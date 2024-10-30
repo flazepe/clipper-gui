@@ -5,3 +5,7 @@
 body {
     @apply bg-black text-white;
 }
+
+input {
+    @apply text-black p-2 rounded;
+}

@@ -30,7 +30,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 				}}
 				onClick={event => (event.currentTarget.paused ? event.currentTarget.play() : event.currentTarget.pause())}
 			/>
-			{video && segmentEnd && (
+			{video && segmentEnd > 0 && (
 				<>
 					<div className="text-center text-2xl font-bold">
 						<div

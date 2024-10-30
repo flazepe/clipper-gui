@@ -23,7 +23,7 @@ export default function ({
 		}
 	}
 
-	if (fade) args.push("-f");
+	if (fade) args.push(fade === true ? "-f" : `-f=${fade}`);
 	if (noVideo) args.push("-vn");
 	if (noAudio) args.push("-an");
 	args.push("-y", output);

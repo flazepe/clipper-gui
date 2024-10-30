@@ -67,10 +67,22 @@ function App(): JSX.Element {
 				>
 					Clear All Inputs
 				</Button>
-				<div className="cursor-pointer">
-					<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
-						<input type="checkbox" checked={!!fade} readOnly />
-						Fade
+				<div className="flex cursor-pointer flex-col justify-center gap-5">
+					<div className="flex items-center gap-2 text-xl">
+						<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
+							<input type="checkbox" checked={!!fade} readOnly />
+							Fade
+						</div>
+						{!!fade && (
+							<input
+								type="number"
+								min={0}
+								defaultValue="0.5"
+								step="0.1"
+								onChange={event => setFade(Number(event.currentTarget.value))}
+								className="w-20"
+							/>
+						)}
 					</div>
 					<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2 text-xl">
 						<input type="checkbox" checked={!!noVideo} readOnly />
@@ -120,7 +132,11 @@ function App(): JSX.Element {
 				>
 					Clip
 				</Button>
-				<div className="whitespace-pre-wrap">{logs.replace(/\x1b(.+?)m/g, "")}</div>
+				<div className="whitespace-pre-wrap">
+					clipper {generateClipperArgs({ inputs, fade, noVideo, noAudio, output: "<output>" }).join(" ")}
+					<br />
+					{logs.replace(/\x1b(.+?)m/g, "")}
+				</div>
 			</div>
 		</div>
 	);
