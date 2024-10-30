@@ -13,8 +13,7 @@
 		"windows": [
 			{
 				"title": "clipper-gui",
-				"width": 800,
-				"height": 600
+				"maximized": true
 			}
 		],
 		"security": {
