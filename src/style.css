@@ -3,9 +3,31 @@
 @tailwind utilities;
 
 body {
-    @apply bg-black text-white;
+	@apply bg-black text-white;
 }
 
 input {
-    @apply text-black p-2 rounded;
+	@apply rounded p-2 text-black;
+}
+
+/* Video range slider */
+.multi-range-slider {
+	@apply my-6 border-none p-0;
+}
+
+/* Thicken bar */
+.multi-range-slider .bar {
+	@apply h-6;
+}
+
+/* Remove additional styles from the bars */
+.multi-range-slider .bar-left,
+.multi-range-slider .bar-right,
+.multi-range-slider .bar-inner {
+	@apply rounded-none shadow-none;
+}
+
+/* Fix thumb alignment */
+.multi-range-slider .thumb::before {
+	@apply ml-[-10px] mt-5;
 }

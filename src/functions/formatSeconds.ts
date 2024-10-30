@@ -1,4 +1,4 @@
-export default function (seconds: number) {
+export default function (seconds: number, padAll = false) {
 	if (isNaN(seconds)) seconds = 0;
 
 	const hours = Math.trunc(seconds / 3600);
@@ -7,5 +7,17 @@ export default function (seconds: number) {
 	const minutes = Math.trunc(seconds / 60);
 	seconds = Math.trunc(seconds - 60 * minutes);
 
-	return `${hours ? `${hours}:` : ""}${hours ? minutes.toString().padStart(2, "0") : minutes}:${seconds.toString().padStart(2, "0")}`;
+	let formattedHours = "",
+		formattedMinutes = "",
+		formattedSeconds = seconds.toString().padStart(2, "0");
+
+	if (padAll) {
+		if (hours) formattedHours = `${hours.toString().padStart(2, "0")}:`;
+		formattedMinutes = minutes.toString().padStart(2, "0");
+	} else {
+		if (hours) formattedHours = `${hours}:`;
+		formattedMinutes = hours ? minutes.toString().padStart(2, "0") : minutes.toString();
+	}
+
+	return `${formattedHours}${formattedMinutes}:${formattedSeconds}`;
 }

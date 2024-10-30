@@ -11,7 +11,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 
 	return (
 		<div className="flex w-full flex-col gap-2 rounded border-2 border-gray-500 p-5 lg:w-5/12">
-			<div className="my-2 text-xl font-bold">
+			<div className="my-2 text-2xl font-bold">
 				{input.name}
 				<span onClick={() => setInputs(inputs => inputs.filter(entry => entry !== input))} className="ml-2 cursor-pointer text-red-500">
 					(delete)
@@ -32,22 +32,13 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 			/>
 			{video && segmentEnd > 0 && (
 				<>
-					<div className="text-center text-2xl font-bold">
-						<div
-							onClick={() => {
-								video.currentTime = segmentStart;
-								video.play();
-							}}
-							className="cursor-pointer"
-						>
-							{formatSeconds(segmentStart)}-{formatSeconds(segmentEnd)}
-						</div>
+					<div className="text-center text-2xl">
 						<MultiRangeSlider
 							min={0}
 							max={video.duration}
 							minValue={segmentStart}
 							maxValue={segmentEnd}
-							labels={[formatSeconds(video.currentTime), formatSeconds(video.duration)]}
+							labels={[""]}
 							minCaption={formatSeconds(segmentStart)}
 							maxCaption={formatSeconds(segmentEnd)}
 							step={1}
@@ -62,25 +53,35 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 								setSegmentStart(event.minValue);
 								setSegmentEnd(event.maxValue);
 							}}
-							className="border-none"
 						/>
-					</div>
-					<Button
-						onClick={() => {
-							if (!segmentEnd || segmentStart >= segmentEnd || segmentEnd <= segmentStart) return;
+						<div className="flex flex-col items-center justify-center gap-2">
+							<div
+								onClick={() => {
+									video.currentTime = segmentStart;
+									video.play();
+								}}
+								className="cursor-pointer"
+							>
+								{formatSeconds(segmentStart)}-{formatSeconds(segmentEnd)} ({formatSeconds(segmentEnd - segmentStart)})
+							</div>
+							<Button
+								onClick={() => {
+									if (!segmentEnd || segmentStart >= segmentEnd || segmentEnd <= segmentStart) return;
 
-							setInputs(inputs => {
-								if (!input.segments.find(segment => segment[0] === segmentStart && segment[1] === segmentEnd))
-									input.segments.push([segmentStart, segmentEnd]);
-								return [...inputs];
-							});
-						}}
-					>
-						Add
-					</Button>
-					<div className="text-xl font-bold">Segments</div>
+									setInputs(inputs => {
+										if (!input.segments.find(segment => segment[0] === segmentStart && segment[1] === segmentEnd))
+											input.segments.push([segmentStart, segmentEnd]);
+										return [...inputs];
+									});
+								}}
+							>
+								Add Segment
+							</Button>
+						</div>
+					</div>
+					{!!input.segments.length && <div className="text-2xl font-bold">Segments</div>}
 					{input.segments.map((segment, index) => (
-						<div className="cursor-pointer" key={index}>
+						<div className="w-80 cursor-pointer text-xl" key={index}>
 							<span
 								onClick={() => {
 									setSegmentStart(segment[0]);
@@ -89,7 +90,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 									video.play();
 								}}
 							>
-								{segment.map(formatSeconds).join("-")}
+								{segment.map(entry => formatSeconds(entry, true)).join("-")} ({formatSeconds(segment[1] - segment[0], true)})
 							</span>
 							<span
 								onClick={() =>

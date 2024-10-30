@@ -66,7 +66,7 @@ function App(): JSX.Element {
 						setLogs("");
 					}}
 				>
-					Clear
+					Reset
 				</Button>
 				<div className="flex cursor-pointer items-center gap-5">
 					<div className="flex items-center gap-2 text-xl">
@@ -138,7 +138,7 @@ function App(): JSX.Element {
 						})();
 					}}
 				>
-					Clip
+					Render
 				</Button>
 				<div className="whitespace-pre-wrap">{logs.replace(/\x1b(.+?)m/g, "")}</div>
 			</div>
