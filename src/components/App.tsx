@@ -20,8 +20,9 @@ function App(): JSX.Element {
 	const [isDragged, setIsDragged] = useState(false),
 		[inputs, setInputs] = useState<Array<Input>>([]),
 		[fade, setFade] = useState<boolean | number>(false),
-		[noVideo, setNoVideo] = useState<boolean>(false),
-		[noAudio, setNoAudio] = useState<boolean>(false),
+		[noVideo, setNoVideo] = useState(false),
+		[noAudio, setNoAudio] = useState(false),
+		[dryRun, setDryRun] = useState(false),
 		[logs, setLogs] = useState("");
 
 	useEffect(() => {
@@ -65,9 +66,9 @@ function App(): JSX.Element {
 						setLogs("");
 					}}
 				>
-					Clear All Inputs
+					Clear
 				</Button>
-				<div className="flex cursor-pointer flex-col justify-center gap-5">
+				<div className="flex cursor-pointer items-center gap-5">
 					<div className="flex items-center gap-2 text-xl">
 						<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
 							<input type="checkbox" checked={!!fade} readOnly />
@@ -92,6 +93,10 @@ function App(): JSX.Element {
 						<input type="checkbox" checked={!!noAudio} readOnly />
 						No Audio
 					</div>
+					<div onClick={() => setDryRun(!dryRun)} className="flex gap-2 text-xl">
+						<input type="checkbox" checked={!!dryRun} readOnly />
+						Dry Run
+					</div>
 				</div>
 				<div className="m-5 flex flex-wrap justify-center gap-10">
 					{inputs.map((input, index) => (
@@ -109,7 +114,10 @@ function App(): JSX.Element {
 
 							setLogs("Running...");
 
-							const command = Command.create("clipper", generateClipperArgs({ inputs, fade, noVideo, noAudio, output }));
+							const args = generateClipperArgs({ inputs, fade, noVideo, noAudio, output });
+							if (dryRun) return setLogs(`clipper ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+
+							const command = Command.create("clipper", args);
 
 							command.on("error", error => {
 								console.log("[error]", error);
@@ -132,11 +140,7 @@ function App(): JSX.Element {
 				>
 					Clip
 				</Button>
-				<div className="whitespace-pre-wrap">
-					clipper {generateClipperArgs({ inputs, fade, noVideo, noAudio, output: "<output>" }).join(" ")}
-					<br />
-					{logs.replace(/\x1b(.+?)m/g, "")}
-				</div>
+				<div className="whitespace-pre-wrap">{logs.replace(/\x1b(.+?)m/g, "")}</div>
 			</div>
 		</div>
 	);
