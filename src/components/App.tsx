@@ -10,7 +10,6 @@ import Input from "./Input";
 const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
 
 export interface Input {
-	id: number;
 	name: string;
 	path: string;
 	src: string;
@@ -32,14 +31,11 @@ function App(): JSX.Element {
 			listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, event => {
 				setIsDragged(false);
 
-				const lastID = inputs.length ? inputs[inputs.length - 1].id : 0;
-
 				setInputs([
 					...inputs,
 					...event.payload.paths
 						.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
-						.map((path, index) => ({
-							id: lastID + index + 1,
+						.map(path => ({
 							name: path.split(/[/\\]/).pop()!,
 							path: path,
 							src: convertFileSrc(path),
