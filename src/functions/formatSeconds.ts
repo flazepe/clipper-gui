@@ -1,4 +1,6 @@
 export default function (seconds: number) {
+	if (isNaN(seconds)) seconds = 0;
+
 	const hours = Math.trunc(seconds / 3600);
 	seconds -= hours * 3600;
 
