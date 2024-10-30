@@ -12,10 +12,15 @@
 					"name": "clipper",
 					"cmd": "clipper",
 					"args": true
+				},
+				{
+					"name": "ffmpeg",
+					"cmd": "ffmpeg",
+					"args": true
 				}
 			]
 		},
-		"shell:allow-stdin-write",
+		"shell:allow-kill",
 		"dialog:default"
 	]
 }

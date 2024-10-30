@@ -1,9 +1,9 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { save } from "@tauri-apps/plugin-dialog";
-import { Command } from "@tauri-apps/plugin-shell";
+import { Child } from "@tauri-apps/plugin-shell";
 import { useEffect, useState } from "react";
-import generateClipperArgs from "../functions/generateClipperArgs";
+import { createFfmpegCommand, generateClipperArgs } from "../functions/clipper";
 import Button from "./Button";
 import Input from "./Input";
 
@@ -23,7 +23,8 @@ function App(): JSX.Element {
 		[noVideo, setNoVideo] = useState(false),
 		[noAudio, setNoAudio] = useState(false),
 		[dryRun, setDryRun] = useState(false),
-		[logs, setLogs] = useState("");
+		[status, setStatus] = useState(""),
+		[child, setChild] = useState<Child | null>(null);
 
 	useEffect(() => {
 		const fns = [
@@ -63,7 +64,7 @@ function App(): JSX.Element {
 				<Button
 					onClick={() => {
 						setInputs([]);
-						setLogs("");
+						setStatus("");
 					}}
 				>
 					Reset
@@ -103,44 +104,42 @@ function App(): JSX.Element {
 						<Input input={input} setInputs={setInputs} key={index} />
 					))}
 				</div>
-				<Button
-					onClick={() => {
-						(async () => {
-							const output = await save({
-								defaultPath: "output.mp4",
-								filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
-							});
-							if (!output) return;
+				<div className="whitespace-pre-wrap">{status.replace(/\x1b(.+?)m/g, "")}</div>
+				<div className="flex gap-2">
+					{child ? (
+						<Button onClick={() => child?.kill().catch(() => null)}>Cancel Render</Button>
+					) : (
+						<Button
+							onClick={() => {
+								(async () => {
+									const output = await save({
+										defaultPath: "output.mp4",
+										filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
+									});
+									if (!output) return;
 
-							setLogs("Running...");
+									try {
+										const args = generateClipperArgs({ inputs, fade, noVideo, noAudio, output });
+										if (dryRun) return setStatus(`clipper ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
 
-							const args = generateClipperArgs({ inputs, fade, noVideo, noAudio, output });
-							if (dryRun) return setLogs(`clipper ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+										const command = await createFfmpegCommand(args);
 
-							const command = Command.create("clipper", args);
+										command.stdout.on("data", data => setStatus(data));
+										command.stderr.on("data", data => setStatus(data));
+										command.on("error", error => setStatus(error));
+										command.on("close", () => setChild(null));
 
-							command.on("error", error => {
-								console.log("[error]", error);
-								setLogs(`Error: ${error}`);
-							});
-							command.on("close", close => {
-								console.log("[close]", close);
-								if (!close.code) setLogs("Done!");
-							});
-
-							command.stdout.on("data", data => {
-								console.log(`[stdout] ${data}`);
-								setLogs(data);
-							});
-							command.stderr.on("data", data => console.log(`[stderr] ${data}`));
-
-							await command.spawn();
-						})();
-					}}
-				>
-					Render
-				</Button>
-				<div className="whitespace-pre-wrap">{logs.replace(/\x1b(.+?)m/g, "")}</div>
+										setChild(await command.spawn());
+									} catch (error) {
+										setStatus(`${error}`);
+									}
+								})();
+							}}
+						>
+							Render
+						</Button>
+					)}
+				</div>
 			</div>
 		</div>
 	);
