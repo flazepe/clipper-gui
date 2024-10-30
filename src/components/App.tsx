@@ -58,7 +58,7 @@ function App(): JSX.Element {
 				</div>
 			)}
 			<div className="my-10 inline-flex h-full w-full flex-col items-center gap-5">
-				<div className="text-5xl font-bold">Clipper</div>
+				<div className="text-5xl font-bold">clipper-gui</div>
 				<Button
 					onClick={() => {
 						setInputs([]);
