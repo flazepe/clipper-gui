@@ -18,10 +18,7 @@ export function generateClipperArgs({
 
 	for (const input of inputs) {
 		args.push("-i", input.path);
-
-		for (const segment of input.segments) {
-			args.push("-s", segment.join("-"));
-		}
+		for (const segment of input.segments) args.push("-s", segment.join("-"));
 	}
 
 	if (fade) args.push(fade === true ? "-f" : `-f=${fade}`);
