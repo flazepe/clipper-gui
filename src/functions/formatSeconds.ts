@@ -5,7 +5,5 @@ export default function (seconds: number) {
 	const minutes = Math.trunc(seconds / 60);
 	seconds = Math.trunc(seconds - 60 * minutes);
 
-	return `${hours ? `${hours}:` : ""}${hours ? minutes.toString().padStart(2, "0") : minutes}:${seconds
-		.toString()
-		.padStart(2, "0")}`;
+	return `${hours ? `${hours}:` : ""}${hours ? minutes.toString().padStart(2, "0") : minutes}:${seconds.toString().padStart(2, "0")}`;
 }

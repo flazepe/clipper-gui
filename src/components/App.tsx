@@ -1,11 +1,11 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
-import { save } from "@tauri-apps/plugin-dialog";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
+import { save } from "@tauri-apps/plugin-dialog";
 import { Command } from "@tauri-apps/plugin-shell";
 import { useEffect, useState } from "react";
 import generateClipperArgs from "../functions/generateClipperArgs";
 import Button from "./Button";
-import Video from "./Video";
+import Input from "./Input";
 
 const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
 
@@ -14,7 +14,7 @@ export interface Input {
 	name: string;
 	path: string;
 	src: string;
-	segments: Array<string>;
+	segments: Array<[number, number]>;
 }
 
 function App(): JSX.Element {
@@ -57,14 +57,12 @@ function App(): JSX.Element {
 	return (
 		<div className="min-h-screen">
 			{isDragged && (
-				<div
-					className={`bg-gray-700 fixed w-full h-full top-0 left-0 z-10 text-white justify-center items-center flex text-5xl font-bold`}
-				>
+				<div className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-700 text-5xl font-bold text-white`}>
 					Drop the file NOW!
 				</div>
 			)}
-			<div className="inline-flex flex-col w-full h-full items-center">
-				<div className="font-bold text-5xl m-5">Clipper</div>
+			<div className="my-10 inline-flex h-full w-full flex-col items-center gap-5">
+				<div className="text-5xl font-bold">Clipper</div>
 				<Button
 					onClick={() => {
 						setInputs([]);
@@ -74,48 +72,22 @@ function App(): JSX.Element {
 					Clear All Inputs
 				</Button>
 				<div className="cursor-pointer">
-					<div onClick={() => setFade(!fade)} className="text-xl gap-2 flex">
+					<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
 						<input type="checkbox" checked={!!fade} readOnly />
 						Fade
 					</div>
-					<div onClick={() => setNoVideo(!noVideo)} className="text-xl gap-2 flex">
+					<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2 text-xl">
 						<input type="checkbox" checked={!!noVideo} readOnly />
 						No Video
 					</div>
-					<div onClick={() => setNoAudio(!noAudio)} className="text-xl gap-2 flex">
+					<div onClick={() => setNoAudio(!noAudio)} className="flex gap-2 text-xl">
 						<input type="checkbox" checked={!!noAudio} readOnly />
 						No Audio
 					</div>
 				</div>
-				<div className="lg:flex flex-wrap gap-5 justify-center m-5">
+				<div className="m-5 flex flex-wrap justify-center gap-10">
 					{inputs.map((input, index) => (
-						<div className="border-gray-500 border-2 p-5 rounded" key={index}>
-							<div className="font-bold text-xl my-2">
-								{input.name}
-								<span
-									onClick={() => setInputs(inputs.filter(entry => entry.id !== input.id))}
-									className="text-red-500 ml-2 cursor-pointer"
-								>
-									(delete)
-								</span>
-							</div>
-							<Video input={input} setInputs={setInputs} />
-							<div className="text-xl font-bold">Segments</div>
-							{input.segments.map((segment, index) => (
-								<div key={index}>
-									{segment}
-									<span
-										onClick={() => {
-											input.segments.splice(input.segments.indexOf(segment), 1);
-											setInputs(JSON.parse(JSON.stringify(inputs)));
-										}}
-										className="text-red-500 ml-2 cursor-pointer"
-									>
-										(delete)
-									</span>
-								</div>
-							))}
-						</div>
+						<Input input={input} setInputs={setInputs} key={index} />
 					))}
 				</div>
 				<Button
@@ -129,10 +101,7 @@ function App(): JSX.Element {
 
 							setLogs("Running...");
 
-							const command = Command.create(
-								"clipper",
-								generateClipperArgs({ inputs, fade, noVideo, noAudio, output })
-							);
+							const command = Command.create("clipper", generateClipperArgs({ inputs, fade, noVideo, noAudio, output }));
 
 							command.on("error", error => {
 								console.log("[error]", error);
@@ -153,7 +122,7 @@ function App(): JSX.Element {
 						})();
 					}}
 				>
-					Run
+					Clip
 				</Button>
 				<div className="whitespace-pre-wrap">{logs.replace(/\x1b(.+?)m/g, "")}</div>
 			</div>

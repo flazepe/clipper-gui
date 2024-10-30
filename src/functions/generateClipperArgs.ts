@@ -19,7 +19,7 @@ export default function ({
 		args.push("-i", input.path);
 
 		for (const segment of input.segments) {
-			args.push("-s", segment);
+			args.push("-s", segment.join("-"));
 		}
 	}
 
