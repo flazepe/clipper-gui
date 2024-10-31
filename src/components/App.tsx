@@ -4,6 +4,7 @@ import { save } from "@tauri-apps/plugin-dialog";
 import { Child } from "@tauri-apps/plugin-shell";
 import { useEffect, useState } from "react";
 import { createFfmpegCommand, generateClipperArgs } from "../functions/clipper";
+import { secondsToDuration } from "../functions/seconds";
 import Button from "./Button";
 import Input from "./Input";
 
@@ -98,7 +99,12 @@ function App(): JSX.Element {
 						<Input input={input} setInputs={setInputs} key={index} />
 					))}
 				</div>
-				<div className="whitespace-pre-wrap">{status.replace(/\x1b(.+?)m/g, "")}</div>
+				<div className="whitespace-pre-wrap">
+					Total video duration:{" "}
+					{secondsToDuration(inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0))}
+					<br />
+					{status.replace(/\x1b(.+?)m/g, "")}
+				</div>
 				<div className="flex gap-2">
 					{child ? (
 						<Button onClick={() => child?.kill().catch(() => null)}>Cancel Render</Button>
