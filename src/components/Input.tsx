@@ -105,7 +105,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 									video.currentTime = segmentStart;
 									video.play();
 								}}
-								className="w-1/4"
+								className="w-1/3"
 							>
 								Play ({secondsToDuration(segmentEnd - segmentStart)})
 							</Button>
@@ -119,7 +119,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 										return [...inputs];
 									});
 								}}
-								className="w-1/4"
+								className="w-1/3"
 							>
 								Add Segment
 							</Button>
