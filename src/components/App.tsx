@@ -48,9 +48,7 @@ function App(): JSX.Element {
 			})
 		];
 
-		return () => {
-			Promise.all(fns).then(fns => fns.forEach(fn => fn()));
-		};
+		return () => void Promise.all(fns).then(fns => fns.forEach(fn => fn()));
 	});
 
 	return (
