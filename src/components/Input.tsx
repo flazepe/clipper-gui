@@ -1,13 +1,15 @@
 import MultiRangeSlider from "multi-range-slider-react";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import formatSeconds from "../functions/formatSeconds";
+import { Dispatch, SetStateAction, useCallback, useRef, useState } from "react";
+import { durationToSeconds, secondsToDuration } from "../functions/seconds";
 import { Input } from "./App";
 import Button from "./Button";
 
 export default function ({ input, setInputs }: { input: Input; setInputs: Dispatch<SetStateAction<Input[]>> }) {
 	const [video, setVideo] = useState<HTMLVideoElement | null>(null),
 		[segmentStart, setSegmentStart] = useState(0),
-		[segmentEnd, setSegmentEnd] = useState(0);
+		[segmentEnd, setSegmentEnd] = useState(0),
+		segmentStartInput = useRef<HTMLInputElement>(null),
+		segmentEndInput = useRef<HTMLInputElement>(null);
 
 	return (
 		<div className="flex w-full flex-col gap-2 rounded border-2 border-gray-500 p-5 lg:w-5/12">
@@ -28,42 +30,85 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 					const currentTime = event.currentTarget.currentTime;
 					if (!(currentTime >= segmentStart && currentTime <= segmentEnd)) event.currentTarget.pause();
 				}}
-				onClick={event => (event.currentTarget.paused ? event.currentTarget.play() : event.currentTarget.pause())}
+				onClick={event => {
+					const currentTime = event.currentTarget.currentTime;
+					return event.currentTarget.paused && currentTime >= segmentStart && currentTime <= segmentEnd
+						? event.currentTarget.play()
+						: event.currentTarget.pause();
+				}}
 			/>
 			{video && segmentEnd > 0 && (
 				<>
-					<div className="text-center text-2xl">
+					<div className="flex flex-col gap-5 text-center text-2xl">
 						<MultiRangeSlider
 							min={0}
 							max={video.duration}
 							minValue={segmentStart}
 							maxValue={segmentEnd}
 							labels={[""]}
-							minCaption={formatSeconds(segmentStart)}
-							maxCaption={formatSeconds(segmentEnd)}
+							minCaption={secondsToDuration(segmentStart)}
+							maxCaption={secondsToDuration(segmentEnd)}
 							step={1}
 							ruler={false}
 							barInnerColor="#7272ff"
 							barLeftColor="gray"
 							barRightColor="gray"
-							onChange={() => video.play()}
 							onInput={event => {
 								if (event.minValue !== segmentStart) video.currentTime = event.minValue;
 								if (event.maxValue !== segmentEnd) video.currentTime = Math.max(0, event.maxValue - 1);
+
 								setSegmentStart(event.minValue);
+								if (segmentStartInput.current) segmentStartInput.current.value = secondsToDuration(event.minValue);
+
 								setSegmentEnd(event.maxValue);
+								if (segmentEndInput.current) segmentEndInput.current.value = secondsToDuration(event.maxValue);
 							}}
 						/>
-						<div className="flex flex-col items-center justify-center gap-2">
-							<div
+						<div className="flex items-center justify-center gap-2">
+							<input
+								ref={segmentStartInput}
+								type="text"
+								defaultValue={secondsToDuration(segmentStart)}
+								onBlur={event => {
+									const seconds = durationToSeconds(event.currentTarget.value);
+
+									if (seconds >= 0 && seconds < segmentEnd) {
+										setSegmentStart(seconds);
+										event.currentTarget.value = secondsToDuration(seconds).toString();
+									} else {
+										event.currentTarget.value = secondsToDuration(segmentStart).toString();
+									}
+								}}
+								className="w-28 text-center"
+							/>
+							-
+							<input
+								ref={segmentEndInput}
+								type="text"
+								defaultValue={secondsToDuration(segmentEnd)}
+								onBlur={event => {
+									const seconds = durationToSeconds(event.currentTarget.value);
+
+									if (seconds <= video.duration && seconds > segmentStart) {
+										setSegmentEnd(seconds);
+										event.currentTarget.value = secondsToDuration(seconds).toString();
+									} else {
+										event.currentTarget.value = secondsToDuration(segmentEnd).toString();
+									}
+								}}
+								className="w-28 text-center"
+							/>
+						</div>
+						<div className="flex justify-center gap-2">
+							<Button
 								onClick={() => {
 									video.currentTime = segmentStart;
 									video.play();
 								}}
-								className="cursor-pointer"
+								className="w-1/4"
 							>
-								{formatSeconds(segmentStart)}-{formatSeconds(segmentEnd)} ({formatSeconds(segmentEnd - segmentStart)})
-							</div>
+								Play ({secondsToDuration(segmentEnd - segmentStart)})
+							</Button>
 							<Button
 								onClick={() => {
 									if (!segmentEnd || segmentStart >= segmentEnd || segmentEnd <= segmentStart) return;
@@ -74,6 +119,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 										return [...inputs];
 									});
 								}}
+								className="w-1/4"
 							>
 								Add Segment
 							</Button>
@@ -90,7 +136,7 @@ export default function ({ input, setInputs }: { input: Input; setInputs: Dispat
 									video.play();
 								}}
 							>
-								{segment.map(entry => formatSeconds(entry, true)).join("-")} ({formatSeconds(segment[1] - segment[0], true)})
+								{segment.map(entry => secondsToDuration(entry, true)).join("-")} ({secondsToDuration(segment[1] - segment[0], true)})
 							</span>
 							<span
 								onClick={() =>
