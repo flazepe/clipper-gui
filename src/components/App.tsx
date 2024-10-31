@@ -61,30 +61,24 @@ function App(): JSX.Element {
 			)}
 			<div className="my-10 inline-flex h-full w-full flex-col items-center gap-5">
 				<div className="text-5xl font-bold">clipper-gui</div>
-				<Button
-					onClick={() => {
-						setInputs([]);
-						setStatus("");
-					}}
-				>
-					Reset
-				</Button>
+				<Button onClick={() => window.location.reload()}>Reset</Button>
 				<div className="flex cursor-pointer items-center gap-5">
 					<div className="flex items-center gap-2 text-xl">
 						<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
 							<input type="checkbox" checked={!!fade} readOnly />
 							Fade
 						</div>
-						{!!fade && (
+						{
 							<input
 								type="number"
 								min={0}
 								defaultValue="0.5"
 								step="0.1"
 								onChange={event => setFade(Number(event.currentTarget.value))}
+								readOnly={!fade}
 								className="w-20"
 							/>
-						)}
+						}
 					</div>
 					<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2 text-xl">
 						<input type="checkbox" checked={!!noVideo} readOnly />
