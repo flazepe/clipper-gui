@@ -111,9 +111,14 @@ function App(): JSX.Element {
 					) : (
 						<Button
 							onClick={() => {
+								if (!inputs[0]) return;
+
+								const split = inputs[0].name.split("."),
+									[defaultExtension, defaultFile] = [split.pop(), split.join(".")];
+
 								(async () => {
 									const output = await save({
-										defaultPath: "output.mp4",
+										defaultPath: `${defaultFile} (clipped).${defaultExtension}`,
 										filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
 									});
 									if (!output) return;
