@@ -111,12 +111,12 @@ function App(): JSX.Element {
 							onClick={() => {
 								if (!inputs[0]) return;
 
-								const split = inputs[0].name.split("."),
-									[defaultExtension, defaultFile] = [split.pop(), split.join(".")];
+								const split = inputs[0].path.split("."),
+									[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
 								(async () => {
 									const output = await save({
-										defaultPath: `${defaultFile} (clipped).${defaultExtension}`,
+										defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
 										filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
 									});
 									if (!output) return;
