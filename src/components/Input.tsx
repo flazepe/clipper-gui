@@ -27,6 +27,37 @@ export default function ({ input }: { input: Input }) {
 					[x]
 				</div>
 			</div>
+			<div className="flex justify-between text-xl">
+				<div className="flex items-center gap-2">
+					Video Track:
+					<input
+						type="number"
+						min={0}
+						defaultValue={0}
+						onChange={event => (c.input.videoTrack = Number(event.currentTarget.value))}
+						className="w-20 text-center"
+					/>
+				</div>
+				<div className="flex items-center gap-2">
+					Audio Track:
+					<input
+						type="number"
+						min={0}
+						defaultValue={0}
+						onChange={event => (c.input.audioTrack = Number(event.currentTarget.value))}
+						className="w-20 text-center"
+					/>
+				</div>
+				<div className="flex items-center gap-2">
+					Subtitle Track:
+					<input
+						type="number"
+						min={0}
+						onChange={event => (c.input.subtitleTrack = event.currentTarget.value ? Number(event.currentTarget.value) : null)}
+						className="w-20 text-center"
+					/>
+				</div>
+			</div>
 			<video
 				src={c.input.src}
 				ref={useCallback((video: HTMLVideoElement | null) => c.setVideo(video), [])}
@@ -39,6 +70,7 @@ export default function ({ input }: { input: Input }) {
 					if (!(currentTime >= c.segmentStart && currentTime <= c.segmentEnd)) event.currentTarget.pause();
 				}}
 				onClick={() => c.playorPause()}
+				className="w-screen"
 			/>
 			{c.ready && (
 				<div className="flex flex-col gap-5 text-center text-2xl">
@@ -114,37 +146,6 @@ export default function ({ input }: { input: Input }) {
 						<Button onClick={() => c.addCurrentSegment()} className="w-1/3">
 							Add Segment
 						</Button>
-					</div>
-					<div className="flex justify-between">
-						<div className="flex items-center gap-2">
-							Video Track:
-							<input
-								type="number"
-								min={0}
-								defaultValue={0}
-								onChange={event => (c.input.videoTrack = Number(event.currentTarget.value))}
-								className="w-20 text-center"
-							/>
-						</div>
-						<div className="flex items-center gap-2">
-							Audio Track:
-							<input
-								type="number"
-								min={0}
-								defaultValue={0}
-								onChange={event => (c.input.audioTrack = Number(event.currentTarget.value))}
-								className="w-20 text-center"
-							/>
-						</div>
-						<div className="flex items-center gap-2">
-							Subtitle Track:
-							<input
-								type="number"
-								min={0}
-								onChange={event => (c.input.subtitleTrack = event.currentTarget.value ? Number(event.currentTarget.value) : null)}
-								className="w-20 text-center"
-							/>
-						</div>
 					</div>
 				</div>
 			)}
