@@ -15,7 +15,7 @@ export default function () {
 			</Button>
 			<Options />
 			<div className="m-5 flex flex-wrap justify-center gap-10">
-				{inputs.map((input, index) => (
+				{inputs.inputs.map((input, index) => (
 					<InputComponent input={input} key={index} />
 				))}
 			</div>

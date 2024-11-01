@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
-import { Input } from "../components/Input";
 import InputsStateContext from "../contexts/InputsState";
+import { Input } from "../functions/clipper";
 
 export default class {
 	input;
@@ -57,14 +57,14 @@ export default class {
 		this.setInputs?.(inputs => {
 			if (!this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
 				this.input.segments.push([this.segmentStart, this.segmentEnd]);
-			return [...inputs];
+			return { ...inputs };
 		});
 	}
 
 	deleteSegment(index: number) {
 		this.setInputs?.(inputs => {
 			this.input.segments.splice(index, 1);
-			return [...inputs];
+			return { ...inputs };
 		});
 	}
 
@@ -93,6 +93,9 @@ export default class {
 	}
 
 	delete() {
-		this.setInputs?.(inputs => inputs.filter(entry => entry !== this.input));
+		this.setInputs?.(inputs => {
+			inputs.inputs = inputs.inputs.filter(entry => entry !== this.input);
+			return { ...inputs };
+		});
 	}
 }

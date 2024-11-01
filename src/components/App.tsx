@@ -1,13 +1,13 @@
-import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import InputsStateContext from "../contexts/InputsState";
-import { Input, SUPPORTED_EXTENSIONS } from "./Input";
+import { SUPPORTED_EXTENSIONS } from "../functions/clipper";
 import Inputs from "./Inputs";
 
 function App(): JSX.Element {
 	const [isDragged, setIsDragged] = useState(false),
-		[inputs, setInputs] = useState<Array<Input>>([]);
+		inputsState = useContext(InputsStateContext),
+		[inputs, setInputs] = useState(inputsState[0]);
 
 	useEffect(() => {
 		const fns = [
@@ -16,20 +16,19 @@ function App(): JSX.Element {
 			listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, event => {
 				setIsDragged(false);
 
-				setInputs([
+				setInputs?.({
 					...inputs,
-					...event.payload.paths
+					inputs: event.payload.paths
 						.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
 						.map(path => ({
-							filename: path.split(/[/\\]/).pop()!,
-							path: path,
-							src: convertFileSrc(path),
+							file: path,
 							segments: [],
 							videoTrack: 0,
 							audioTrack: 0,
-							subtitleTrack: null
+							subtitleTrack: null,
+							speed: 1
 						}))
-				]);
+				});
 			})
 		];
 

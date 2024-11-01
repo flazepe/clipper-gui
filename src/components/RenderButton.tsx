@@ -1,12 +1,11 @@
 import { message, save } from "@tauri-apps/plugin-dialog";
-import { Child } from "@tauri-apps/plugin-shell";
+import { Child, Command } from "@tauri-apps/plugin-shell";
 import { useContext, useState } from "react";
 import InputsStateContext from "../contexts/InputsState";
 import OptionsContext from "../contexts/Options";
-import { createFfmpegCommand, generateClipperArgs } from "../functions/clipper";
+import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "../functions/clipper";
 import { secondsToDuration } from "../functions/seconds";
 import Button from "./Button";
-import { SUPPORTED_EXTENSIONS } from "./Input";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
@@ -18,7 +17,7 @@ export default function () {
 		<>
 			<div className="w-1/2 whitespace-pre-wrap rounded bg-gray-950 p-4 text-center">
 				Total video duration:{" "}
-				{secondsToDuration(inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0))}
+				{secondsToDuration(inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0))}
 				<br />
 				{status.replace(/\x1b(.+?)m/g, "")}
 			</div>
@@ -30,13 +29,13 @@ export default function () {
 				<Button
 					onClick={() => {
 						// Validations
-						if (!inputs[0]) return message("No inputs given.", { kind: "error" });
+						if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
 
-						const badInput = inputs.find(input => !input.segments[0]);
-						if (badInput) return message(`Input "${badInput.filename} is missing segments.`, { kind: "error" });
+						const badInput = inputs.inputs.find(input => !input.segments[0]);
+						if (badInput) return message(`Input "${badInput.file} is missing segments.`, { kind: "error" });
 
 						// Default filename
-						const split = inputs[0].path.split("."),
+						const split = inputs.inputs[0].file.split("."),
 							[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
 						// Run clipper and ffmpeg
@@ -48,10 +47,10 @@ export default function () {
 							if (!output) return;
 
 							try {
-								const args = generateClipperArgs({ inputs, options, output });
-								if (options.dryRun) return setStatus(`clipper ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+								const args = await getFfmpegArgs({ inputs, output, dryRun: options.dryRun });
+								if (options.dryRun) return setStatus(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
 
-								const command = await createFfmpegCommand(args);
+								const command = Command.create("ffmpeg", args);
 
 								command.stdout.on("data", data => setStatus(data));
 								command.stderr.on("data", data => setStatus(data));

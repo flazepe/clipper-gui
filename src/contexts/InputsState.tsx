@@ -1,4 +1,4 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { Input } from "../components/Input";
+import { Inputs } from "../functions/clipper";
 
-export default createContext<[Array<Input>, Dispatch<SetStateAction<Array<Input>>> | null]>([[], null]);
+export default createContext<[Inputs, Dispatch<SetStateAction<Inputs>> | null]>([{ inputs: [], fade: 0, noVideo: false, noAudio: false }, null]);

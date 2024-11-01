@@ -1,20 +1,10 @@
+import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useCallback } from "react";
 import InputController from "../classes/InputController";
+import { Input } from "../functions/clipper";
 import { durationToSeconds, secondsToDuration } from "../functions/seconds";
 import Button from "./Button";
-
-export const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
-
-export interface Input {
-	filename: string;
-	path: string;
-	src: string;
-	segments: Array<[number, number]>;
-	videoTrack: number;
-	audioTrack: number;
-	subtitleTrack: number | null;
-}
 
 export default function ({ input }: { input: Input }) {
 	const c = new InputController(input);
@@ -22,7 +12,7 @@ export default function ({ input }: { input: Input }) {
 	return (
 		<div className="flex w-full flex-col gap-5 rounded border-2 border-gray-500 p-5 lg:w-5/12">
 			<div className="flex items-center justify-between text-2xl font-bold">
-				{c.input.filename}
+				{c.input.file.split(/[/\\]/).pop()!}
 				<div onClick={() => c.delete()} title="Delete" className="cursor-pointer text-red-500">
 					[x]
 				</div>
@@ -59,7 +49,7 @@ export default function ({ input }: { input: Input }) {
 				</div>
 			</div>
 			<video
-				src={c.input.src}
+				src={convertFileSrc(c.input.file)}
 				ref={useCallback((video: HTMLVideoElement | null) => c.setVideo(video), [])}
 				onLoadedMetadata={event => {
 					c.setVideo(event.currentTarget);

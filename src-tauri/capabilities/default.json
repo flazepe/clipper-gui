@@ -5,21 +5,7 @@
 	"windows": ["main"],
 	"permissions": [
 		"core:default",
-		{
-			"identifier": "shell:allow-spawn",
-			"allow": [
-				{
-					"name": "clipper",
-					"cmd": "clipper",
-					"args": true
-				},
-				{
-					"name": "ffmpeg",
-					"cmd": "ffmpeg",
-					"args": true
-				}
-			]
-		},
+		{ "identifier": "shell:allow-spawn", "allow": [{ "name": "ffmpeg", "cmd": "ffmpeg", "args": true }] },
 		"shell:allow-kill",
 		"dialog:default"
 	]
