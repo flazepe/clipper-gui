@@ -29,11 +29,17 @@ export default function () {
 			) : (
 				<Button
 					onClick={() => {
+						// Validations
 						if (!inputs[0]) return message("No inputs given.", { kind: "error" });
 
+						const badInput = inputs.find(input => !input.segments[0]);
+						if (badInput) return message(`Input "${badInput.filename} is missing segments.`, { kind: "error" });
+
+						// Default filename
 						const split = inputs[0].path.split("."),
 							[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
+						// Run clipper and ffmpeg
 						(async () => {
 							const output = await save({
 								defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
