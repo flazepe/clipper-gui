@@ -105,6 +105,37 @@ export default function ({ input }: { input: Input }) {
 								Add Segment
 							</Button>
 						</div>
+						<div className="flex justify-between">
+							<div className="flex items-center gap-2">
+								Video track:
+								<input
+									type="number"
+									min={0}
+									defaultValue={0}
+									onChange={event => (c.input.videoTrack = Number(event.currentTarget.value))}
+									className="w-14"
+								/>
+							</div>
+							<div className="flex items-center gap-2">
+								Audio track:
+								<input
+									type="number"
+									min={0}
+									defaultValue={0}
+									onChange={event => (c.input.audioTrack = Number(event.currentTarget.value))}
+									className="w-14"
+								/>
+							</div>
+							<div className="flex items-center gap-2">
+								Subtitle track:
+								<input
+									type="number"
+									min={0}
+									className="w-14"
+									onChange={event => (c.input.subtitleTrack = event.currentTarget.value ? Number(event.currentTarget.value) : null)}
+								/>
+							</div>
+						</div>
 					</div>
 					{!!c.input.segments.length && <div className="text-2xl font-bold">Segments</div>}
 					{c.input.segments.map((segment, index) => (

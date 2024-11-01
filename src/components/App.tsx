@@ -16,6 +16,9 @@ export interface Input {
 	path: string;
 	src: string;
 	segments: Array<[number, number]>;
+	videoTrack: number;
+	audioTrack: number;
+	subtitleTrack: number | null;
 }
 
 function App(): JSX.Element {
@@ -43,7 +46,10 @@ function App(): JSX.Element {
 							filename: path.split(/[/\\]/).pop()!,
 							path: path,
 							src: convertFileSrc(path),
-							segments: []
+							segments: [],
+							videoTrack: 0,
+							audioTrack: 0,
+							subtitleTrack: null
 						}))
 				]);
 			})
@@ -63,35 +69,33 @@ function App(): JSX.Element {
 					</div>
 				)}
 				<div className="my-10 inline-flex h-full w-full flex-col items-center gap-5">
-					<div className="text-5xl font-bold">clipper-gui</div>
+					<div className="text-4xl font-bold">clipper-gui</div>
 					<Button onClick={() => window.location.reload()}>Reset</Button>
-					<div className="flex cursor-pointer items-center gap-5">
-						<div className="flex items-center gap-2 text-xl">
-							<div onClick={() => setFade(!fade)} className="flex gap-2 text-xl">
+					<div className="flex cursor-pointer items-center gap-5 text-xl">
+						<div className="flex items-center gap-2">
+							<div onClick={() => setFade(!fade)} className="flex gap-2">
 								<input type="checkbox" checked={!!fade} readOnly />
-								Fade
+								Fade:
 							</div>
-							{
-								<input
-									type="number"
-									min={0}
-									defaultValue="0.5"
-									step="0.1"
-									onChange={event => setFade(Number(event.currentTarget.value))}
-									readOnly={!fade}
-									className="w-20"
-								/>
-							}
+							<input
+								type="number"
+								min={0}
+								defaultValue="0.5"
+								step="0.1"
+								onChange={event => setFade(Number(event.currentTarget.value))}
+								readOnly={!fade}
+								className="w-20"
+							/>
 						</div>
-						<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2 text-xl">
+						<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2">
 							<input type="checkbox" checked={!!noVideo} readOnly />
 							No Video
 						</div>
-						<div onClick={() => setNoAudio(!noAudio)} className="flex gap-2 text-xl">
+						<div onClick={() => setNoAudio(!noAudio)} className="flex gap-2">
 							<input type="checkbox" checked={!!noAudio} readOnly />
 							No Audio
 						</div>
-						<div onClick={() => setDryRun(!dryRun)} className="flex gap-2 text-xl">
+						<div onClick={() => setDryRun(!dryRun)} className="flex gap-2">
 							<input type="checkbox" checked={!!dryRun} readOnly />
 							Dry Run
 						</div>

@@ -18,6 +18,9 @@ export function generateClipperArgs({
 
 	for (const input of inputs) {
 		args.push("-i", input.path);
+		if (!noVideo) args.push("-vt", input.videoTrack.toString());
+		if (!noAudio) args.push("-at", input.audioTrack.toString());
+		if (input.subtitleTrack !== null) args.push("-st", input.subtitleTrack.toString());
 		for (const segment of input.segments) args.push("-s", segment.join("-"));
 	}
 
