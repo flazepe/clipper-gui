@@ -1,32 +1,21 @@
 import { Command } from "@tauri-apps/plugin-shell";
-import { Input } from "../components/App";
+import { Input } from "../components/Input";
+import { Options } from "../components/Options";
 
-export function generateClipperArgs({
-	inputs,
-	fade,
-	noVideo,
-	noAudio,
-	output
-}: {
-	inputs: Array<Input>;
-	fade: boolean | number;
-	noVideo: boolean;
-	noAudio: boolean;
-	output: string;
-}) {
+export function generateClipperArgs({ inputs, options, output }: { inputs: Array<Input>; options: Options; output: string }) {
 	const args: Array<string> = [];
 
 	for (const input of inputs) {
 		args.push("-i", input.path);
-		if (!noVideo) args.push("-vt", input.videoTrack.toString());
-		if (!noAudio) args.push("-at", input.audioTrack.toString());
+		if (!options.noVideo) args.push("-vt", input.videoTrack.toString());
+		if (!options.noAudio) args.push("-at", input.audioTrack.toString());
 		if (input.subtitleTrack !== null) args.push("-st", input.subtitleTrack.toString());
 		for (const segment of input.segments) args.push("-s", segment.join("-"));
 	}
 
-	if (fade) args.push(fade === true ? "-f" : `-f=${fade}`);
-	if (noVideo) args.push("-vn");
-	if (noAudio) args.push("-an");
+	if (options.fade) args.push(options.fade === true ? "-f" : `-f=${options.fade}`);
+	if (options.noVideo) args.push("-vn");
+	if (options.noAudio) args.push("-an");
 	args.push("-y", output);
 
 	return args;

@@ -1,5 +1,5 @@
 import { useContext, useRef, useState } from "react";
-import { Input } from "../components/App";
+import { Input } from "../components/Input";
 import InputsStateContext from "../contexts/InputsState";
 
 export default class {
