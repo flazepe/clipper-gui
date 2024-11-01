@@ -12,7 +12,7 @@ import Input from "./Input";
 const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
 
 export interface Input {
-	name: string;
+	filename: string;
 	path: string;
 	src: string;
 	segments: Array<[number, number]>;
@@ -40,7 +40,7 @@ function App(): JSX.Element {
 					...event.payload.paths
 						.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
 						.map(path => ({
-							name: path.split(/[/\\]/).pop()!,
+							filename: path.split(/[/\\]/).pop()!,
 							path: path,
 							src: convertFileSrc(path),
 							segments: []

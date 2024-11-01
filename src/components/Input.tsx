@@ -1,25 +1,23 @@
 import MultiRangeSlider from "multi-range-slider-react";
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
+import InputController from "../classes/InputController";
 import { durationToSeconds, secondsToDuration } from "../functions/seconds";
 import { Input } from "./App";
 import Button from "./Button";
-import InputController from "../classes/InputController";
-import InputsStateContext from "../contexts/InputsState";
 
 export default function ({ input }: { input: Input }) {
-	const [, setInputs] = useContext(InputsStateContext),
-		c = new InputController(input);
+	const c = new InputController(input);
 
 	return (
 		<div className="flex w-full flex-col gap-2 rounded border-2 border-gray-500 p-5 lg:w-5/12">
 			<div className="my-2 text-2xl font-bold">
-				{input.name}
-				<span onClick={() => setInputs!(inputs => inputs.filter(entry => entry !== input))} className="ml-2 cursor-pointer text-red-500">
+				{c.input.filename}
+				<span onClick={() => c.delete()} className="ml-2 cursor-pointer text-red-500">
 					(delete)
 				</span>
 			</div>
 			<video
-				src={input.src}
+				src={c.input.src}
 				ref={useCallback((video: HTMLVideoElement | null) => c.setVideo(video), [])}
 				onLoadedMetadata={event => {
 					c.setVideo(event.currentTarget);
@@ -103,45 +101,18 @@ export default function ({ input }: { input: Input }) {
 							>
 								Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
 							</Button>
-							<Button
-								onClick={() => {
-									if (!c.segmentEnd || c.segmentStart >= c.segmentEnd || c.segmentEnd <= c.segmentStart) return;
-
-									setInputs!(inputs => {
-										if (!input.segments.find(segment => segment[0] === c.segmentStart && segment[1] === c.segmentEnd))
-											input.segments.push([c.segmentStart, c.segmentEnd]);
-										return [...inputs];
-									});
-								}}
-								className="w-1/3"
-							>
+							<Button onClick={() => c.addCurrentSegment()} className="w-1/3">
 								Add Segment
 							</Button>
 						</div>
 					</div>
-					{!!input.segments.length && <div className="text-2xl font-bold">Segments</div>}
-					{input.segments.map((segment, index) => (
+					{!!c.input.segments.length && <div className="text-2xl font-bold">Segments</div>}
+					{c.input.segments.map((segment, index) => (
 						<div className="w-80 cursor-pointer text-xl" key={index}>
-							<span
-								onClick={() => {
-									c.setSegmentStart(segment[0]);
-									c.setSegmentEnd(segment[1]);
-									c.currentTime = segment[0];
-									c.play();
-								}}
-							>
+							<span onClick={() => c.playSegment(segment)}>
 								{segment.map(entry => secondsToDuration(entry, true)).join("-")} ({secondsToDuration(segment[1] - segment[0], true)})
 							</span>
-							<span
-								onClick={() =>
-									setInputs!(inputs => {
-										const inputToEdit = inputs.find(entry => entry === input);
-										if (inputToEdit) inputToEdit.segments.splice(index, 1);
-										return [...inputs];
-									})
-								}
-								className="ml-2 text-red-500"
-							>
+							<span onClick={() => c.deleteSegment(index)} className="ml-2 text-red-500">
 								(delete)
 							</span>
 						</div>

@@ -51,6 +51,31 @@ export default class {
 		if (this.video) this.video.currentTime = duration;
 	}
 
+	addCurrentSegment() {
+		if (this.segmentStart >= this.segmentEnd || this.segmentEnd <= this.segmentStart) return;
+
+		this.setInputs?.(inputs => {
+			if (!this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
+				this.input.segments.push([this.segmentStart, this.segmentEnd]);
+			return [...inputs];
+		});
+	}
+
+	deleteSegment(index: number) {
+		this.setInputs?.(inputs => {
+			this.input.segments.splice(index, 1);
+			return [...inputs];
+		});
+	}
+
+	playSegment([segmentStart, segmentEnd]: [number, number]) {
+		this.setSegmentStart(segmentStart);
+		this.setSegmentEnd(segmentEnd);
+
+		this.currentTime = segmentStart;
+		this.play();
+	}
+
 	play() {
 		this.video?.play();
 	}
@@ -65,5 +90,9 @@ export default class {
 		this.video.paused && this.video.currentTime >= this.segmentStart && this.video.currentTime <= this.segmentEnd
 			? this.video.play()
 			: this.video.pause();
+	}
+
+	delete() {
+		this.setInputs?.(inputs => inputs.filter(entry => entry !== this.input));
 	}
 }
