@@ -13,7 +13,8 @@
 		"windows": [
 			{
 				"title": "clipper-gui",
-				"maximized": true
+				"maximized": true,
+				"zoomHotkeysEnabled": true
 			}
 		],
 		"security": {
