@@ -45,7 +45,7 @@ function App(): JSX.Element {
 					<div
 						className={`fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-700 text-5xl font-bold text-white`}
 					>
-						Drop the file NOW!
+						Drop the file(s) NOW!
 					</div>
 				)}
 				<div className="text-4xl font-bold">clipper-gui</div>
