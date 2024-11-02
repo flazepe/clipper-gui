@@ -4,22 +4,26 @@ import { useContext, useState } from "react";
 import InputsStateContext from "../contexts/InputsState";
 import OptionsContext from "../contexts/Options";
 import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "../functions/clipper";
-import { secondsToDuration } from "../functions/seconds";
+import { durationToSeconds, secondsToDuration } from "../functions/seconds";
 import Button from "./Button";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
 	const options = useContext(OptionsContext),
 		[status, setStatus] = useState(""),
-		[child, setChild] = useState<Child | null>(null);
+		[child, setChild] = useState<Child | null>(null),
+		[progress, setProgress] = useState(0),
+		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0);
 
 	return (
 		<>
 			<div className="w-1/2 whitespace-pre-wrap rounded bg-gray-950 p-4 text-center">
-				Total video duration:{" "}
-				{secondsToDuration(inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0))}
+				Total video duration: {secondsToDuration(totalDuration)}
 				<br />
 				{status.replace(/\x1b(.+?)m/g, "")}
+			</div>
+			<div className="h-9 w-1/2 bg-slate-300">
+				<div className="h-full bg-green-500" style={{ width: `${progress}%` }} />
 			</div>
 			{child ? (
 				<Button onClick={() => child?.kill().catch(() => null)} className="w-56 bg-red-600">
@@ -53,7 +57,12 @@ export default function () {
 								const command = Command.create("ffmpeg", args);
 
 								command.stdout.on("data", data => setStatus(data));
-								command.stderr.on("data", data => setStatus(data));
+								command.stderr.on("data", data => {
+									const time = data.split("time=").pop()!.split(" ")[0];
+									if (time.split(":").every(entry => !isNaN(Number(entry))))
+										setProgress(Math.round((durationToSeconds(time) / totalDuration) * 100));
+									setStatus(data);
+								});
 								command.on("error", error => setStatus(error));
 								command.on("close", () => setChild(null));
 
