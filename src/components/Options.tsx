@@ -9,7 +9,7 @@ export interface Options {
 export default function () {
 	const options = useContext(OptionsContext),
 		[inputs] = useContext(InputsStateContext),
-		[fade, setFade] = useState<number>(0),
+		[fade, setFade] = useState(0),
 		[noVideo, setNoVideo] = useState(false),
 		[noAudio, setNoAudio] = useState(false),
 		[dryRun, setDryRun] = useState(false);
@@ -22,14 +22,14 @@ export default function () {
 	return (
 		<div className="flex cursor-pointer items-center gap-5 text-xl">
 			<div className="flex items-center gap-2">
-				<div onClick={() => setFade(0.5)} className="flex gap-2">
+				<div onClick={() => setFade(fade ? 0 : 0.5)} className="flex gap-2">
 					<input type="checkbox" checked={!!fade} readOnly />
 					Fade:
 				</div>
 				<input
 					type="number"
 					min={0}
-					defaultValue="0.5"
+					value={fade}
 					step="0.1"
 					onChange={event => setFade(Number(event.currentTarget.value))}
 					readOnly={!fade}
