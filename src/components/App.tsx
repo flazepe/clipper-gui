@@ -18,16 +18,19 @@ function App(): JSX.Element {
 
 				setInputs?.({
 					...inputs,
-					inputs: event.payload.paths
-						.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
-						.map(path => ({
-							file: path,
-							segments: [],
-							videoTrack: 0,
-							audioTrack: 0,
-							subtitleTrack: null,
-							speed: 1
-						}))
+					inputs: [
+						...inputs.inputs,
+						...event.payload.paths
+							.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
+							.map(path => ({
+								file: path,
+								segments: [],
+								videoTrack: 0,
+								audioTrack: 0,
+								subtitleTrack: null,
+								speed: 1
+							}))
+					]
 				});
 			})
 		];
