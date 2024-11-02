@@ -11,7 +11,7 @@ function App(): JSX.Element {
 
 	useEffect(() => {
 		const fns = [
-			listen(TauriEvent.DRAG_ENTER, () => setIsDragged(true)),
+			listen<{ paths: Array<string> }>(TauriEvent.DRAG_ENTER, event => event.payload.paths.length && setIsDragged(true)),
 			listen(TauriEvent.DRAG_LEAVE, () => setIsDragged(false)),
 			listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, event => {
 				setIsDragged(false);
