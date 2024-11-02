@@ -58,18 +58,15 @@ export default class {
 	addCurrentSegment() {
 		if (this.segmentStart >= this.segmentEnd || this.segmentEnd <= this.segmentStart) return;
 
-		this.setInputs?.(inputs => {
-			if (!this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
-				this.input.segments.push([this.segmentStart, this.segmentEnd]);
-			return { ...inputs };
-		});
+		if (!this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
+			this.input.segments.push([this.segmentStart, this.segmentEnd]);
+
+		this.setInputs?.({ ...this.inputs });
 	}
 
 	deleteSegment(index: number) {
-		this.setInputs?.(inputs => {
-			this.input.segments.splice(index, 1);
-			return { ...inputs };
-		});
+		this.input.segments.splice(index, 1);
+		this.setInputs?.({ ...this.inputs });
 	}
 
 	playSegment([segmentStart, segmentEnd]: [number, number]) {
@@ -97,9 +94,7 @@ export default class {
 	}
 
 	delete() {
-		this.setInputs?.(inputs => {
-			inputs.inputs = inputs.inputs.filter(entry => entry !== this.input);
-			return { ...inputs };
-		});
+		this.inputs.inputs = this.inputs.inputs.filter(entry => entry !== this.input);
+		this.setInputs?.({ ...this.inputs });
 	}
 }

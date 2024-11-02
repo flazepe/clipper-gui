@@ -6,8 +6,7 @@ import Inputs from "./Inputs";
 
 function App(): JSX.Element {
 	const [isDragged, setIsDragged] = useState(false),
-		inputsState = useContext(InputsStateContext),
-		[inputs, setInputs] = useState(inputsState[0]);
+		[inputs, setInputs] = useState(useContext(InputsStateContext)[0]);
 
 	useEffect(() => {
 		const fns = [
@@ -23,6 +22,7 @@ function App(): JSX.Element {
 						...event.payload.paths
 							.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))
 							.map(path => ({
+								_dndID: Math.random().toString(8),
 								file: path,
 								segments: [],
 								videoTrack: 0,
