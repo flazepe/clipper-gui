@@ -40,14 +40,14 @@ export default function () {
 
 						// Run clipper and ffmpeg
 						(async () => {
-							const output = await save({
+							const outputFile = await save({
 								defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
 								filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
 							});
-							if (!output) return;
+							if (!outputFile) return;
 
 							try {
-								const args = await getFfmpegArgs({ inputs, output, dryRun: options.dryRun });
+								const args = await getFfmpegArgs({ inputs, outputFile, dryRun: options.dryRun });
 								if (options.dryRun) return setStatus(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
 
 								const command = Command.create("ffmpeg", args);

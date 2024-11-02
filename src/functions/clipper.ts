@@ -39,7 +39,7 @@ export interface Output {
 	forceNotOverwrite: boolean;
 }
 
-export function getFfmpegArgs({ inputs, output, dryRun }: { inputs: Inputs; output: string; dryRun: boolean }) {
+export function getFfmpegArgs({ inputs, outputFile, dryRun }: { inputs: Inputs; outputFile: string; dryRun: boolean }) {
 	const clipper: Clipper = {
 		inputs,
 		encoder: {
@@ -50,7 +50,7 @@ export function getFfmpegArgs({ inputs, output, dryRun }: { inputs: Inputs; outp
 			cq: null
 		},
 		output: {
-			file: output,
+			file: outputFile,
 			forceOverwrite: true,
 			forceNotOverwrite: false
 		},
