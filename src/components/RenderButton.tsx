@@ -26,7 +26,15 @@ export default function () {
 				<div className="h-full bg-green-500" style={{ width: `${progress}%` }} />
 			</div>
 			{child ? (
-				<Button onClick={() => child?.kill().catch(() => null)} className="w-56 bg-red-600">
+				<Button
+					onClick={() =>
+						child
+							?.kill()
+							.then(() => setChild(null))
+							.catch(() => null)
+					}
+					className="w-56 bg-red-600"
+				>
 					Cancel Render
 				</Button>
 			) : (
