@@ -12,7 +12,7 @@ export default function ({ input }: { input: Input }) {
 	return (
 		<div className="flex w-full flex-col gap-5 rounded border-2 border-gray-500 p-5 lg:w-5/12">
 			<div className="flex items-center justify-between text-2xl font-bold">
-				{c.input.file.split(/[/\\]/).pop()!}
+				{c.filename}
 				<div onClick={() => c.delete()} title="Delete" className="cursor-pointer text-red-500">
 					[x]
 				</div>

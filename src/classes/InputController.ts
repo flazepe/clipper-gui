@@ -35,6 +35,10 @@ export default class {
 		this.setSegmentEnd = setSegmentEnd;
 	}
 
+	get filename() {
+		return this.input.file.split(/[/\\]/).pop()!;
+	}
+
 	get ready() {
 		return !!this.video && !!this.video.duration && !!this.segmentEnd;
 	}
