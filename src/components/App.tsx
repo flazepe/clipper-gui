@@ -21,7 +21,10 @@ function App(): JSX.Element {
 
 	useEffect(() => {
 		const fns = [
-			listen<{ paths: Array<string> }>(TauriEvent.DRAG_ENTER, event => event.payload.paths.length && setIsDragged(true)),
+			listen<{ paths: Array<string> }>(
+				TauriEvent.DRAG_ENTER,
+				event => event.payload.paths.some(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext))) && setIsDragged(true)
+			),
 			listen(TauriEvent.DRAG_LEAVE, () => setIsDragged(false)),
 			listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, event => {
 				setIsDragged(false);
@@ -65,7 +68,7 @@ function App(): JSX.Element {
 		<InputsStateContext.Provider value={[inputs, setInputs]}>
 			{isDragged && (
 				<div className="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-700 text-5xl font-bold text-white">
-					Drop the file(s) NOW!
+					Drop the input(s) NOW!
 				</div>
 			)}
 			<div className="flex h-[6vh] justify-between gap-2 bg-gray-900 p-2">
@@ -91,7 +94,7 @@ function App(): JSX.Element {
 					) : (
 						<>
 							<div className="m-5 text-5xl font-bold">clipper-gui</div>
-							<div className="text-2xl">Drag video(s) to this window to get started.</div>
+							<div className="text-2xl">Drag input(s) to this window to get started.</div>
 						</>
 					)}
 				</div>
