@@ -60,7 +60,7 @@ export default function ({ input }: { input: Input }) {
 						}}
 						onTimeUpdate={event => {
 							const currentTime = Math.trunc(event.currentTarget.currentTime);
-							if (!(currentTime >= c.segmentStart && currentTime <= c.segmentEnd)) event.currentTarget.pause();
+							if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) event.currentTarget.pause();
 						}}
 						onClick={() => c.playorPause()}
 						className="h-[50vh] w-screen"
@@ -127,16 +127,13 @@ export default function ({ input }: { input: Input }) {
 								/>
 							</div>
 							<div className="flex gap-2">
-								<Button
-									onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])}
-									className="flex w-1/2 items-center justify-center gap-2"
-								>
+								<Button onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
 									<div className="w-10 fill-white">
 										<PlayIcon />
 									</div>
 									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
 								</Button>
-								<Button onClick={() => c.addCurrentSegment()} className="flex w-1/2 items-center justify-center gap-2">
+								<Button onClick={() => c.addCurrentSegment()} className="w-1/2">
 									<div className="w-10 fill-white">
 										<AddIcon />
 									</div>
@@ -148,7 +145,7 @@ export default function ({ input }: { input: Input }) {
 				</div>
 				<div className="w-60 bg-gray-950" />
 			</div>
-			<div className="flex h-full w-full items-center gap-4 overflow-x-scroll bg-gray-950 p-4">
+			<div className="flex h-full w-full items-center gap-4 overflow-y-hidden overflow-x-scroll bg-gray-950 p-4">
 				<DndContext
 					onDragEnd={event => {
 						if (!event.over || event.active.id === event.over.id) return;
