@@ -73,7 +73,7 @@ function App(): JSX.Element {
 					Drop the input(s) NOW!
 				</div>
 			)}
-			<div className="flex h-[6vh] justify-between gap-2 bg-gray-900 p-2">
+			<div className="flex h-[6vh] items-center justify-between gap-2 bg-gray-900 p-2">
 				<div className="w-1/6">
 					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)} className="flex justify-center gap-2">
 						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
