@@ -5,14 +5,16 @@ import InputsStateContext from "../contexts/InputsState";
 import OptionsContext from "../contexts/Options";
 import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "../functions/clipper";
 import { durationToSeconds, secondsToDuration } from "../functions/seconds";
+import CancelIcon from "../icons/Cancel";
+import VideoVintageIcon from "../icons/VideoVintage";
 import Button from "./Button";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
 	const options = useContext(OptionsContext),
-		[status, setStatus] = useState(""),
+		[_status, setStatus] = useState(""),
 		[child, setChild] = useState<Child | null>(null),
-		[progress, setProgress] = useState(0),
+		[_progress, setProgress] = useState(0),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0);
 
 	/*
@@ -35,8 +37,11 @@ export default function () {
 					})
 					.catch(() => null)
 			}
-			className="bg-red-600"
+			className="flex justify-center gap-2 bg-red-600"
 		>
+			<div className="w-8 fill-white">
+				<CancelIcon />
+			</div>
 			Cancel Render
 		</Button>
 	) : (
@@ -85,7 +90,11 @@ export default function () {
 					}
 				})();
 			}}
+			className="flex justify-center gap-2"
 		>
+			<div className="w-8 fill-white">
+				<VideoVintageIcon />
+			</div>
 			Render ({secondsToDuration(totalDuration)})
 		</Button>
 	);

@@ -3,11 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import InputsStateContext from "../contexts/InputsState";
 import InputStateContext from "../contexts/InputState";
 import { Input, SUPPORTED_EXTENSIONS } from "../functions/clipper";
+import MenuCloseIcon from "../icons/MenuClose";
+import MenuOpenIcon from "../icons/MenuOpen";
+import Button from "./Button";
 import InputComponent from "./Input";
-import SideInputsComponent from "./SideInputs";
 import Options from "./Options";
 import RenderButton from "./RenderButton";
-import Button from "./Button";
+import SideInputsComponent from "./SideInputs";
 
 function App(): JSX.Element {
 	const [isDragged, setIsDragged] = useState(false),
@@ -73,7 +75,10 @@ function App(): JSX.Element {
 			)}
 			<div className="flex h-[6vh] justify-between gap-2 bg-gray-900 p-2">
 				<div className="w-1/6">
-					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)}>{sideInputsToggled ? "Hide" : "Show"} Inputs</Button>
+					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)} className="flex justify-center gap-2">
+						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
+						{sideInputsToggled ? "Hide" : "Show"} Inputs
+					</Button>
 				</div>
 				<div className="w-4/6">
 					<Options />

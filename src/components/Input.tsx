@@ -5,6 +5,8 @@ import { useCallback } from "react";
 import InputController from "../classes/InputController";
 import { Input } from "../functions/clipper";
 import { durationToSeconds, secondsToDuration } from "../functions/seconds";
+import AddIcon from "../icons/Add";
+import PlayIcon from "../icons/Play";
 import Button from "./Button";
 import InputSegmentComponent from "./InputSegment";
 
@@ -80,7 +82,7 @@ export default function ({ input }: { input: Input }) {
 								barRightColor="gray"
 								onInput={event => {
 									if (event.minValue !== c.segmentStart) c.currentTime = event.minValue;
-									if (event.maxValue !== c.segmentEnd) c.currentTime = Math.max(0, event.maxValue - 1);
+									if (event.maxValue !== c.segmentEnd) c.currentTime = event.maxValue;
 
 									c.setSegmentStart(event.minValue);
 									if (c.segmentStartInput.current) c.segmentStartInput.current.value = secondsToDuration(event.minValue);
@@ -124,8 +126,22 @@ export default function ({ input }: { input: Input }) {
 									className="w-28 text-center"
 								/>
 							</div>
-							<div className="flex items-center justify-center gap-2">
-								<Button onClick={() => c.addCurrentSegment()}>Add ({secondsToDuration(c.segmentEnd - c.segmentStart)})</Button>
+							<div className="flex gap-2">
+								<Button
+									onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])}
+									className="flex w-1/2 items-center justify-center gap-2"
+								>
+									<div className="w-10 fill-white">
+										<PlayIcon />
+									</div>
+									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
+								</Button>
+								<Button onClick={() => c.addCurrentSegment()} className="flex w-1/2 items-center justify-center gap-2">
+									<div className="w-10 fill-white">
+										<AddIcon />
+									</div>
+									Add
+								</Button>
 							</div>
 						</div>
 					)}
