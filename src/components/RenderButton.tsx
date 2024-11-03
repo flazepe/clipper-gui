@@ -15,76 +15,78 @@ export default function () {
 		[progress, setProgress] = useState(0),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0);
 
-	return (
-		<>
-			<div className="w-1/2 whitespace-pre-wrap rounded bg-gray-950 p-4 text-center">
-				Total video duration: {secondsToDuration(totalDuration)}
-				<br />
-				{status.replace(/\x1b(.+?)m/g, "")}
+	/*
+		<div className="flex w-64 flex-col justify-between text-sm">
+			<div className="h-2 rounded bg-slate-300">
+				<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
 			</div>
-			<div className="h-9 w-1/2 bg-slate-300">
-				<div className="h-full bg-green-500" style={{ width: `${progress}%` }} />
-			</div>
-			{child ? (
-				<Button
-					onClick={() =>
-						child
-							?.kill()
-							.then(() => setChild(null))
-							.catch(() => null)
+			{status.replace(/\x1b(.+?)m/g, "") || "aaa"}
+		</div>
+	*/
+
+	return child ? (
+		<Button
+			onClick={() =>
+				child
+					?.kill()
+					.then(() => {
+						setChild(null);
+						setProgress(100);
+					})
+					.catch(() => null)
+			}
+			className="bg-red-600"
+		>
+			Cancel Render
+		</Button>
+	) : (
+		<Button
+			onClick={() => {
+				// Validations
+				if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
+
+				const badInput = inputs.inputs.find(input => !input.segments[0]);
+				if (badInput) return message(`Input "${badInput.file} is missing segments.`, { kind: "error" });
+
+				// Default filename
+				const split = inputs.inputs[0].file.split("."),
+					[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
+
+				// Run clipper and ffmpeg
+				(async () => {
+					const outputFile = await save({
+						defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
+						filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
+					});
+					if (!outputFile) return;
+
+					try {
+						const args = await getFfmpegArgs({ inputs, outputFile, dryRun: options.dryRun });
+						if (options.dryRun) return setStatus(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+
+						const command = Command.create("ffmpeg", args);
+
+						command.stdout.on("data", data => setStatus(data));
+						command.stderr.on("data", data => {
+							console.log(data);
+							const time = data.split("time=").pop()!.split(" ")[0];
+							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
+							setStatus(data);
+						});
+						command.on("error", error => setStatus(error));
+						command.on("close", () => {
+							setChild(null);
+							setProgress(100);
+						});
+
+						setChild(await command.spawn());
+					} catch (error) {
+						setStatus(`${error}`);
 					}
-					className="w-56 bg-red-600"
-				>
-					Cancel Render
-				</Button>
-			) : (
-				<Button
-					onClick={() => {
-						// Validations
-						if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
-
-						const badInput = inputs.inputs.find(input => !input.segments[0]);
-						if (badInput) return message(`Input "${badInput.file} is missing segments.`, { kind: "error" });
-
-						// Default filename
-						const split = inputs.inputs[0].file.split("."),
-							[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
-
-						// Run clipper and ffmpeg
-						(async () => {
-							const outputFile = await save({
-								defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
-								filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
-							});
-							if (!outputFile) return;
-
-							try {
-								const args = await getFfmpegArgs({ inputs, outputFile, dryRun: options.dryRun });
-								if (options.dryRun) return setStatus(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
-
-								const command = Command.create("ffmpeg", args);
-
-								command.stdout.on("data", data => setStatus(data));
-								command.stderr.on("data", data => {
-									const time = data.split("time=").pop()!.split(" ")[0];
-									if (time.split(":").every(entry => !isNaN(Number(entry))))
-										setProgress(Math.round((durationToSeconds(time) / totalDuration) * 100));
-									setStatus(data);
-								});
-								command.on("error", error => setStatus(error));
-								command.on("close", () => setChild(null));
-
-								setChild(await command.spawn());
-							} catch (error) {
-								setStatus(`${error}`);
-							}
-						})();
-					}}
-					className="w-56"
-				>
-					Render
-				</Button>
-			)}
-		</>
+				})();
+			}}
+		>
+			Render ({secondsToDuration(totalDuration)})
+		</Button>
 	);
 }

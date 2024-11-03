@@ -12,7 +12,7 @@ input {
 
 /* Video range slider */
 .multi-range-slider {
-	@apply my-6 border-none p-0;
+	@apply my-3 border-none p-0;
 }
 
 /* Thicken bar */

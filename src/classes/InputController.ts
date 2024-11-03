@@ -1,9 +1,12 @@
 import { useContext, useRef, useState } from "react";
 import InputsStateContext from "../contexts/InputsState";
+import InputStateContext from "../contexts/InputState";
 import { Input } from "../functions/clipper";
+import { message } from "@tauri-apps/plugin-dialog";
 
 export default class {
 	input;
+	setInput;
 	inputs;
 	setInputs;
 	private video;
@@ -16,7 +19,9 @@ export default class {
 	segmentEndInput = useRef<HTMLInputElement>(null);
 
 	constructor(input: Input) {
+		const [, setInput] = useContext(InputStateContext);
 		this.input = input;
+		this.setInput = setInput;
 
 		const [inputs, setInputs] = useContext(InputsStateContext);
 		this.inputs = inputs;
@@ -56,16 +61,19 @@ export default class {
 	}
 
 	addCurrentSegment() {
-		if (this.segmentStart >= this.segmentEnd || this.segmentEnd <= this.segmentStart) return;
+		if (this.segmentStart >= this.segmentEnd || this.segmentEnd <= this.segmentStart)
+			return message("Segment start must be before segment end and vice versa.");
 
-		if (!this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
-			this.input.segments.push([this.segmentStart, this.segmentEnd]);
+		if (this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
+			return message("Section segment exists.", { kind: "error" });
+
+		this.input.segments.push([this.segmentStart, this.segmentEnd]);
 
 		this.setInputs?.({ ...this.inputs });
 	}
 
-	deleteSegment(index: number) {
-		this.input.segments.splice(index, 1);
+	deleteSegment(segment: [number, number]) {
+		this.input.segments.splice(this.input.segments.indexOf(segment), 1);
 		this.setInputs?.({ ...this.inputs });
 	}
 
@@ -88,13 +96,27 @@ export default class {
 	playorPause() {
 		if (!this.video) return;
 
-		this.video.paused && this.video.currentTime >= this.segmentStart && this.video.currentTime <= this.segmentEnd
-			? this.video.play()
-			: this.video.pause();
+		if (this.video.currentTime >= this.segmentStart && this.video.currentTime <= this.segmentEnd) {
+			this.video.paused ? this.video.play() : this.video.pause();
+		} else if (this.video.paused) {
+			this.video.currentTime = this.segmentStart;
+			this.video.play();
+		}
 	}
 
-	delete() {
-		this.inputs.inputs = this.inputs.inputs.filter(entry => entry !== this.input);
+	setTrack(trackType: "video" | "audio" | "subtitle", trackIndex: number) {
+		switch (trackType) {
+			case "video":
+				this.input.videoTrack = trackIndex;
+				break;
+			case "audio":
+				this.input.audioTrack = trackIndex;
+				break;
+			case "subtitle":
+				this.input.subtitleTrack = trackIndex === -1 ? null : trackIndex;
+				break;
+		}
+
 		this.setInputs?.({ ...this.inputs });
 	}
 }

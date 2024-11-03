@@ -20,7 +20,7 @@ export default function () {
 	options.dryRun = dryRun;
 
 	return (
-		<div className="flex cursor-pointer items-center gap-5 text-xl">
+		<div className="flex cursor-pointer items-center justify-center gap-5 text-xl">
 			<div className="flex items-center gap-2">
 				<div onClick={() => setFade(fade ? 0 : 0.5)} className="flex gap-2">
 					<input type="checkbox" checked={!!fade} readOnly />
@@ -33,7 +33,7 @@ export default function () {
 					step="0.1"
 					onChange={event => setFade(Number(event.currentTarget.value))}
 					readOnly={!fade}
-					className="w-20 text-center"
+					className="w-16 text-center"
 				/>
 			</div>
 			<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2">
