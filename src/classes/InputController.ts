@@ -65,7 +65,7 @@ export default class {
 			return message("Segment start must be before segment end and vice versa.");
 
 		if (this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
-			return message("Section segment exists.", { kind: "error" });
+			return message("Segment already exists.", { kind: "error" });
 
 		this.input.segments.push([this.segmentStart, this.segmentEnd]);
 
