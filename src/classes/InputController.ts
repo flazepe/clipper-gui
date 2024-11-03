@@ -49,11 +49,11 @@ export default class {
 	}
 
 	get duration() {
-		return this.video?.duration || 0;
+		return Math.trunc(this.video?.duration || 0);
 	}
 
 	get currentTime() {
-		return this.video?.currentTime || 0;
+		return Math.trunc(this.video?.currentTime || 0);
 	}
 
 	set currentTime(duration: number) {

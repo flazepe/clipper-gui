@@ -23,7 +23,7 @@ export function secondsToDuration(seconds: number, padAll = false) {
 }
 
 export function durationToSeconds(duration: string) {
-	const split = duration.toString().split(":").map(Number);
+	const split = duration.toString().split(":").map(Number).map(Math.trunc);
 	if (split.some(entry => isNaN(entry))) return 0;
 
 	switch (split.length) {

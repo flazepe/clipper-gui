@@ -56,10 +56,10 @@ export default function ({ input }: { input: Input }) {
 						ref={useCallback((video: HTMLVideoElement | null) => c.setVideo(video), [])}
 						onLoadedMetadata={event => {
 							c.setVideo(event.currentTarget);
-							c.setSegmentEnd(event.currentTarget.duration);
+							c.setSegmentEnd(Math.trunc(event.currentTarget.duration));
 						}}
 						onTimeUpdate={event => {
-							const currentTime = event.currentTarget.currentTime;
+							const currentTime = Math.trunc(event.currentTarget.currentTime);
 							if (!(currentTime >= c.segmentStart && currentTime <= c.segmentEnd)) event.currentTarget.pause();
 						}}
 						onClick={() => c.playorPause()}
