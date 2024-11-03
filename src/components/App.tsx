@@ -75,7 +75,7 @@ function App(): JSX.Element {
 			)}
 			<div className="flex h-[6vh] items-center justify-between gap-2 bg-gray-900 p-2">
 				<div className="w-1/6">
-					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)} className="flex justify-center gap-2">
+					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
 						{sideInputsToggled ? "Hide" : "Show"} Inputs
 					</Button>
@@ -89,7 +89,7 @@ function App(): JSX.Element {
 			</div>
 			<div className="flex h-[94vh] overflow-hidden">
 				{sideInputsToggled && (
-					<div className="flex w-2/12 flex-col gap-5 overflow-y-scroll p-4">
+					<div className="flex w-2/12 flex-col gap-5 overflow-x-hidden overflow-y-scroll p-4">
 						<SideInputsComponent />
 					</div>
 				)}

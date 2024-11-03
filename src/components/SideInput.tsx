@@ -17,20 +17,17 @@ export default function ({ input }: { input: Input }) {
 		<div
 			ref={setNodeRef}
 			style={{ transform: CSS.Translate.toString(transform), opacity: transform ? 0.7 : 1 }}
-			className="flex cursor-pointer flex-col text-xl"
+			className="flex cursor-pointer flex-col text-lg"
 		>
 			<div ref={setDroppableNodeRef} {...listeners} {...attributes} className="cursor-move rounded-t bg-gray-800 p-2 text-center">
 				{input.file.split(/[/\\]/).pop()}
 			</div>
 			<div className="flex">
-				<div
-					onClick={() => setInput?.(input)}
-					className={`flex w-1/2 items-center justify-center gap-3 rounded-bl border-2 p-2 uppercase ${currentInput === input ? "border-gray-700 bg-gray-700" : "border-gray-800 bg-black"} `}
-				>
+				<div onClick={() => setInput?.(input)} className="flex w-1/2 items-center justify-center gap-3 rounded-bl bg-gray-700 p-2 uppercase">
 					<div className="w-7 fill-white">
 						<EditIcon />
 					</div>
-					Edit
+					{currentInput === input ? "Editing" : "Edit"}
 				</div>
 				<div
 					onClick={() => {

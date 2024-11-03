@@ -37,7 +37,7 @@ export default function () {
 					})
 					.catch(() => null)
 			}
-			className="flex justify-center gap-2 bg-red-600"
+			className="bg-red-600"
 		>
 			<div className="w-8 fill-white">
 				<CancelIcon />
@@ -90,7 +90,6 @@ export default function () {
 					}
 				})();
 			}}
-			className="flex justify-center gap-2"
 		>
 			<div className="w-8 fill-white">
 				<VideoVintageIcon />
