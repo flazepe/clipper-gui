@@ -58,7 +58,7 @@ function App(): JSX.Element {
 			})
 		];
 
-		if (input === null && inputs.inputs[0]) {
+		if (!input && inputs.inputs[0]) {
 			setSideInputsToggled(true);
 			setInput(inputs.inputs[0]);
 		}

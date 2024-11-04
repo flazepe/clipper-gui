@@ -31,9 +31,11 @@ export default function ({ input }: { input: Input }) {
 				</div>
 				<div
 					onClick={() => {
-						inputs.inputs = inputs.inputs.filter(entry => entry !== input);
+						const index = inputs.inputs.indexOf(input);
+						inputs.inputs.splice(index, 1);
+
 						setInputs?.({ ...inputs });
-						setInput?.(null);
+						setInput?.(inputs.inputs[index - 1] ?? null);
 					}}
 					className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}
 				>
