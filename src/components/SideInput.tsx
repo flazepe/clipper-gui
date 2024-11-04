@@ -15,8 +15,8 @@ export default function ({ input }: { input: Input }) {
 
 	useEffect(() => {
 		const fn = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && deleteInput();
-		document.addEventListener("keyup", fn);
-		return () => document.removeEventListener("keyup", fn);
+		document.addEventListener("keydown", fn);
+		return () => document.removeEventListener("keydown", fn);
 	});
 
 	const deleteInput = () => {
