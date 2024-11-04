@@ -1,6 +1,6 @@
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import InputsStateContext from "../contexts/InputsState";
 import InputStateContext from "../contexts/InputState";
 import { Input } from "../functions/clipper";
@@ -12,6 +12,20 @@ export default function ({ input }: { input: Input }) {
 		[currentInput, setInput] = useContext(InputStateContext),
 		{ attributes, listeners, setNodeRef, transform } = useDraggable({ id: input._dndID }),
 		{ setNodeRef: setDroppableNodeRef } = useDroppable({ id: input._dndID });
+
+	useEffect(() => {
+		const fn = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && deleteInput();
+		document.addEventListener("keyup", fn);
+		return () => document.removeEventListener("keyup", fn);
+	});
+
+	const deleteInput = () => {
+		const index = inputs.inputs.indexOf(input);
+		inputs.inputs.splice(index, 1);
+
+		setInputs?.({ ...inputs });
+		setInput?.(inputs.inputs[index - 1] ?? null);
+	};
 
 	return (
 		<div
@@ -29,16 +43,7 @@ export default function ({ input }: { input: Input }) {
 					</div>
 					{currentInput === input ? "Editing" : "Edit"}
 				</div>
-				<div
-					onClick={() => {
-						const index = inputs.inputs.indexOf(input);
-						inputs.inputs.splice(index, 1);
-
-						setInputs?.({ ...inputs });
-						setInput?.(inputs.inputs[index - 1] ?? null);
-					}}
-					className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}
-				>
+				<div onClick={deleteInput} className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}>
 					<div className="w-7 fill-white">
 						<DeleteIcon />
 					</div>
