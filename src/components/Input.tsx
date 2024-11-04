@@ -49,7 +49,7 @@ export default function ({ input }: { input: Input }) {
 						/>
 					)}
 				</div>
-				<div className="flex flex-col gap-5 p-5">
+				<div className="flex flex-col justify-center gap-5 overflow-y-auto p-5">
 					<div className="text-center text-2xl font-bold">{c.filename}</div>
 					<video
 						src={convertFileSrc(c.input.file)}
@@ -63,7 +63,7 @@ export default function ({ input }: { input: Input }) {
 							if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) event.currentTarget.pause();
 						}}
 						onClick={() => c.playorPause()}
-						className="h-[50vh] w-screen"
+						className="h-[55%] w-screen"
 					/>
 					{c.ready && (
 						<div className="flex flex-col gap-5 text-center text-2xl">

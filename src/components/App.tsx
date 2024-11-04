@@ -73,7 +73,7 @@ function App(): JSX.Element {
 					Drop the input(s) NOW!
 				</div>
 			)}
-			<div className="flex h-[6vh] items-center justify-between gap-2 bg-gray-900 p-2">
+			<div className="flex h-[7vh] items-center justify-between gap-2 bg-gray-900 p-2">
 				<div className="w-1/6">
 					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
@@ -87,13 +87,13 @@ function App(): JSX.Element {
 					<RenderButton />
 				</div>
 			</div>
-			<div className="flex h-[94vh] overflow-hidden">
+			<div className="flex h-[93vh] overflow-hidden">
 				{sideInputsToggled && (
-					<div className="flex w-2/12 flex-col gap-5 overflow-x-hidden overflow-y-scroll p-4">
+					<div className="flex w-1/4 flex-col gap-5 overflow-x-hidden overflow-y-scroll p-4">
 						<SideInputsComponent />
 					</div>
 				)}
-				<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-10/12" : "w-full"}`}>
+				<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
 					{input ? (
 						<InputComponent input={input} />
 					) : (
