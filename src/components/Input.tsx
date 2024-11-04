@@ -49,7 +49,7 @@ export default function ({ input }: { input: Input }) {
 						/>
 					)}
 				</div>
-				<div className="flex flex-col justify-center gap-5 overflow-y-auto p-5">
+				<div className="flex flex-col justify-center gap-5 overflow-y-auto overflow-x-hidden p-5">
 					<div className="text-center text-2xl font-bold">{c.filename}</div>
 					<video
 						src={convertFileSrc(c.input.file)}
