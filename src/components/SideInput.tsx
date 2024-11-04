@@ -14,12 +14,12 @@ export default function ({ input }: { input: Input }) {
 		{ setNodeRef: setDroppableNodeRef } = useDroppable({ id: input._dndID });
 
 	useEffect(() => {
-		const fn = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && deleteInput();
+		const fn = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && currentInput && deleteInput(currentInput);
 		document.addEventListener("keydown", fn);
 		return () => document.removeEventListener("keydown", fn);
 	});
 
-	const deleteInput = () => {
+	const deleteInput = (input: Input) => {
 		const index = inputs.inputs.indexOf(input);
 		inputs.inputs.splice(index, 1);
 
@@ -43,7 +43,10 @@ export default function ({ input }: { input: Input }) {
 					</div>
 					{currentInput === input ? "Editing" : "Edit"}
 				</div>
-				<div onClick={deleteInput} className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}>
+				<div
+					onClick={() => deleteInput(input)}
+					className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}
+				>
 					<div className="w-7 fill-white">
 						<DeleteIcon />
 					</div>
