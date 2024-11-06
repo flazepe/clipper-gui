@@ -16,7 +16,7 @@ export default function ({ input }: { input: Input }) {
 	return (
 		<>
 			<div className="flex h-5/6">
-				<div className="flex w-60 flex-col justify-center gap-10 bg-gray-950 p-5 text-xl">
+				<div className="flex w-60 flex-col items-center justify-center gap-10 bg-gray-950 p-5 text-xl">
 					<div className="flex flex-col gap-2">
 						<div className="text-2xl font-bold uppercase">Tracks</div>
 						Video
