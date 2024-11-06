@@ -15,7 +15,7 @@ export default function () {
 		[_status, setStatus] = useState(""),
 		[child, setChild] = useState<Child | null>(null),
 		[_progress, setProgress] = useState(0),
-		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0), 0);
+		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0);
 
 	/*
 		<div className="flex w-64 flex-col justify-between text-sm">
