@@ -82,15 +82,7 @@ export default class {
 		this.setSegmentEnd(segmentEnd);
 
 		this.currentTime = segmentStart;
-		this.play();
-	}
-
-	play() {
 		this.video?.play();
-	}
-
-	pause() {
-		this.video?.pause();
 	}
 
 	playorPause() {
@@ -117,6 +109,11 @@ export default class {
 				break;
 		}
 
+		this.setInputs?.({ ...this.inputs });
+	}
+
+	setSpeed(speed: number) {
+		this.input.speed = speed;
 		this.setInputs?.({ ...this.inputs });
 	}
 }

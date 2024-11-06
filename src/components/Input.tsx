@@ -16,44 +16,59 @@ export default function ({ input }: { input: Input }) {
 	return (
 		<>
 			<div className="flex h-5/6">
-				<div className="flex w-60 flex-col items-center justify-center gap-2 bg-gray-950 p-5 text-xl">
-					<div className="text-2xl font-bold uppercase">Tracks</div>
-					Video
-					<input
-						type="number"
-						min={0}
-						value={c.input.videoTrack}
-						onChange={event => c.setTrack("video", Number(event.currentTarget.value))}
-						className="w-20 text-center"
-					/>
-					Audio
-					<input
-						type="number"
-						min={0}
-						value={c.input.audioTrack}
-						onChange={event => c.setTrack("audio", Number(event.currentTarget.value))}
-						className="w-20 text-center"
-					/>
-					<div onClick={() => c.setTrack("subtitle", c.input.subtitleTrack !== null ? -1 : 0)} className="flex cursor-pointer gap-2">
-						<input type="checkbox" checked={c.input.subtitleTrack !== null} readOnly />
-						Subtitle
-					</div>
-					{c.input.subtitleTrack !== null && (
+				<div className="flex w-60 flex-col justify-center gap-10 bg-gray-950 p-5 text-xl">
+					<div className="flex flex-col gap-2">
+						<div className="text-2xl font-bold uppercase">Tracks</div>
+						Video
 						<input
 							type="number"
 							min={0}
-							required={false}
-							value={c.input.subtitleTrack}
-							onChange={event => c.setTrack("subtitle", Number(event.currentTarget.value))}
+							value={c.input.videoTrack}
+							onChange={event => c.setTrack("video", Number(event.currentTarget.value))}
 							className="w-20 text-center"
 						/>
-					)}
+						Audio
+						<input
+							type="number"
+							min={0}
+							value={c.input.audioTrack}
+							onChange={event => c.setTrack("audio", Number(event.currentTarget.value))}
+							className="w-20 text-center"
+						/>
+						<div onClick={() => c.setTrack("subtitle", c.input.subtitleTrack !== null ? -1 : 0)} className="flex cursor-pointer gap-2">
+							<input type="checkbox" checked={c.input.subtitleTrack !== null} readOnly />
+							Subtitle
+						</div>
+						{c.input.subtitleTrack !== null && (
+							<input
+								type="number"
+								min={0}
+								required={false}
+								value={c.input.subtitleTrack}
+								onChange={event => c.setTrack("subtitle", Number(event.currentTarget.value))}
+								className="w-20 text-center"
+							/>
+						)}
+					</div>
+					<div className="flex flex-col gap-2">
+						<div className="text-2xl font-bold uppercase">Speed</div>
+						Multiplier
+						<input
+							type="number"
+							min={0.5}
+							max={100}
+							value={c.input.speed}
+							onChange={event => c.setSpeed(Number(event.currentTarget.value))}
+							className="w-20 text-center"
+						/>
+					</div>
 				</div>
 				<div className="flex flex-col justify-center gap-5 overflow-y-auto overflow-x-hidden p-5">
 					<div className="text-center text-2xl font-bold">{c.filename}</div>
 					<video
-						src={convertFileSrc(c.input.file)}
 						ref={useCallback((video: HTMLVideoElement | null) => c.setVideo(video), [])}
+						src={convertFileSrc(c.input.file)}
+						controls
 						onLoadedMetadata={event => {
 							c.setVideo(event.currentTarget);
 							c.setSegmentEnd(Math.trunc(event.currentTarget.duration));
@@ -62,7 +77,10 @@ export default function ({ input }: { input: Input }) {
 							const currentTime = Math.trunc(event.currentTarget.currentTime);
 							if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) event.currentTarget.pause();
 						}}
-						onClick={() => c.playorPause()}
+						onClick={event => {
+							event.preventDefault();
+							c.playorPause();
+						}}
 						className="h-[55%] w-screen"
 					/>
 					{c.ready && (
@@ -92,6 +110,9 @@ export default function ({ input }: { input: Input }) {
 								}}
 							/>
 							<div className="flex items-center justify-center gap-2">
+								<Button onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
+									Set current time as start
+								</Button>
 								<input
 									ref={c.segmentStartInput}
 									type="text"
@@ -125,6 +146,9 @@ export default function ({ input }: { input: Input }) {
 									}}
 									className="w-28 text-center"
 								/>
+								<Button onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
+									Set current time as end
+								</Button>
 							</div>
 							<div className="flex gap-2">
 								<Button onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
