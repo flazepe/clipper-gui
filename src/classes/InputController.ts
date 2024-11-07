@@ -68,7 +68,6 @@ export default class {
 			return message("Segment already exists.", { kind: "error" });
 
 		this.input.segments.push([this.segmentStart, this.segmentEnd]);
-
 		this.setInputs?.({ ...this.inputs });
 	}
 

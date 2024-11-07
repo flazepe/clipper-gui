@@ -71,6 +71,7 @@ export default function ({ input }: { input: Input }) {
 						controls
 						onLoadedMetadata={event => {
 							c.setVideo(event.currentTarget);
+							c.setSegmentStart(0);
 							c.setSegmentEnd(Math.trunc(event.currentTarget.duration));
 						}}
 						onTimeUpdate={event => {
