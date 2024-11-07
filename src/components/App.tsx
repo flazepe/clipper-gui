@@ -77,7 +77,7 @@ function App(): JSX.Element {
 	return (
 		<InputsStateContext.Provider value={[inputs, setInputs]}>
 			{dragMessage && (
-				<div className="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
+				<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
 					{dragMessage}
 				</div>
 			)}

@@ -12,38 +12,39 @@ import Button from "./Button";
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
 	const options = useContext(OptionsContext),
-		[_status, setStatus] = useState(""),
+		[status, setStatus] = useState(""),
 		[child, setChild] = useState<Child | null>(null),
-		[_progress, setProgress] = useState(0),
+		[progress, setProgress] = useState(0),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0);
 
-	/*
-		<div className="flex w-64 flex-col justify-between text-sm">
-			<div className="h-2 rounded bg-slate-300">
-				<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
-			</div>
-			{status.replace(/\x1b(.+?)m/g, "") || "aaa"}
-		</div>
-	*/
-
 	return child ? (
-		<Button
-			onClick={() =>
-				child
-					?.kill()
-					.then(() => {
-						setChild(null);
-						setProgress(100);
-					})
-					.catch(() => null)
-			}
-			className="bg-red-600"
-		>
-			<div className="w-8 fill-white">
-				<CancelIcon />
+		<div className="fixed inset-0 z-10 flex h-full w-full items-center justify-center bg-[#000000e6]">
+			<div className="flex w-2/5 flex-col justify-between gap-5 rounded bg-gray-800 p-4 text-center">
+				{status.replace(/\x1b(.+?)m/g, "") || "aaa"}
+				<div className="flex flex-col gap-5">
+					<div className="h-4 rounded bg-slate-300">
+						<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
+					</div>
+					<Button
+						onClick={() =>
+							child
+								.kill()
+								.then(() => {
+									setChild(null);
+									setProgress(0);
+								})
+								.catch(() => null)
+						}
+						className="bg-red-600"
+					>
+						<div className="w-8 fill-white">
+							<CancelIcon />
+						</div>
+						Cancel Render
+					</Button>
+				</div>
 			</div>
-			Cancel Render
-		</Button>
+		</div>
 	) : (
 		<Button
 			onClick={() => {
