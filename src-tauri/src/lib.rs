@@ -1,9 +1,9 @@
 use clipper::Clipper;
-use tauri::{command, generate_context, Builder};
+use tauri::{command, generate_context, Builder, Error};
 
 #[command]
-fn run_clipper(clipper: Clipper) -> Vec<String> {
-    clipper.into_iter().collect()
+fn run_clipper(clipper: Clipper) -> Result<Vec<String>, Error> {
+    clipper.into_vec().map_err(Error::Anyhow)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

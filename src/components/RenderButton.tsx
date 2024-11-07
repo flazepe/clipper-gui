@@ -72,22 +72,25 @@ export default function () {
 
 						const command = Command.create("ffmpeg", args);
 
-						command.stdout.on("data", data => setStatus(data));
-						command.stderr.on("data", data => {
+						command.stdout.on("data", data => {
 							console.log(data);
-							const time = data.split("time=").pop()!.split(" ")[0];
-							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
 							setStatus(data);
 						});
-						command.on("error", error => setStatus(error));
+						command.stderr.on("data", data => {
+							console.log(data);
+							setStatus(data);
+							const time = data.split("time=").pop()!.split(" ")[0];
+							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
+						});
 						command.on("close", () => {
 							setChild(null);
 							setProgress(100);
 						});
+						command.on("error", error => message(error, { kind: "error" }));
 
 						setChild(await command.spawn());
 					} catch (error) {
-						setStatus(`${error}`);
+						message(`${error}`, { kind: "error" });
 					}
 				})();
 			}}
