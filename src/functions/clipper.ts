@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { Command } from "@tauri-apps/plugin-shell";
 
 export const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
 
@@ -59,4 +60,18 @@ export function getFfmpegArgs({ inputs, outputFile, dryRun }: { inputs: Inputs; 
 	};
 
 	return invoke<Array<string>>("run_clipper", { clipper });
+}
+
+export async function isValidVideo(path: string) {
+	return new Promise<boolean>(async resolve => {
+		const command = Command.create("ffprobe", ["-v", "error", path]),
+			child = await command.spawn();
+
+		command.stderr.on("data", async () => {
+			resolve(false);
+			await child.kill();
+		});
+
+		command.on("close", () => resolve(true));
+	});
 }

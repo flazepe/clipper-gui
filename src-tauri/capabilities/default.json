@@ -5,7 +5,13 @@
 	"windows": ["main"],
 	"permissions": [
 		"core:default",
-		{ "identifier": "shell:allow-spawn", "allow": [{ "name": "ffmpeg", "cmd": "ffmpeg", "args": true }] },
+		{
+			"identifier": "shell:allow-spawn",
+			"allow": [
+				{ "name": "ffmpeg", "cmd": "ffmpeg", "args": true },
+				{ "name": "ffprobe", "cmd": "ffprobe", "args": true }
+			]
+		},
 		"shell:allow-kill",
 		"dialog:default"
 	]
