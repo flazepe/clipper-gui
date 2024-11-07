@@ -19,34 +19,35 @@ export default function ({ input }: { input: Input }) {
 				<div className="flex w-60 flex-col items-center justify-center gap-10 bg-gray-950 p-5 text-xl">
 					<div className="flex flex-col gap-2">
 						<div className="text-2xl font-bold uppercase">Tracks</div>
-						Video
+						Video:
 						<input
 							type="number"
 							min={0}
 							value={c.input.videoTrack}
 							onChange={event => c.setTrack("video", Number(event.currentTarget.value))}
-							className="w-20 text-center"
+							className="w-20"
 						/>
-						Audio
+						Audio:
 						<input
 							type="number"
 							min={0}
 							value={c.input.audioTrack}
 							onChange={event => c.setTrack("audio", Number(event.currentTarget.value))}
-							className="w-20 text-center"
+							className="w-20"
 						/>
 						<div onClick={() => c.setTrack("subtitle", c.input.subtitleTrack !== null ? -1 : 0)} className="flex cursor-pointer gap-2">
 							<input type="checkbox" checked={c.input.subtitleTrack !== null} readOnly />
-							Subtitle
+							Subtitle:
 						</div>
-						{c.input.subtitleTrack !== null && (
+						{c.input.subtitleTrack === null ? (
+							<input type="number" value="" readOnly className="w-20" />
+						) : (
 							<input
 								type="number"
 								min={0}
-								required={false}
 								value={c.input.subtitleTrack}
 								onChange={event => c.setTrack("subtitle", Number(event.currentTarget.value))}
-								className="w-20 text-center"
+								className="w-20"
 							/>
 						)}
 					</div>
@@ -59,7 +60,7 @@ export default function ({ input }: { input: Input }) {
 							max={100}
 							value={c.input.speed}
 							onChange={event => c.setSpeed(Number(event.currentTarget.value))}
-							className="w-20 text-center"
+							className="w-20"
 						/>
 					</div>
 				</div>
@@ -85,7 +86,7 @@ export default function ({ input }: { input: Input }) {
 						className="h-[55%] w-screen"
 					/>
 					{c.ready && (
-						<div className="flex flex-col gap-5 text-center text-2xl">
+						<div className="flex flex-col gap-5 text-2xl">
 							<MultiRangeSlider
 								min={0}
 								max={c.duration}
@@ -96,7 +97,7 @@ export default function ({ input }: { input: Input }) {
 								maxCaption={secondsToDuration(c.segmentEnd)}
 								step={1}
 								ruler={false}
-								barInnerColor="#7272ff"
+								barInnerColor="#1d4ed8"
 								barLeftColor="gray"
 								barRightColor="gray"
 								onInput={event => {
@@ -128,7 +129,7 @@ export default function ({ input }: { input: Input }) {
 											event.currentTarget.value = secondsToDuration(c.segmentStart).toString();
 										}
 									}}
-									className="w-28 text-center"
+									className="w-28"
 								/>
 								-
 								<input
@@ -145,7 +146,7 @@ export default function ({ input }: { input: Input }) {
 											event.currentTarget.value = secondsToDuration(c.segmentEnd).toString();
 										}
 									}}
-									className="w-28 text-center"
+									className="w-28"
 								/>
 								<Button onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
 									Set current time as end

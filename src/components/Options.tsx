@@ -33,7 +33,7 @@ export default function () {
 					step="0.1"
 					onChange={event => setFade(Number(event.currentTarget.value))}
 					readOnly={!fade}
-					className="w-16 text-center"
+					className="w-16"
 				/>
 			</div>
 			<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2">
