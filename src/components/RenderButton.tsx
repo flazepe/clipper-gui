@@ -52,7 +52,7 @@ export default function () {
 				if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
 
 				const badInput = inputs.inputs.find(input => !input.segments[0]);
-				if (badInput) return message(`Input "${badInput.file} is missing segments.`, { kind: "error" });
+				if (badInput) return message(`Input "${badInput.file}" is missing segments.`, { kind: "error" });
 
 				// Default filename
 				const split = inputs.inputs[0].file.split("."),
