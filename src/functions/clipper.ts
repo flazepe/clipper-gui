@@ -41,16 +41,10 @@ export interface Output {
 	forceNotOverwrite: boolean;
 }
 
-export function getFfmpegArgs({ inputs, outputFile, dryRun }: { inputs: Inputs; outputFile: string; dryRun: boolean }) {
+export function getFfmpegArgs({ inputs, encoder, outputFile, dryRun }: { inputs: Inputs; encoder: Encoder; outputFile: string; dryRun: boolean }) {
 	const clipper: Clipper = {
 		inputs,
-		encoder: {
-			nvenc: false,
-			hevc: false,
-			preset: null,
-			crf: null,
-			cq: null
-		},
+		encoder,
 		output: {
 			file: outputFile,
 			forceOverwrite: true,

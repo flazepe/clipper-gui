@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import OptionsContext from "../contexts/Options";
 import InputsStateContext from "../contexts/InputsState";
+import EncoderStateContext from "../contexts/EncoderState";
 
 export interface Options {
 	dryRun: boolean;
@@ -12,11 +13,16 @@ export default function () {
 		[fade, setFade] = useState(0),
 		[noVideo, setNoVideo] = useState(false),
 		[noAudio, setNoAudio] = useState(false),
+		[encoder] = useContext(EncoderStateContext),
+		[nvenc, setNvenc] = useState(false),
+		[hevc, setHevc] = useState(false),
 		[dryRun, setDryRun] = useState(false);
 
 	inputs.fade = fade;
 	inputs.noVideo = noVideo;
 	inputs.noAudio = noAudio;
+	encoder.nvenc = nvenc;
+	encoder.hevc = hevc;
 	options.dryRun = dryRun;
 
 	return (
@@ -37,15 +43,23 @@ export default function () {
 				/>
 			</div>
 			<div onClick={() => setNoVideo(!noVideo)} className="flex gap-2">
-				<input type="checkbox" checked={!!noVideo} readOnly />
+				<input type="checkbox" checked={noVideo} readOnly />
 				No Video
 			</div>
 			<div onClick={() => setNoAudio(!noAudio)} className="flex gap-2">
-				<input type="checkbox" checked={!!noAudio} readOnly />
+				<input type="checkbox" checked={noAudio} readOnly />
 				No Audio
 			</div>
+			<div onClick={() => setNvenc(!nvenc)} className="flex gap-2">
+				<input type="checkbox" checked={nvenc} readOnly />
+				NVENC
+			</div>
+			<div onClick={() => setHevc(!hevc)} className="flex gap-2">
+				<input type="checkbox" checked={hevc} readOnly />
+				HEVC
+			</div>
 			<div onClick={() => setDryRun(!dryRun)} className="flex gap-2">
-				<input type="checkbox" checked={!!dryRun} readOnly />
+				<input type="checkbox" checked={dryRun} readOnly />
 				Dry Run
 			</div>
 		</div>

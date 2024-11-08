@@ -1,6 +1,7 @@
 import { message, save } from "@tauri-apps/plugin-dialog";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 import { useContext, useState } from "react";
+import EncoderStateContext from "../contexts/EncoderState";
 import InputsStateContext from "../contexts/InputsState";
 import OptionsContext from "../contexts/Options";
 import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "../functions/clipper";
@@ -11,6 +12,7 @@ import Button from "./Button";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
+	const [encoder] = useContext(EncoderStateContext);
 	const options = useContext(OptionsContext),
 		[status, setStatus] = useState(""),
 		[child, setChild] = useState<Child | null>(null),
@@ -67,7 +69,7 @@ export default function () {
 					if (!outputFile) return;
 
 					try {
-						const args = await getFfmpegArgs({ inputs, outputFile, dryRun: options.dryRun });
+						const args = await getFfmpegArgs({ inputs, encoder, outputFile, dryRun: options.dryRun });
 						if (options.dryRun) return message(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
 
 						const command = Command.create("ffmpeg", args);
