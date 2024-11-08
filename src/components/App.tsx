@@ -12,7 +12,7 @@ import Options from "./Options";
 import RenderButton from "./RenderButton";
 import SideInputsComponent from "./SideInputs";
 
-function App(): JSX.Element {
+function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
 		[inputs, setInputs] = useState(useContext(InputsStateContext)[0]),
 		[input, setInput] = useState<Input | null>(null),

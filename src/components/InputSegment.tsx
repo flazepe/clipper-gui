@@ -11,11 +11,13 @@ export default function ({ controller: c, segment }: { controller: InputControll
 
 	return (
 		<div
-			ref={setNodeRef}
+			ref={setDroppableNodeRef}
+			{...listeners}
+			{...attributes}
 			style={{ transform: CSS.Translate.toString(transform), opacity: transform ? 0.7 : 1 }}
 			className="flex min-w-52 flex-col rounded bg-gray-700 text-xl font-bold"
 		>
-			<div ref={setDroppableNodeRef} {...listeners} {...attributes} className="cursor-move rounded-t bg-gray-800 p-2 text-center">
+			<div ref={setNodeRef} className="cursor-move rounded-t bg-gray-800 p-2 text-center">
 				{segment.map(entry => secondsToDuration(entry, true)).join("-")}
 			</div>
 			<div className="flex">
