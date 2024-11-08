@@ -154,15 +154,11 @@ export default function ({ input }: { input: Input }) {
 							</div>
 							<div className="flex gap-2">
 								<Button onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
-									<div className="w-10 fill-white">
-										<PlayIcon />
-									</div>
+									<PlayIcon className="w-10 fill-white" />
 									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
 								</Button>
 								<Button onClick={() => c.addCurrentSegment()} className="w-1/2">
-									<div className="w-10 fill-white">
-										<AddIcon />
-									</div>
+									<AddIcon className="w-10 fill-white" />
 									Add
 								</Button>
 							</div>

@@ -40,9 +40,7 @@ export default function () {
 						}
 						className="bg-red-600"
 					>
-						<div className="w-8 fill-white">
-							<CancelIcon />
-						</div>
+						<CancelIcon className="w-8 fill-white" />
 						Cancel Render
 					</Button>
 				</div>
@@ -50,63 +48,56 @@ export default function () {
 		</div>
 	) : (
 		<Button
-			onClick={() => {
-				// Validations
+			onClick={async () => {
 				if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
 
 				const badInput = inputs.inputs.find(input => !input.segments[0]);
 				if (badInput) return message(`Input "${badInput.file}" is missing segments.`, { kind: "error" });
 
-				// Default filename
 				const split = inputs.inputs[0].file.split("."),
 					[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
-				// Run clipper and ffmpeg
-				(async () => {
-					const outputFile = await save({
-						defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
-						filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
+				const outputFile = await save({
+					defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
+					filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
+				});
+				if (!outputFile) return;
+
+				try {
+					const args = await getFfmpegArgs({ inputs, encoder, outputFile, dryRun: options.dryRun });
+
+					await writeTextFile("ffmpeg.log", `ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}\n\n`);
+					if (options.dryRun) return message("Wrote the ffmpeg command to the ffmpeg.log file.");
+
+					const command = Command.create("ffmpeg", args);
+
+					command.stdout.on("data", data => {
+						console.log(data);
+						setStatus(data);
+						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 					});
-					if (!outputFile) return;
+					command.stderr.on("data", data => {
+						console.log(data);
+						setStatus(data);
+						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 
-					try {
-						const args = await getFfmpegArgs({ inputs, encoder, outputFile, dryRun: options.dryRun });
+						const time = data.split("time=").pop()!.split(" ")[0];
+						if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
+					});
+					command.on("close", close => {
+						setChild(null);
+						setProgress(100);
+						if (![0, 1].includes(close.code ?? 0)) message(`ffmpeg exited with code ${close.code}.`, { kind: "error" });
+					});
+					command.on("error", error => message(error, { kind: "error" }));
 
-						await writeTextFile("ffmpeg.log", `ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}\n\n`);
-						if (options.dryRun) return message("Wrote the ffmpeg command to the ffmpeg.log file.");
-
-						const command = Command.create("ffmpeg", args);
-
-						command.stdout.on("data", data => {
-							console.log(data);
-							setStatus(data);
-							writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
-						});
-						command.stderr.on("data", data => {
-							console.log(data);
-							setStatus(data);
-							writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
-
-							const time = data.split("time=").pop()!.split(" ")[0];
-							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
-						});
-						command.on("close", close => {
-							setChild(null);
-							setProgress(100);
-							if (![0, 1].includes(close.code ?? 0)) message(`ffmpeg exited with code ${close.code}.`, { kind: "error" });
-						});
-						command.on("error", error => message(error, { kind: "error" }));
-
-						setChild(await command.spawn());
-					} catch (error) {
-						message(`${error}`, { kind: "error" });
-					}
-				})();
+					setChild(await command.spawn());
+				} catch (error) {
+					message(`${error}`, { kind: "error" });
+				}
 			}}
 		>
-			<div className="w-8 fill-white">
-				<VideoVintageIcon />
-			</div>
+			<VideoVintageIcon className="w-8 fill-white" />
 			Render ({secondsToDuration(totalDuration)})
 		</Button>
 	);

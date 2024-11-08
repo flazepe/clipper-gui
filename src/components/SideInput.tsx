@@ -38,18 +38,14 @@ export default function ({ input }: { input: Input }) {
 			</div>
 			<div className="flex">
 				<div onClick={() => setInput?.(input)} className="flex w-1/2 items-center justify-center gap-3 rounded-bl bg-gray-700 p-2 uppercase">
-					<div className="w-7 fill-white">
-						<EditIcon />
-					</div>
+					<EditIcon className="w-7 fill-white" />
 					{currentInput === input ? "Editing" : "Edit"}
 				</div>
 				<div
 					onClick={() => deleteInput(input)}
 					className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}
 				>
-					<div className="w-7 fill-white">
-						<DeleteIcon />
-					</div>
+					<DeleteIcon className="w-7 fill-white" />
 					Delete
 				</div>
 			</div>

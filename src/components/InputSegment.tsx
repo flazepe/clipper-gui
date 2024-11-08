@@ -20,15 +20,11 @@ export default function ({ controller: c, segment }: { controller: InputControll
 			</div>
 			<div className="flex">
 				<div onClick={() => c.playSegment(segment)} className="flex w-4/5 cursor-pointer items-center">
-					<div className="w-8 fill-white">
-						<PlayIcon />
-					</div>
+					<PlayIcon className="w-8 fill-white" />
 					{secondsToDuration(segment[1] - segment[0], true)}
 				</div>
 				<div onClick={() => c.deleteSegment(segment)} className="flex w-1/5 cursor-pointer rounded-br bg-red-500 p-2">
-					<div className="w-8 fill-white">
-						<DeleteIcon />
-					</div>
+					<DeleteIcon className="w-8 fill-white" />
 				</div>
 			</div>
 		</div>
