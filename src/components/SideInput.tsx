@@ -24,7 +24,7 @@ export default function ({ input }: { input: Input }) {
 		inputs.inputs.splice(index, 1);
 
 		setInputs?.({ ...inputs });
-		setInput?.(inputs.inputs[index - 1] ?? null);
+		setInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
 	};
 
 	return (
