@@ -1,4 +1,5 @@
 import { message, save } from "@tauri-apps/plugin-dialog";
+import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 import { useContext, useState } from "react";
 import EncoderStateContext from "../contexts/EncoderState";
@@ -70,17 +71,22 @@ export default function () {
 
 					try {
 						const args = await getFfmpegArgs({ inputs, encoder, outputFile, dryRun: options.dryRun });
-						if (options.dryRun) return message(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+
+						await writeTextFile("ffmpeg.log", `ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}\n\n`);
+						if (options.dryRun) return message("Wrote the ffmpeg command to the ffmpeg.log file.");
 
 						const command = Command.create("ffmpeg", args);
 
 						command.stdout.on("data", data => {
 							console.log(data);
 							setStatus(data);
+							writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 						});
 						command.stderr.on("data", data => {
 							console.log(data);
 							setStatus(data);
+							writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
+
 							const time = data.split("time=").pop()!.split(" ")[0];
 							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
 						});

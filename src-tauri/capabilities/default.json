@@ -5,6 +5,11 @@
 	"windows": ["main"],
 	"permissions": [
 		"core:default",
+		"dialog:default",
+		{
+			"identifier": "fs:allow-write-text-file",
+			"allow": [{ "path": "ffmpeg.log" }]
+		},
 		{
 			"identifier": "shell:allow-spawn",
 			"allow": [
@@ -12,7 +17,6 @@
 				{ "name": "ffprobe", "cmd": "ffprobe", "args": true }
 			]
 		},
-		"shell:allow-kill",
-		"dialog:default"
+		"shell:allow-kill"
 	]
 }
