@@ -68,7 +68,7 @@ export default function () {
 
 					try {
 						const args = await getFfmpegArgs({ inputs, outputFile, dryRun: options.dryRun });
-						if (options.dryRun) return setStatus(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
+						if (options.dryRun) return message(`ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`);
 
 						const command = Command.create("ffmpeg", args);
 
@@ -82,9 +82,10 @@ export default function () {
 							const time = data.split("time=").pop()!.split(" ")[0];
 							if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
 						});
-						command.on("close", () => {
+						command.on("close", close => {
 							setChild(null);
 							setProgress(100);
+							if (![0, 1].includes(close.code ?? 0)) message(`ffmpeg exited with code ${close.code}.`, { kind: "error" });
 						});
 						command.on("error", error => message(error, { kind: "error" }));
 
