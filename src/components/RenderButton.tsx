@@ -23,7 +23,7 @@ export default function () {
 	return child ? (
 		<div className="fixed inset-0 z-10 flex h-full w-full items-center justify-center bg-[#000000e6]">
 			<div className="flex w-2/5 flex-col justify-between gap-5 rounded bg-gray-800 p-4 text-center">
-				{status.replace(/\x1b(.+?)m/g, "") || "aaa"}
+				{status.replace(/\x1b(.+?)m/g, "")}
 				<div className="flex flex-col gap-5">
 					<div className="h-4 rounded bg-slate-300">
 						<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
