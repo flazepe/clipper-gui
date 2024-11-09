@@ -112,6 +112,7 @@ export default class {
 	}
 
 	setSpeed(speed: number) {
+		if (this.video) this.video.playbackRate = speed;
 		this.input.speed = speed;
 		this.setInputs?.({ ...this.inputs });
 	}
