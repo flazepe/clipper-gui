@@ -2,14 +2,14 @@ import { EncoderStateContext, InputsStateContext, OutputContext } from "@/contex
 import { useContext, useState } from "react";
 
 export default function () {
-	const output = useContext(OutputContext),
-		[inputs] = useContext(InputsStateContext),
+	const [inputs] = useContext(InputsStateContext),
 		[fade, setFade] = useState(0),
 		[noVideo, setNoVideo] = useState(false),
 		[noAudio, setNoAudio] = useState(false),
 		[encoder] = useContext(EncoderStateContext),
 		[nvenc, setNvenc] = useState(false),
 		[hevc, setHevc] = useState(false),
+		output = useContext(OutputContext),
 		[dryRun, setDryRun] = useState(false);
 
 	inputs.fade = fade;
