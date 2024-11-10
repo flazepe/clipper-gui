@@ -2,16 +2,17 @@ import { ButtonComponent } from "@/components";
 import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { CancelIcon, VideoVintageIcon } from "@/icons";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { message, save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 import { useContext, useState } from "react";
-import { EncoderStateContext, InputsStateContext, OptionsContext } from "../contexts";
+import { EncoderStateContext, InputsStateContext, OutputContext } from "../contexts";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
 	const [encoder] = useContext(EncoderStateContext);
-	const options = useContext(OptionsContext),
+	const output = useContext(OutputContext),
 		[status, setStatus] = useState(""),
 		[child, setChild] = useState<Child | null>(null),
 		[progress, setProgress] = useState(0),
@@ -54,17 +55,22 @@ export default function () {
 				const split = inputs.inputs[0].file.split("."),
 					[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
-				const outputFile = await save({
+				output.file = await save({
 					defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
 					filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
 				});
-				if (!outputFile) return;
+				if (!output.file) return;
 
 				try {
-					const args = await getFfmpegArgs({ inputs, encoder, outputFile, dryRun: options.dryRun });
+					const args = await getFfmpegArgs({ inputs, encoder, output }),
+						commandString = `ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}`;
 
-					await writeTextFile("ffmpeg.log", `ffmpeg ${args.map(arg => (arg.includes(" ") ? `"${arg}"` : arg)).join(" ")}\n\n`);
-					if (options.dryRun) return message("Wrote the ffmpeg command to the ffmpeg.log file.");
+					if (output.dryRun) {
+						await writeText(commandString);
+						return message("Wrote the ffmpeg command to clipboard.");
+					}
+
+					await writeTextFile("ffmpeg.log", `${commandString}\n\n`);
 
 					const command = Command.create("ffmpeg", args);
 

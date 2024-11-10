@@ -1,8 +1,8 @@
-import { EncoderStateContext, InputsStateContext, OptionsContext } from "@/contexts";
+import { EncoderStateContext, InputsStateContext, OutputContext } from "@/contexts";
 import { useContext, useState } from "react";
 
 export default function () {
-	const options = useContext(OptionsContext),
+	const output = useContext(OutputContext),
 		[inputs] = useContext(InputsStateContext),
 		[fade, setFade] = useState(0),
 		[noVideo, setNoVideo] = useState(false),
@@ -17,7 +17,7 @@ export default function () {
 	inputs.noAudio = noAudio;
 	encoder.nvenc = nvenc;
 	encoder.hevc = hevc;
-	options.dryRun = dryRun;
+	output.dryRun = dryRun;
 
 	return (
 		<div className="flex cursor-pointer items-center justify-center gap-5 text-xl">
