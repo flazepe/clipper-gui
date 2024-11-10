@@ -1,11 +1,9 @@
+import { InputsStateContext, InputStateContext } from "@/contexts";
+import { Input } from "@/functions/clipper";
+import { DeleteIcon, EditIcon } from "@/icons";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useContext, useEffect } from "react";
-import InputsStateContext from "../contexts/InputsState";
-import InputStateContext from "../contexts/InputState";
-import { Input } from "../functions/clipper";
-import DeleteIcon from "../icons/Delete";
-import EditIcon from "../icons/Edit";
 
 export default function ({ input }: { input: Input }) {
 	const [inputs, setInputs] = useContext(InputsStateContext),
@@ -43,10 +41,7 @@ export default function ({ input }: { input: Input }) {
 					<EditIcon className="w-7 fill-white" />
 					{currentInput === input ? "Editing" : "Edit"}
 				</div>
-				<div
-					onClick={() => deleteInput(input)}
-					className={`flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase`}
-				>
+				<div onClick={() => deleteInput(input)} className="flex w-1/2 items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase">
 					<DeleteIcon className="w-7 fill-white" />
 					Delete
 				</div>

@@ -1,8 +1,7 @@
-import { useContext, useRef, useState } from "react";
-import InputsStateContext from "../contexts/InputsState";
-import InputStateContext from "../contexts/InputState";
-import { Input } from "../functions/clipper";
+import { InputStateContext, InputsStateContext } from "@/contexts";
+import { Input } from "@/functions/clipper";
 import { message } from "@tauri-apps/plugin-dialog";
+import { useContext, useRef, useState } from "react";
 
 export default class {
 	input;

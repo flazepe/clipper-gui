@@ -1,9 +1,8 @@
+import InputController from "@/classes/InputController";
+import { secondsToDuration } from "@/functions/seconds";
+import { DeleteIcon, PlayIcon } from "@/icons";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import InputController from "../classes/InputController";
-import { secondsToDuration } from "../functions/seconds";
-import DeleteIcon from "../icons/Delete";
-import PlayIcon from "../icons/Play";
 
 export default function ({ controller: c, segment }: { controller: InputController; segment: [number, number] }) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: segment.toString() }),

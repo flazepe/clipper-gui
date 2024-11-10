@@ -1,15 +1,12 @@
+import { ButtonComponent } from "@/components";
+import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
+import { CancelIcon, VideoVintageIcon } from "@/icons";
 import { message, save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 import { useContext, useState } from "react";
-import EncoderStateContext from "../contexts/EncoderState";
-import InputsStateContext from "../contexts/InputsState";
-import OptionsContext from "../contexts/Options";
-import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "../functions/clipper";
-import { durationToSeconds, secondsToDuration } from "../functions/seconds";
-import CancelIcon from "../icons/Cancel";
-import VideoVintageIcon from "../icons/VideoVintage";
-import Button from "./Button";
+import { EncoderStateContext, InputsStateContext, OptionsContext } from "../contexts";
 
 export default function () {
 	const [inputs] = useContext(InputsStateContext);
@@ -28,7 +25,7 @@ export default function () {
 					<div className="h-4 rounded bg-slate-300">
 						<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
 					</div>
-					<Button
+					<ButtonComponent
 						onClick={() =>
 							child
 								.kill()
@@ -42,12 +39,12 @@ export default function () {
 					>
 						<CancelIcon className="w-8 fill-white" />
 						Cancel Render
-					</Button>
+					</ButtonComponent>
 				</div>
 			</div>
 		</div>
 	) : (
-		<Button
+		<ButtonComponent
 			onClick={async () => {
 				if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
 
@@ -99,6 +96,6 @@ export default function () {
 		>
 			<VideoVintageIcon className="w-8 fill-white" />
 			Render ({secondsToDuration(totalDuration)})
-		</Button>
+		</ButtonComponent>
 	);
 }

@@ -1,7 +1,7 @@
+import { SideInputComponent } from "@/components";
+import { InputsStateContext } from "@/contexts";
 import { DndContext } from "@dnd-kit/core";
 import { useContext } from "react";
-import InputsStateContext from "../contexts/InputsState";
-import SideInputComponent from "./SideInput";
 
 export default function () {
 	const [inputs, setInputs] = useContext(InputsStateContext);

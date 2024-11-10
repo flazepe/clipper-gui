@@ -1,11 +1,5 @@
+import { EncoderStateContext, InputsStateContext, OptionsContext } from "@/contexts";
 import { useContext, useState } from "react";
-import OptionsContext from "../contexts/Options";
-import InputsStateContext from "../contexts/InputsState";
-import EncoderStateContext from "../contexts/EncoderState";
-
-export interface Options {
-	dryRun: boolean;
-}
 
 export default function () {
 	const options = useContext(OptionsContext),

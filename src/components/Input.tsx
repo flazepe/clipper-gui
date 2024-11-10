@@ -1,14 +1,12 @@
+import InputController from "@/classes/InputController";
+import { ButtonComponent, InputSegmentComponent } from "@/components";
+import { Input } from "@/functions/clipper";
+import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
+import { AddIcon, PlayIcon } from "@/icons";
 import { DndContext } from "@dnd-kit/core";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useCallback } from "react";
-import InputController from "../classes/InputController";
-import { Input } from "../functions/clipper";
-import { durationToSeconds, secondsToDuration } from "../functions/seconds";
-import AddIcon from "../icons/Add";
-import PlayIcon from "../icons/Play";
-import Button from "./Button";
-import InputSegmentComponent from "./InputSegment";
 
 export default function ({ input }: { input: Input }) {
 	const c = new InputController(input);
@@ -112,9 +110,9 @@ export default function ({ input }: { input: Input }) {
 								}}
 							/>
 							<div className="flex items-center justify-center gap-2">
-								<Button onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
+								<ButtonComponent onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
 									Set current time as start
-								</Button>
+								</ButtonComponent>
 								<input
 									ref={c.segmentStartInput}
 									type="text"
@@ -148,19 +146,19 @@ export default function ({ input }: { input: Input }) {
 									}}
 									className="w-28"
 								/>
-								<Button onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
+								<ButtonComponent onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
 									Set current time as end
-								</Button>
+								</ButtonComponent>
 							</div>
 							<div className="flex gap-2">
-								<Button onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
+								<ButtonComponent onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
 									<PlayIcon className="w-10 fill-white" />
 									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
-								</Button>
-								<Button onClick={() => c.addCurrentSegment()} className="w-1/2">
+								</ButtonComponent>
+								<ButtonComponent onClick={() => c.addCurrentSegment()} className="w-1/2">
 									<AddIcon className="w-10 fill-white" />
 									Add
-								</Button>
+								</ButtonComponent>
 							</div>
 						</div>
 					)}

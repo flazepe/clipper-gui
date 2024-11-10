@@ -1,16 +1,10 @@
+import { ButtonComponent, InputComponent, OptionsComponent, RenderButtonComponent, SideInputsComponent } from "@/components";
+import { InputsStateContext, InputStateContext } from "@/contexts";
+import { Input, isValidVideo, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { useContext, useEffect, useState } from "react";
-import InputsStateContext from "../contexts/InputsState";
-import InputStateContext from "../contexts/InputState";
-import { Input, isValidVideo, SUPPORTED_EXTENSIONS } from "../functions/clipper";
-import MenuCloseIcon from "../icons/MenuClose";
-import MenuOpenIcon from "../icons/MenuOpen";
-import Button from "./Button";
-import InputComponent from "./Input";
-import Options from "./Options";
-import RenderButton from "./RenderButton";
-import SideInputsComponent from "./SideInputs";
 
 function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
@@ -83,16 +77,16 @@ function App() {
 			)}
 			<div className="flex h-[6.5vh] items-center justify-between gap-2 bg-gray-900 p-2">
 				<div className="w-1/6">
-					<Button onClick={() => setSideInputsToggled(!sideInputsToggled)}>
+					<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
 						{sideInputsToggled ? "Hide" : "Show"} Inputs
-					</Button>
+					</ButtonComponent>
 				</div>
 				<div className="w-4/6">
-					<Options />
+					<OptionsComponent />
 				</div>
 				<div className="w-1/6">
-					<RenderButton />
+					<RenderButtonComponent />
 				</div>
 			</div>
 			<div className="flex h-[93.5vh] overflow-hidden">
