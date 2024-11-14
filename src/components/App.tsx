@@ -66,15 +66,18 @@ function App() {
 			})
 		];
 
-		const onKeyDown = async (event: KeyboardEvent) => {
-			if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
-				for (const render of renders) await render.child.kill().catch(() => null);
-		};
+		const onContextMenu = (event: MouseEvent) => event.preventDefault(),
+			onKeyDown = async (event: KeyboardEvent) => {
+				if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
+					for (const render of renders) await render.child.kill().catch(() => null);
+			};
 
+		document.addEventListener("contextmenu", onContextMenu);
 		document.addEventListener("keydown", onKeyDown);
 
 		return () => {
 			Promise.all(fns).then(fns => fns.forEach(fn => fn()));
+			document.removeEventListener("contextmenu", onContextMenu);
 			document.removeEventListener("keydown", onKeyDown);
 		};
 	});
