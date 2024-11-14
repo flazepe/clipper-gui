@@ -12,9 +12,9 @@ export default function ({ input }: { input: Input }) {
 		{ setNodeRef: setDroppableNodeRef } = useDroppable({ id: input._dndID });
 
 	useEffect(() => {
-		const fn = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && currentInput && deleteInput(currentInput);
-		document.addEventListener("keydown", fn);
-		return () => document.removeEventListener("keydown", fn);
+		const onKeyDown = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && currentInput && deleteInput(currentInput);
+		document.addEventListener("keydown", onKeyDown);
+		return () => document.removeEventListener("keydown", onKeyDown);
 	});
 
 	const deleteInput = (input: Input) =>

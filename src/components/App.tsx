@@ -66,7 +66,17 @@ function App() {
 			})
 		];
 
-		return () => void Promise.all(fns).then(fns => fns.forEach(fn => fn()));
+		const onKeyDown = async (event: KeyboardEvent) => {
+			if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
+				for (const render of renders) await render.child.kill().catch(() => null);
+		};
+
+		document.addEventListener("keydown", onKeyDown);
+
+		return () => {
+			Promise.all(fns).then(fns => fns.forEach(fn => fn()));
+			document.removeEventListener("keydown", onKeyDown);
+		};
 	});
 
 	return (
