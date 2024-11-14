@@ -29,7 +29,7 @@ export default function () {
 					</DndContext>
 				</div>
 			) : (
-				<div className="flex h-1/2 items-center justify-center text-xl">No inputs</div>
+				<div className="flex h-1/2 items-center justify-center text-xl font-bold uppercase text-gray-400">Empty</div>
 			)}
 		</>
 	);

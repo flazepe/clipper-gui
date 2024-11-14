@@ -13,7 +13,7 @@ export default function () {
 	const [inputs] = useContext(InputsStateContext),
 		[encoder] = useContext(EncoderStateContext),
 		output = useContext(OutputContext),
-		[, setRenders] = useContext(RendersStateContext),
+		[renders, setRenders] = useContext(RendersStateContext),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0);
 
 	return (
@@ -42,7 +42,7 @@ export default function () {
 						return message("Wrote the ffmpeg command to clipboard.");
 					}
 
-					await writeTextFile("ffmpeg.log", `${commandString}\n\n`);
+					await writeTextFile("ffmpeg.log", `${renders[0] ? "\n\n" : ""}${commandString}\n\n`, { append: !!renders[0] });
 
 					const command = Command.create("ffmpeg", args),
 						child = await command.spawn(),
@@ -51,10 +51,14 @@ export default function () {
 					setRenders?.(renders => [...renders, render]);
 
 					command.stdout.on("data", data => {
+						data = `[${render.filename}] ${data}`;
+
 						console.log(data);
 						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 					});
 					command.stderr.on("data", data => {
+						data = `[${render.filename}] ${data}`;
+
 						console.log(data);
 						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 
@@ -67,7 +71,11 @@ export default function () {
 					});
 					command.on("close", close => {
 						setRenders?.(renders => renders.filter(entry => entry !== render));
-						if (![0, 1].includes(close.code ?? 0)) message(`ffmpeg exited with code ${close.code}.`, { kind: "error" });
+
+						if (![0, 1].includes(close.code ?? 0))
+							message(`[${render.filename}] ffmpeg exited with code ${close.code}. Please check the ffmpeg.log file.`, {
+								kind: "error"
+							});
 					});
 					command.on("error", error => message(error, { kind: "error" }));
 				} catch (error) {
