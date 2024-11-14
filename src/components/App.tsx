@@ -1,6 +1,6 @@
-import { ButtonComponent, InputComponent, OptionsComponent, RenderButtonComponent, SideInputsComponent } from "@/components";
-import { InputsStateContext, InputStateContext } from "@/contexts";
-import { Input, isValidVideo, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { ButtonComponent, InputComponent, OptionsComponent, RenderButtonComponent, SideInputsComponent, SideRendersComponent } from "@/components";
+import { InputsStateContext, InputStateContext, RendersStateContext } from "@/contexts";
+import { Input, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
@@ -11,6 +11,7 @@ function App() {
 		[inputs, setInputs] = useState(useContext(InputsStateContext)[0]),
 		[input, setInput] = useState<Input | null>(null),
 		inputState = useContext(InputStateContext),
+		[renders, setRenders] = useState<Array<Render>>([]),
 		[sideInputsToggled, setSideInputsToggled] = useState(false);
 
 	inputState[0] = input;
@@ -70,40 +71,47 @@ function App() {
 
 	return (
 		<InputsStateContext.Provider value={[inputs, setInputs]}>
-			{dragMessage && (
-				<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
-					{dragMessage}
+			<RendersStateContext.Provider value={[renders, setRenders]}>
+				{dragMessage && (
+					<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
+						{dragMessage}
+					</div>
+				)}
+				<div className="flex h-[6.5vh] items-center justify-between gap-2 bg-gray-900 p-2">
+					<div className="w-1/6">
+						<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
+							<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
+							{sideInputsToggled ? "Hide" : "Show"} Inputs
+						</ButtonComponent>
+					</div>
+					<div className="w-4/6">
+						<OptionsComponent />
+					</div>
+					<div className="w-1/6">
+						<RenderButtonComponent />
+					</div>
 				</div>
-			)}
-			<div className="flex h-[6.5vh] items-center justify-between gap-2 bg-gray-900 p-2">
-				<div className="w-1/6">
-					<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
-						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
-						{sideInputsToggled ? "Hide" : "Show"} Inputs
-					</ButtonComponent>
+				<div className="flex h-[93.5vh]">
+					<div className={`w-1/4 flex-col gap-5 p-4 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
+						<div className="h-2/3 overflow-y-auto overflow-x-hidden">
+							<SideInputsComponent />
+						</div>
+						<div className="h-1/3 overflow-y-auto overflow-x-hidden">
+							<SideRendersComponent />
+						</div>
+					</div>
+					<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
+						{input ? (
+							<InputComponent input={input} />
+						) : (
+							<>
+								<div className="m-5 text-5xl font-bold">clipper-gui</div>
+								<div className="text-2xl">Drag input(s) to this window to get started.</div>
+							</>
+						)}
+					</div>
 				</div>
-				<div className="w-4/6">
-					<OptionsComponent />
-				</div>
-				<div className="w-1/6">
-					<RenderButtonComponent />
-				</div>
-			</div>
-			<div className="flex h-[93.5vh] overflow-hidden">
-				<div className={`w-1/4 flex-col gap-5 overflow-x-hidden overflow-y-scroll p-4 ${sideInputsToggled ? "flex" : "hidden"}`}>
-					<SideInputsComponent />
-				</div>
-				<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
-					{input ? (
-						<InputComponent input={input} />
-					) : (
-						<>
-							<div className="m-5 text-5xl font-bold">clipper-gui</div>
-							<div className="text-2xl">Drag input(s) to this window to get started.</div>
-						</>
-					)}
-				</div>
-			</div>
+			</RendersStateContext.Provider>
 		</InputsStateContext.Provider>
 	);
 }

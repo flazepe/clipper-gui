@@ -1,50 +1,22 @@
 import { ButtonComponent } from "@/components";
-import { getFfmpegArgs, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { getFfmpegArgs, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
-import { CancelIcon, VideoVintageIcon } from "@/icons";
+import { VideoVintageIcon } from "@/icons";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { message, save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
-import { Child, Command } from "@tauri-apps/plugin-shell";
-import { useContext, useState } from "react";
-import { EncoderStateContext, InputsStateContext, OutputContext } from "../contexts";
+import { Command } from "@tauri-apps/plugin-shell";
+import { useContext } from "react";
+import { EncoderStateContext, InputsStateContext, OutputContext, RendersStateContext } from "../contexts";
 
 export default function () {
-	const [inputs] = useContext(InputsStateContext);
-	const [encoder] = useContext(EncoderStateContext);
-	const output = useContext(OutputContext),
-		[status, setStatus] = useState(""),
-		[child, setChild] = useState<Child | null>(null),
-		[progress, setProgress] = useState(0),
+	const [inputs] = useContext(InputsStateContext),
+		[encoder] = useContext(EncoderStateContext),
+		output = useContext(OutputContext),
+		[, setRenders] = useContext(RendersStateContext),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0);
 
-	return child ? (
-		<div className="fixed inset-0 z-10 flex h-full w-full items-center justify-center bg-[#000000e6]">
-			<div className="flex w-2/5 flex-col justify-between gap-5 rounded bg-gray-800 p-4 text-center">
-				{status}
-				<div className="flex flex-col gap-5">
-					<div className="h-4 rounded bg-slate-300">
-						<div className="h-full rounded bg-green-500" style={{ width: `${progress}%` }}></div>
-					</div>
-					<ButtonComponent
-						onClick={() =>
-							child
-								.kill()
-								.then(() => {
-									setChild(null);
-									setProgress(0);
-								})
-								.catch(() => null)
-						}
-						className="bg-red-600"
-					>
-						<CancelIcon className="w-8 fill-white" />
-						Cancel Render
-					</ButtonComponent>
-				</div>
-			</div>
-		</div>
-	) : (
+	return (
 		<ButtonComponent
 			onClick={async () => {
 				if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
@@ -72,29 +44,32 @@ export default function () {
 
 					await writeTextFile("ffmpeg.log", `${commandString}\n\n`);
 
-					const command = Command.create("ffmpeg", args);
+					const command = Command.create("ffmpeg", args),
+						child = await command.spawn(),
+						render: Render = { filename: output.file, progress: 0, child };
+
+					setRenders?.(renders => [...renders, render]);
 
 					command.stdout.on("data", data => {
 						console.log(data);
-						setStatus(data);
 						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 					});
 					command.stderr.on("data", data => {
 						console.log(data);
-						setStatus(data);
 						writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
 
 						const time = data.split("time=").pop()!.split(" ")[0];
-						if (time.split(":").every(entry => !isNaN(Number(entry)))) setProgress((durationToSeconds(time) / totalDuration) * 100);
+
+						if (time.split(":").every(entry => !isNaN(Number(entry)))) {
+							render.progress = (durationToSeconds(time) / totalDuration) * 100;
+							setRenders?.(renders => [...renders]);
+						}
 					});
 					command.on("close", close => {
-						setChild(null);
-						setProgress(100);
+						setRenders?.(renders => renders.filter(entry => entry !== render));
 						if (![0, 1].includes(close.code ?? 0)) message(`ffmpeg exited with code ${close.code}.`, { kind: "error" });
 					});
 					command.on("error", error => message(error, { kind: "error" }));
-
-					setChild(await command.spawn());
 				} catch (error) {
 					message(`${error}`, { kind: "error" });
 				}

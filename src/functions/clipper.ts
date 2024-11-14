@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { Command } from "@tauri-apps/plugin-shell";
+import { Child, Command } from "@tauri-apps/plugin-shell";
 
 export const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
 
@@ -57,4 +57,10 @@ export async function isValidVideo(path: string) {
 
 		command.on("close", () => resolve(true));
 	});
+}
+
+export interface Render {
+	filename: String;
+	progress: number;
+	child: Child;
 }

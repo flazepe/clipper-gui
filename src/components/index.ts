@@ -6,3 +6,5 @@ export { default as OptionsComponent } from "./Options";
 export { default as RenderButtonComponent } from "./RenderButton";
 export { default as SideInputComponent } from "./SideInput";
 export { default as SideInputsComponent } from "./SideInputs";
+export { default as SideRenderComponent } from "./SideRender";
+export { default as SideRendersComponent } from "./SideRenders";

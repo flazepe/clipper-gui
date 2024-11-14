@@ -171,7 +171,7 @@ export default function ({ input }: { input: Input }) {
 						if (!event.over || event.active.id === event.over.id) return;
 
 						const oldIndex = input.segments.findIndex(segment => segment.toString() === event.active.id),
-							newIndex = input.segments.findIndex(segment => segment.toString() === event.over!.id),
+							newIndex = input.segments.findIndex(segment => segment.toString() === event.over?.id),
 							[oldSegment] = input.segments.splice(oldIndex, 1);
 
 						input.segments.splice(newIndex, 0, oldSegment);
