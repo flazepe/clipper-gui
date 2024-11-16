@@ -19,54 +19,53 @@ function App() {
 
 	useEffect(() => {
 		const fns = [
-			listen<{ paths: Array<string> }>(
-				TauriEvent.DRAG_ENTER,
-				event =>
-					event.payload.paths.some(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext))) &&
-					setDragMessage("Drop the input(s) NOW!")
-			),
-			listen(TauriEvent.DRAG_LEAVE, () => setDragMessage(null)),
-			listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
-				const paths = [];
+				listen<{ paths: Array<string> }>(
+					TauriEvent.DRAG_ENTER,
+					event =>
+						event.payload.paths.some(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext))) &&
+						setDragMessage("Drop the input(s) NOW!")
+				),
+				listen(TauriEvent.DRAG_LEAVE, () => setDragMessage(null)),
+				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
+					const paths = [];
 
-				for (const path of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
-					setDragMessage(`Processing input "${path}"`);
+					for (const path of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
+						setDragMessage(`Processing input "${path}"`);
 
-					if (await isValidVideo(path)) {
-						paths.push(path);
-					} else {
-						message(`Input "${path}" is not a valid video.`, { kind: "error" });
+						if (await isValidVideo(path)) {
+							paths.push(path);
+						} else {
+							message(`Input "${path}" is not a valid video.`, { kind: "error" });
+						}
 					}
-				}
 
-				setDragMessage(null);
+					setDragMessage(null);
 
-				const newInputs = {
-					...inputs,
-					inputs: [
-						...inputs.inputs,
-						...paths.map(path => ({
-							_dndID: Math.random().toString(8),
-							file: path,
-							segments: [],
-							videoTrack: 0,
-							audioTrack: 0,
-							subtitleTrack: null,
-							speed: 1
-						}))
-					]
-				};
+					const newInputs = {
+						...inputs,
+						inputs: [
+							...inputs.inputs,
+							...paths.map(path => ({
+								_dndID: Math.random().toString(8),
+								file: path,
+								segments: [],
+								videoTrack: 0,
+								audioTrack: 0,
+								subtitleTrack: null,
+								speed: 1
+							}))
+						]
+					};
 
-				setInputs?.(newInputs);
+					setInputs?.(newInputs);
 
-				if (newInputs.inputs[0]) {
-					setInput(newInputs.inputs[newInputs.inputs.length - 1]);
-					setSideInputsToggled(true);
-				}
-			})
-		];
-
-		const onContextMenu = (event: MouseEvent) => event.preventDefault(),
+					if (newInputs.inputs[0]) {
+						setInput(newInputs.inputs[newInputs.inputs.length - 1]);
+						setSideInputsToggled(true);
+					}
+				})
+			],
+			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
 				if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
 					for (const render of renders) await render.child.kill().catch(() => null);
@@ -90,7 +89,7 @@ function App() {
 						{dragMessage}
 					</div>
 				)}
-				<div className="flex h-[6.5vh] items-center justify-between gap-2 bg-gray-900 p-2">
+				<div className="flex h-[7vh] items-center justify-between gap-2 bg-gray-900 p-2">
 					<div className="w-1/6">
 						<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 							<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
@@ -104,7 +103,7 @@ function App() {
 						<RenderButtonComponent />
 					</div>
 				</div>
-				<div className="flex h-[93.5vh]">
+				<div className="flex h-[93vh]">
 					<div className={`w-1/4 flex-col gap-5 p-4 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
 						<div className="h-2/3 overflow-y-auto overflow-x-hidden">
 							<SideInputsComponent />

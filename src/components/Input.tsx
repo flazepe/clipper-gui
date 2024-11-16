@@ -81,7 +81,7 @@ export default function ({ input }: { input: Input }) {
 							event.preventDefault();
 							c.playorPause();
 						}}
-						className="h-[55%] w-screen"
+						className="h-3/5 w-screen"
 					/>
 					{c.ready && (
 						<div className="flex flex-col gap-5 text-2xl">
