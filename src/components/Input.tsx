@@ -14,6 +14,7 @@ export default function ({ input }: { input: Input }) {
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === " ") c.playorPause();
 			if (event.key === "Enter") c.addCurrentSegment();
 			if (event.key === "Backspace") c.deleteSegment(c.input.segments[c.input.segments.length - 1]);
 		};
@@ -91,6 +92,7 @@ export default function ({ input }: { input: Input }) {
 							event.preventDefault();
 							c.playorPause();
 						}}
+						onFocus={event => event.currentTarget.blur()}
 						className="h-3/5 w-screen"
 					/>
 					{c.ready && (
