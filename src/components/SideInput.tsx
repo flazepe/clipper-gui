@@ -40,14 +40,16 @@ export default function ({ input }: { input: Input }) {
 					onClick={() => setInput?.(input)}
 					className="flex w-1/2 cursor-pointer items-center justify-center gap-3 rounded-bl bg-gray-700 p-2 uppercase"
 				>
-					<EditIcon className="w-7 fill-white" /> {currentInput === input ? "Editing" : "Edit"}
+					<EditIcon className="w-7 fill-white" />
+					{currentInput === input ? "Editing" : "Edit"}
 				</div>
 				<div
 					onClick={() => deleteInput(input)}
 					className="flex w-1/2 cursor-pointer items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase"
 				>
 					<DeleteIcon className="w-7 fill-white" />
-					Delete {currentInput === input && <KeybindHintComponent>Ctrl + W</KeybindHintComponent>}
+					Delete
+					{currentInput === input && <KeybindHintComponent>Ctrl + W</KeybindHintComponent>}
 				</div>
 			</div>
 		</div>
