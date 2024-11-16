@@ -22,8 +22,8 @@ export default function ({ input }: { input: Input }) {
 		setInputs?.(inputs => {
 			const index = inputs.inputs.indexOf(input);
 			inputs.inputs.splice(index, 1);
-			setInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
-			return inputs;
+			if (currentInput === input) setInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
+			return { ...inputs };
 		});
 
 	return (
