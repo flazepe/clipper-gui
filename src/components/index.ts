@@ -8,3 +8,4 @@ export { default as SideInputComponent } from "./SideInput";
 export { default as SideInputsComponent } from "./SideInputs";
 export { default as SideRenderComponent } from "./SideRender";
 export { default as SideRendersComponent } from "./SideRenders";
+export { default as KeybindHintComponent } from "./KeybindHint";

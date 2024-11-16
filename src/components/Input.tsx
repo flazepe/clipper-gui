@@ -1,5 +1,5 @@
 import InputController from "@/classes/InputController";
-import { ButtonComponent, InputSegmentComponent } from "@/components";
+import { ButtonComponent, InputSegmentComponent, KeybindHintComponent } from "@/components";
 import { Input } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { AddIcon, PlayIcon } from "@/icons";
@@ -17,6 +17,11 @@ export default function ({ input }: { input: Input }) {
 			if (event.key === " ") c.playorPause();
 			if (event.key === "Enter") c.addCurrentSegment();
 			if (event.key === "Backspace") c.deleteSegment(c.input.segments[c.input.segments.length - 1]);
+			if (event.key === "ArrowLeft") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
+			if (event.key === "ArrowRight") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
+			if (event.key.toUpperCase() === "S") c.setSegmentStart(c.currentTime);
+			if (event.key.toUpperCase() === "E") c.setSegmentEnd(c.currentTime);
+			if (event.key.toUpperCase() === "P") c.playSegment([c.segmentStart, c.segmentEnd]);
 		};
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
@@ -122,8 +127,8 @@ export default function ({ input }: { input: Input }) {
 								}}
 							/>
 							<div className="flex items-center justify-center gap-2">
-								<ButtonComponent onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
-									Set current time as start
+								<ButtonComponent onClick={() => c.setSegmentStart(c.currentTime)} className="w-1/2">
+									Set current time as start <KeybindHintComponent>S</KeybindHintComponent>
 								</ButtonComponent>
 								<input
 									ref={c.segmentStartInput}
@@ -158,18 +163,18 @@ export default function ({ input }: { input: Input }) {
 									}}
 									className="w-28"
 								/>
-								<ButtonComponent onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
-									Set current time as end
+								<ButtonComponent onClick={() => c.setSegmentEnd(c.currentTime)} className="w-1/2">
+									Set current time as end <KeybindHintComponent>E</KeybindHintComponent>
 								</ButtonComponent>
 							</div>
 							<div className="flex gap-2">
 								<ButtonComponent onClick={() => c.playSegment([c.segmentStart, c.segmentEnd])} className="w-1/2">
 									<PlayIcon className="w-10 fill-white" />
-									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)})
+									Play ({secondsToDuration(c.segmentEnd - c.segmentStart)}) <KeybindHintComponent>P</KeybindHintComponent>
 								</ButtonComponent>
 								<ButtonComponent onClick={() => c.addCurrentSegment()} className="w-1/2">
 									<AddIcon className="w-10 fill-white" />
-									Add
+									Add <KeybindHintComponent>Enter</KeybindHintComponent>
 								</ButtonComponent>
 							</div>
 						</div>

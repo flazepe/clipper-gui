@@ -11,9 +11,9 @@ export default class {
 	private video;
 	setVideo;
 	segmentStart;
-	setSegmentStart;
+	_setSegmentStart;
 	segmentEnd;
-	setSegmentEnd;
+	_setSegmentEnd;
 	segmentStartInput = useRef<HTMLInputElement>(null);
 	segmentEndInput = useRef<HTMLInputElement>(null);
 
@@ -32,11 +32,11 @@ export default class {
 
 		const [segmentStart, setSegmentStart] = useState(0);
 		this.segmentStart = segmentStart;
-		this.setSegmentStart = setSegmentStart;
+		this._setSegmentStart = setSegmentStart;
 
 		const [segmentEnd, setSegmentEnd] = useState(0);
 		this.segmentEnd = segmentEnd;
-		this.setSegmentEnd = setSegmentEnd;
+		this._setSegmentEnd = setSegmentEnd;
 	}
 
 	get filename() {
@@ -57,6 +57,14 @@ export default class {
 
 	set currentTime(duration: number) {
 		if (this.video) this.video.currentTime = duration;
+	}
+
+	setSegmentStart(duration: number) {
+		if (duration < this.segmentEnd) this._setSegmentStart(duration);
+	}
+
+	setSegmentEnd(duration: number) {
+		if (duration > this.segmentStart) this._setSegmentEnd(duration);
 	}
 
 	addCurrentSegment() {

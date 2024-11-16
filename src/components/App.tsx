@@ -1,4 +1,12 @@
-import { ButtonComponent, InputComponent, OptionsComponent, RenderButtonComponent, SideInputsComponent, SideRendersComponent } from "@/components";
+import {
+	ButtonComponent,
+	InputComponent,
+	KeybindHintComponent,
+	OptionsComponent,
+	RenderButtonComponent,
+	SideInputsComponent,
+	SideRendersComponent
+} from "@/components";
 import { InputsStateContext, InputStateContext, RendersStateContext } from "@/contexts";
 import { Input, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
@@ -68,17 +76,17 @@ function App() {
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
-				if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
+				if (event.key === "F5" || (event.ctrlKey && event.key.toUpperCase() === "R"))
 					for (const render of renders) await render.child.kill().catch(() => null);
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
 
-				if (["ArrowLeft", "ArrowUp"].includes(event.key) && input) {
+				if (event.key === "ArrowUp" && input) {
 					const previousInput = inputs.inputs[inputs.inputs.indexOf(input) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
 					if (previousInput) setInput(previousInput);
 				}
 
-				if (["ArrowRight", "ArrowDown"].includes(event.key) && input) {
+				if (event.key === "ArrowDown" && input) {
 					const nextInput = inputs.inputs[inputs.inputs.indexOf(input) + 1] ?? inputs.inputs[0];
 					if (nextInput) setInput(nextInput);
 				}
@@ -106,7 +114,7 @@ function App() {
 					<div className="w-1/6">
 						<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 							<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
-							{sideInputsToggled ? "Hide" : "Show"} Inputs
+							{sideInputsToggled ? "Hide" : "Show"} Inputs <KeybindHintComponent>Esc</KeybindHintComponent>
 						</ButtonComponent>
 					</div>
 					<div className="w-4/6">
