@@ -9,7 +9,7 @@ export default function () {
 		<>
 			<div className="my-2 text-2xl font-bold uppercase">Renders</div>
 			{renders[0] ? (
-				<div className="flex flex-col gap-2 font-bold">
+				<div className="flex flex-col gap-4 font-bold">
 					{renders.map((render, index) => (
 						<SideRenderComponent render={render} key={index} />
 					))}

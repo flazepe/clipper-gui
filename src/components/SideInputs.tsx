@@ -10,7 +10,7 @@ export default function () {
 		<>
 			<div className="my-2 text-2xl font-bold uppercase">Inputs</div>
 			{inputs.inputs[0] ? (
-				<div className="flex flex-col gap-2 font-bold">
+				<div className="flex flex-col gap-4 font-bold">
 					<DndContext
 						onDragEnd={event => {
 							if (!event.over || event.active.id === event.over.id) return;
