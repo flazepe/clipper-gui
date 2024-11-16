@@ -15,7 +15,7 @@ export default function () {
 					))}
 				</div>
 			) : (
-				<div className="flex h-1/2 items-center justify-center text-xl font-bold uppercase text-gray-400">Empty</div>
+				<div className="flex justify-center text-xl font-bold uppercase text-gray-400">Empty</div>
 			)}
 		</>
 	);
