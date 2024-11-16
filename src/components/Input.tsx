@@ -6,11 +6,20 @@ import { AddIcon, PlayIcon } from "@/icons";
 import { DndContext } from "@dnd-kit/core";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import SimpleBar from "simplebar-react";
 
 export default function ({ input }: { input: Input }) {
 	const c = new InputController(input);
+
+	useEffect(() => {
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Enter") c.addCurrentSegment();
+			if (event.key === "Backspace") c.deleteSegment(c.input.segments[c.input.segments.length - 1]);
+		};
+		document.addEventListener("keydown", onKeyDown);
+		return () => document.removeEventListener("keydown", onKeyDown);
+	});
 
 	return (
 		<>

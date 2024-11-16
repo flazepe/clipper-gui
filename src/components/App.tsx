@@ -68,10 +68,20 @@ function App() {
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
-				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
-
 				if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
 					for (const render of renders) await render.child.kill().catch(() => null);
+
+				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
+
+				if (["ArrowLeft", "ArrowUp"].includes(event.key)) {
+					const previousInput = input ? inputs.inputs[inputs.inputs.indexOf(input) - 1] : inputs.inputs[0];
+					if (previousInput) setInput(previousInput);
+				}
+
+				if (["ArrowRight", "ArrowDown"].includes(event.key)) {
+					const nextInput = input ? inputs.inputs[inputs.inputs.indexOf(input) + 1] : inputs.inputs[0];
+					if (nextInput) setInput(nextInput);
+				}
 			};
 
 		document.addEventListener("contextmenu", onContextMenu);
