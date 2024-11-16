@@ -7,7 +7,6 @@
 		"core:default",
 		"clipboard-manager:allow-write-text",
 		"dialog:default",
-		"fs:allow-exists",
 		{
 			"identifier": "fs:allow-write-text-file",
 			"allow": [{ "path": "ffmpeg.log" }]

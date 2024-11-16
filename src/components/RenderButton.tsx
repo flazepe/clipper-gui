@@ -1,10 +1,10 @@
 import { ButtonComponent } from "@/components";
-import { getFfmpegArgs, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { VideoVintageIcon } from "@/icons";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { message, save } from "@tauri-apps/plugin-dialog";
-import { exists, writeTextFile } from "@tauri-apps/plugin-fs";
+import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { useContext } from "react";
 import { EncoderStateContext, InputsStateContext, OutputContext, RendersStateContext } from "../contexts";
@@ -27,7 +27,7 @@ export default function () {
 					if (!input.segments[0]) return message(`Input "${input.file}" is missing segments.`, { kind: "error" });
 
 					// Deleted inputs
-					if (!(await exists(input.file).catch(() => true))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
+					if (!(await isValidVideo(input.file))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
 				}
 
 				const split = inputs.inputs[0].file.split("."),
