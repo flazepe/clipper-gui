@@ -73,13 +73,13 @@ function App() {
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
 
-				if (["ArrowLeft", "ArrowUp"].includes(event.key)) {
-					const previousInput = input ? inputs.inputs[inputs.inputs.indexOf(input) - 1] : inputs.inputs[0];
+				if (["ArrowLeft", "ArrowUp"].includes(event.key) && input) {
+					const previousInput = inputs.inputs[inputs.inputs.indexOf(input) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
 					if (previousInput) setInput(previousInput);
 				}
 
-				if (["ArrowRight", "ArrowDown"].includes(event.key)) {
-					const nextInput = input ? inputs.inputs[inputs.inputs.indexOf(input) + 1] : inputs.inputs[0];
+				if (["ArrowRight", "ArrowDown"].includes(event.key) && input) {
+					const nextInput = inputs.inputs[inputs.inputs.indexOf(input) + 1] ?? inputs.inputs[0];
 					if (nextInput) setInput(nextInput);
 				}
 			};
