@@ -27,7 +27,7 @@ export default function () {
 					if (!input.segments[0]) return message(`Input "${input.file}" is missing segments.`, { kind: "error" });
 
 					// Deleted inputs
-					if (!(await exists(input.file))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
+					if (!(await exists(input.file).catch(() => true))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
 				}
 
 				const split = inputs.inputs[0].file.split("."),
