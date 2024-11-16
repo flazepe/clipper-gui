@@ -68,6 +68,8 @@ function App() {
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
+				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
+
 				if (event.key === "F5" || (event.ctrlKey && event.key.toLowerCase() === "r"))
 					for (const render of renders) await render.child.kill().catch(() => null);
 			};
