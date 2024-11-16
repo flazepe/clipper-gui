@@ -5,6 +5,7 @@ import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { useContext, useEffect, useState } from "react";
+import SimpleBar from "simplebar-react";
 
 function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
@@ -104,13 +105,13 @@ function App() {
 					</div>
 				</div>
 				<div className="flex h-[93vh]">
-					<div className={`w-1/4 flex-col gap-5 p-4 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
-						<div className="h-2/3 overflow-y-auto overflow-x-hidden">
+					<div className={`w-1/4 flex-col gap-5 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
+						<SimpleBar className="h-2/3 p-4">
 							<SideInputsComponent />
-						</div>
-						<div className="h-1/3 overflow-y-auto overflow-x-hidden">
+						</SimpleBar>
+						<SimpleBar className="h-1/3 p-4">
 							<SideRendersComponent />
-						</div>
+						</SimpleBar>
 					</div>
 					<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
 						{input ? (

@@ -7,6 +7,7 @@ import { DndContext } from "@dnd-kit/core";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
 import { useCallback } from "react";
+import SimpleBar from "simplebar-react";
 
 export default function ({ input }: { input: Input }) {
 	const c = new InputController(input);
@@ -165,24 +166,28 @@ export default function ({ input }: { input: Input }) {
 				</div>
 				<div className="w-60 bg-gray-950" />
 			</div>
-			<div className="flex h-full w-full items-center gap-4 overflow-y-hidden overflow-x-scroll bg-gray-950 p-4">
-				<DndContext
-					onDragEnd={event => {
-						if (!event.over || event.active.id === event.over.id) return;
+			<div className="flex h-full w-full items-center bg-gray-950 px-8">
+				<SimpleBar className="w-full py-4">
+					<div className="flex flex-row gap-4">
+						<DndContext
+							onDragEnd={event => {
+								if (!event.over || event.active.id === event.over.id) return;
 
-						const oldIndex = input.segments.findIndex(segment => segment.toString() === event.active.id),
-							newIndex = input.segments.findIndex(segment => segment.toString() === event.over?.id),
-							[oldSegment] = input.segments.splice(oldIndex, 1);
+								const oldIndex = input.segments.findIndex(segment => segment.toString() === event.active.id),
+									newIndex = input.segments.findIndex(segment => segment.toString() === event.over?.id),
+									[oldSegment] = input.segments.splice(oldIndex, 1);
 
-						input.segments.splice(newIndex, 0, oldSegment);
+								input.segments.splice(newIndex, 0, oldSegment);
 
-						c.setInputs?.({ ...c.inputs });
-					}}
-				>
-					{c.input.segments.map((segment, index) => (
-						<InputSegmentComponent controller={c} segment={segment} key={index} />
-					))}
-				</DndContext>
+								c.setInputs?.({ ...c.inputs });
+							}}
+						>
+							{c.input.segments.map((segment, index) => (
+								<InputSegmentComponent controller={c} segment={segment} key={index} />
+							))}
+						</DndContext>
+					</div>
+				</SimpleBar>
 			</div>
 		</>
 	);

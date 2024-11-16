@@ -14,6 +14,11 @@ input[type="checkbox"] {
 	@apply w-4 accent-blue-700;
 }
 
+/* Scrollbar */
+.simplebar-scrollbar::before {
+	@apply bg-gray-50;
+}
+
 /* Video range slider */
 .multi-range-slider {
 	@apply my-3 border-none p-0;
