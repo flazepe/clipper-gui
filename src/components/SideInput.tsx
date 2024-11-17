@@ -51,7 +51,7 @@ export default function ({ input }: { input: Input }) {
 				</div>
 				<div
 					onClick={() => deleteInput(input)}
-					className="flex w-1/2 cursor-pointer items-center justify-center gap-3 rounded-br bg-red-500 p-2 uppercase"
+					className="flex w-1/2 cursor-pointer items-center justify-center gap-3 rounded-br bg-red-600 p-2 uppercase"
 				>
 					<DeleteIcon className="w-7 fill-white" />
 					Delete

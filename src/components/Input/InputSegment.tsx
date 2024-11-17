@@ -25,7 +25,7 @@ export default function ({ controller: c, segment }: { controller: InputControll
 					{secondsToDuration(segment[1] - segment[0], true)}
 					{isCurrentSegment && <KeybindHintComponent>P</KeybindHintComponent>}
 				</div>
-				<div onClick={() => c.deleteSegment(segment)} className="flex w-1/2 cursor-pointer justify-center gap-2 rounded-br bg-red-500 p-2">
+				<div onClick={() => c.deleteSegment(segment)} className="flex w-1/2 cursor-pointer justify-center gap-2 rounded-br bg-red-600 p-2">
 					<DeleteIcon className="w-8 fill-white" />
 					{isCurrentSegment && <KeybindHintComponent>Back</KeybindHintComponent>}
 				</div>
