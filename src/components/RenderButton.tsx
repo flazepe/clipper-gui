@@ -16,6 +16,7 @@ export default function () {
 				encoder: [encoder],
 				output: [output]
 			},
+			sideInputsToggled: [, setSideInputsToggled],
 			renders: [renders, setRenders]
 		} = useContext(StatesContext),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0),
@@ -56,6 +57,7 @@ export default function () {
 					render: Render = { filename: output.file, progress: 0, child };
 
 				setRenders?.(renders => [...renders, render]);
+				setSideInputsToggled?.(true);
 
 				command.stdout.on("data", data => {
 					data = `[${render.filename}] ${data}`;
