@@ -10,7 +10,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 		<>
 			<div className="text-center text-2xl font-bold">{c.filename}</div>
 			<video
-				src={convertFileSrc(c.input.file)}
+				src={convertFileSrc(c.currentInput.file)}
 				controls
 				onLoadedMetadata={event => {
 					c.setVideo(event.currentTarget);

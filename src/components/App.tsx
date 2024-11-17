@@ -7,9 +7,9 @@ import {
 	SideInputsComponent,
 	SideRendersComponent
 } from "@/components";
-import { InputsStateContext, InputStateContext, RendersStateContext } from "@/contexts";
-import { Input, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { isValidVideo, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
+import StatesContext from "@/StatesContext";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { useContext, useEffect, useState } from "react";
@@ -17,17 +17,16 @@ import SimpleBar from "simplebar-react";
 
 function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
-		[inputs, setInputs] = useState(useContext(InputsStateContext)[0]),
-		[input, setInput] = useState<Input | null>(null),
-		inputState = useContext(InputStateContext),
-		[renders, setRenders] = useState<Array<Render>>([]),
-		[sideInputsToggled, setSideInputsToggled] = useState(false);
-
-	inputState[0] = input;
-	inputState[1] = setInput;
+		states = useContext(StatesContext),
+		[inputs, setInputs] = useState(states.clipper.inputs[0]),
+		[encoder, setEncoder] = useState(states.clipper.encoder[0]),
+		[output, setOutput] = useState(states.clipper.output[0]),
+		[sideInputsToggled, setSideInputsToggled] = useState(false),
+		[currentInput, setCurrentInput] = useState(states.currentInput[0]),
+		[renders, setRenders] = useState(states.renders[0]);
 
 	useEffect(() => {
-		const fns = [
+		const unlistens = [
 				listen<{ paths: Array<string> }>(
 					TauriEvent.DRAG_ENTER,
 					event =>
@@ -69,7 +68,7 @@ function App() {
 					setInputs?.(newInputs);
 
 					if (newInputs.inputs[0]) {
-						setInput(newInputs.inputs[newInputs.inputs.length - 1]);
+						setCurrentInput(newInputs.inputs[newInputs.inputs.length - 1]);
 						setSideInputsToggled(true);
 					}
 				})
@@ -81,14 +80,14 @@ function App() {
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
 
-				if (event.key === "ArrowUp" && input) {
-					const previousInput = inputs.inputs[inputs.inputs.indexOf(input) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
-					if (previousInput) setInput(previousInput);
+				if (event.key === "ArrowUp" && currentInput) {
+					const previousInput = inputs.inputs[inputs.inputs.indexOf(currentInput) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
+					if (previousInput) setCurrentInput(previousInput);
 				}
 
-				if (event.key === "ArrowDown" && input) {
-					const nextInput = inputs.inputs[inputs.inputs.indexOf(input) + 1] ?? inputs.inputs[0];
-					if (nextInput) setInput(nextInput);
+				if (event.key === "ArrowDown" && currentInput) {
+					const nextInput = inputs.inputs[inputs.inputs.indexOf(currentInput) + 1] ?? inputs.inputs[0];
+					if (nextInput) setCurrentInput(nextInput);
 				}
 			};
 
@@ -96,56 +95,65 @@ function App() {
 		document.addEventListener("keydown", onKeyDown);
 
 		return () => {
-			Promise.all(fns).then(fns => fns.forEach(fn => fn()));
+			Promise.all(unlistens).then(unlistens => unlistens.forEach(unlisten => unlisten()));
 			document.removeEventListener("contextmenu", onContextMenu);
 			document.removeEventListener("keydown", onKeyDown);
 		};
 	});
 
 	return (
-		<InputsStateContext.Provider value={[inputs, setInputs]}>
-			<RendersStateContext.Provider value={[renders, setRenders]}>
-				{dragMessage && (
-					<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
-						{dragMessage}
-					</div>
-				)}
-				<div className="flex h-[7vh] items-center justify-between gap-2 bg-gray-900 p-2">
-					<div className="w-1/6">
-						<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
-							<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
-							{sideInputsToggled ? "Hide" : "Show"} Inputs <KeybindHintComponent>Esc</KeybindHintComponent>
-						</ButtonComponent>
-					</div>
-					<div className="w-4/6">
-						<OptionsComponent />
-					</div>
-					<div className="w-1/6">
-						<RenderButtonComponent />
-					</div>
+		<StatesContext.Provider
+			value={{
+				clipper: {
+					inputs: [inputs, setInputs],
+					encoder: [encoder, setEncoder],
+					output: [output, setOutput]
+				},
+				sideInputsToggled: [sideInputsToggled, setSideInputsToggled],
+				currentInput: [currentInput, setCurrentInput],
+				renders: [renders, setRenders]
+			}}
+		>
+			{dragMessage && (
+				<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
+					{dragMessage}
 				</div>
-				<div className="flex h-[93vh]">
-					<div className={`w-1/4 flex-col gap-5 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
-						<SimpleBar className="h-2/3 p-4">
-							<SideInputsComponent />
-						</SimpleBar>
-						<SimpleBar className="h-1/3 p-4">
-							<SideRendersComponent />
-						</SimpleBar>
-					</div>
-					<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
-						{input ? (
-							<InputComponent input={input} />
-						) : (
-							<>
-								<div className="m-5 text-5xl font-bold">clipper-gui</div>
-								<div className="text-2xl">Drag input(s) to this window to get started.</div>
-							</>
-						)}
-					</div>
+			)}
+			<div className="flex h-[7vh] items-center justify-between gap-2 bg-gray-900 p-2">
+				<div className="w-1/6">
+					<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
+						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
+						{sideInputsToggled ? "Hide" : "Show"} Inputs <KeybindHintComponent>Esc</KeybindHintComponent>
+					</ButtonComponent>
 				</div>
-			</RendersStateContext.Provider>
-		</InputsStateContext.Provider>
+				<div className="w-4/6">
+					<OptionsComponent />
+				</div>
+				<div className="w-1/6">
+					<RenderButtonComponent />
+				</div>
+			</div>
+			<div className="flex h-[93vh]">
+				<div className={`w-1/4 flex-col gap-5 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
+					<SimpleBar className="h-2/3 p-4">
+						<SideInputsComponent />
+					</SimpleBar>
+					<SimpleBar className="h-1/3 p-4">
+						<SideRendersComponent />
+					</SimpleBar>
+				</div>
+				<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
+					{currentInput ? (
+						<InputComponent currentInput={currentInput} />
+					) : (
+						<>
+							<div className="m-5 text-5xl font-bold">clipper-gui</div>
+							<div className="text-2xl">Drag input(s) to this window to get started.</div>
+						</>
+					)}
+				</div>
+			</div>
+		</StatesContext.Provider>
 	);
 }
 

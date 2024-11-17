@@ -3,8 +3,8 @@ import { InputSegmentsComponent, InputTracksComponent, InputVideoComponent } fro
 import { Input } from "@/functions/clipper";
 import { useEffect } from "react";
 
-export default function ({ input }: { input: Input }) {
-	const c = new InputController(input);
+export default function ({ currentInput }: { currentInput: Input }) {
+	const c = new InputController(currentInput);
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {

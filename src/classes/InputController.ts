@@ -1,11 +1,11 @@
-import { InputStateContext, InputsStateContext } from "@/contexts";
 import { Input } from "@/functions/clipper";
+import StatesContext from "@/StatesContext";
 import { message } from "@tauri-apps/plugin-dialog";
 import { useContext, useRef, useState } from "react";
 
 export default class {
-	input;
-	setInput;
+	currentInput;
+	setCurrentInput;
 	inputs;
 	setInputs;
 	private video;
@@ -17,12 +17,17 @@ export default class {
 	segmentStartInput = useRef<HTMLInputElement>(null);
 	segmentEndInput = useRef<HTMLInputElement>(null);
 
-	constructor(input: Input) {
-		const [, setInput] = useContext(InputStateContext);
-		this.input = input;
-		this.setInput = setInput;
+	constructor(currentInput: Input) {
+		const {
+			clipper: {
+				inputs: [inputs, setInputs]
+			},
+			currentInput: [, setCurrentInput]
+		} = useContext(StatesContext);
 
-		const [inputs, setInputs] = useContext(InputsStateContext);
+		this.currentInput = currentInput;
+		this.setCurrentInput = setCurrentInput;
+
 		this.inputs = inputs;
 		this.setInputs = setInputs;
 
@@ -40,7 +45,7 @@ export default class {
 	}
 
 	get filename() {
-		return this.input.file.split(/[/\\]/).pop()!;
+		return this.currentInput.file.split(/[/\\]/).pop()!;
 	}
 
 	get ready() {
@@ -71,18 +76,18 @@ export default class {
 		if (this.segmentStart >= this.segmentEnd || this.segmentEnd <= this.segmentStart)
 			return message("Segment start must be before segment end and vice versa.");
 
-		if (this.input.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
+		if (this.currentInput.segments.find(segment => segment[0] === this.segmentStart && segment[1] === this.segmentEnd))
 			return message("Segment already exists.", { kind: "error" });
 
-		this.input.segments.push([this.segmentStart, this.segmentEnd]);
+		this.currentInput.segments.push([this.segmentStart, this.segmentEnd]);
 		this.setInputs?.({ ...this.inputs });
 	}
 
 	deleteSegment(segment: [number, number]) {
-		const index = this.input.segments.findIndex(([start, end]) => start === segment[0] && end === segment[1]);
+		const index = this.currentInput.segments.findIndex(([start, end]) => start === segment[0] && end === segment[1]);
 		if (index === -1) return;
 
-		this.input.segments.splice(index, 1);
+		this.currentInput.segments.splice(index, 1);
 		this.setInputs?.({ ...this.inputs });
 	}
 
@@ -112,13 +117,13 @@ export default class {
 	setTrack(trackType: "video" | "audio" | "subtitle", trackIndex: number) {
 		switch (trackType) {
 			case "video":
-				this.input.videoTrack = trackIndex;
+				this.currentInput.videoTrack = trackIndex;
 				break;
 			case "audio":
-				this.input.audioTrack = trackIndex;
+				this.currentInput.audioTrack = trackIndex;
 				break;
 			case "subtitle":
-				this.input.subtitleTrack = trackIndex === -1 ? null : trackIndex;
+				this.currentInput.subtitleTrack = trackIndex === -1 ? null : trackIndex;
 				break;
 		}
 
@@ -127,7 +132,7 @@ export default class {
 
 	setSpeed(speed: number) {
 		if (this.video) this.video.playbackRate = speed;
-		this.input.speed = speed;
+		this.currentInput.speed = speed;
 		this.setInputs?.({ ...this.inputs });
 	}
 }

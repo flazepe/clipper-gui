@@ -1,9 +1,11 @@
 import { SideRenderComponent } from "@/components";
-import { RendersStateContext } from "@/contexts";
+import StatesContext from "@/StatesContext";
 import { useContext } from "react";
 
 export default function () {
-	const [renders] = useContext(RendersStateContext);
+	const {
+		renders: [renders]
+	} = useContext(StatesContext);
 
 	return (
 		<>

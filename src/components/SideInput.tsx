@@ -1,14 +1,18 @@
 import { KeybindHintComponent } from "@/components";
-import { InputsStateContext, InputStateContext } from "@/contexts";
 import { Input } from "@/functions/clipper";
 import { DeleteIcon, EditIcon } from "@/icons";
+import StatesContext from "@/StatesContext";
 import { useDraggable, useDroppable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useContext, useEffect } from "react";
 
 export default function ({ input }: { input: Input }) {
-	const [, setInputs] = useContext(InputsStateContext),
-		[currentInput, setInput] = useContext(InputStateContext),
+	const {
+			clipper: {
+				inputs: [, setInputs]
+			},
+			currentInput: [currentInput, setCurrentInput]
+		} = useContext(StatesContext),
 		{ attributes, listeners, setNodeRef, transform } = useDraggable({ id: input._dndID }),
 		{ setNodeRef: setDroppableNodeRef } = useDroppable({ id: input._dndID });
 
@@ -22,7 +26,7 @@ export default function ({ input }: { input: Input }) {
 		setInputs?.(inputs => {
 			const index = inputs.inputs.indexOf(input);
 			inputs.inputs.splice(index, 1);
-			if (currentInput === input) setInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
+			if (currentInput === input) setCurrentInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
 			return { ...inputs };
 		});
 
@@ -37,7 +41,7 @@ export default function ({ input }: { input: Input }) {
 			</div>
 			<div className="flex">
 				<div
-					onClick={() => setInput?.(input)}
+					onClick={() => setCurrentInput?.(input)}
 					className="flex w-1/2 cursor-pointer items-center justify-center gap-3 rounded-bl bg-gray-700 p-2 uppercase"
 				>
 					<EditIcon className="w-7 fill-white" />

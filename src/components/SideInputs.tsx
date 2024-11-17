@@ -1,10 +1,14 @@
 import { SideInputComponent } from "@/components";
-import { InputsStateContext } from "@/contexts";
+import StatesContext from "@/StatesContext";
 import { DndContext } from "@dnd-kit/core";
 import { useContext } from "react";
 
 export default function () {
-	const [inputs, setInputs] = useContext(InputsStateContext);
+	const {
+		clipper: {
+			inputs: [inputs, setInputs]
+		}
+	} = useContext(StatesContext);
 
 	return (
 		<>

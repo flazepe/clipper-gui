@@ -2,18 +2,22 @@ import { ButtonComponent, KeybindHintComponent } from "@/components";
 import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { VideoIcon } from "@/icons";
+import StatesContext from "@/StatesContext";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { message, save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { useContext, useEffect } from "react";
-import { EncoderStateContext, InputsStateContext, OutputContext, RendersStateContext } from "../contexts";
 
 export default function () {
-	const [inputs] = useContext(InputsStateContext),
-		[encoder] = useContext(EncoderStateContext),
-		output = useContext(OutputContext),
-		[renders, setRenders] = useContext(RendersStateContext),
+	const {
+			clipper: {
+				inputs: [inputs],
+				encoder: [encoder],
+				output: [output]
+			},
+			renders: [renders, setRenders]
+		} = useContext(StatesContext),
 		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0),
 		render = async () => {
 			// No inputs

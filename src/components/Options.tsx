@@ -1,15 +1,19 @@
-import { EncoderStateContext, InputsStateContext, OutputContext } from "@/contexts";
+import StatesContext from "@/StatesContext";
 import { useContext, useState } from "react";
 
 export default function () {
-	const [inputs] = useContext(InputsStateContext),
+	const {
+			clipper: {
+				inputs: [inputs],
+				encoder: [encoder],
+				output: [output]
+			}
+		} = useContext(StatesContext),
 		[fade, setFade] = useState(0),
 		[noVideo, setNoVideo] = useState(false),
 		[noAudio, setNoAudio] = useState(false),
-		[encoder] = useContext(EncoderStateContext),
 		[nvenc, setNvenc] = useState(false),
 		[hevc, setHevc] = useState(false),
-		output = useContext(OutputContext),
 		[dryRun, setDryRun] = useState(false);
 
 	inputs.fade = fade;
