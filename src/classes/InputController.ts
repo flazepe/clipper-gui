@@ -5,7 +5,6 @@ import { useContext, useRef, useState } from "react";
 
 export default class {
 	currentInput;
-	setCurrentInput;
 	inputs;
 	setInputs;
 	private video;
@@ -21,12 +20,10 @@ export default class {
 		const {
 			clipper: {
 				inputs: [inputs, setInputs]
-			},
-			currentInput: [, setCurrentInput]
+			}
 		} = useContext(StatesContext);
 
 		this.currentInput = currentInput;
-		this.setCurrentInput = setCurrentInput;
 
 		this.inputs = inputs;
 		this.setInputs = setInputs;
