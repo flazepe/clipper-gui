@@ -1,11 +1,14 @@
 export { default as AppComponent } from "./App";
 export { default as ButtonComponent } from "./Button";
-export { default as InputComponent } from "./Input";
-export { default as InputSegmentComponent } from "./InputSegment";
+export { default as InputComponent } from "./Input/Input";
+export { default as InputSegmentComponent } from "./Input/InputSegment";
+export { default as InputSegmentsComponent } from "./Input/InputSegments";
+export { default as InputTracksComponent } from "./Input/InputTracks";
+export { default as InputVideoComponent } from "./Input/InputVideo";
+export { default as KeybindHintComponent } from "./KeybindHint";
 export { default as OptionsComponent } from "./Options";
 export { default as RenderButtonComponent } from "./RenderButton";
 export { default as SideInputComponent } from "./SideInput";
 export { default as SideInputsComponent } from "./SideInputs";
 export { default as SideRenderComponent } from "./SideRender";
 export { default as SideRendersComponent } from "./SideRenders";
-export { default as KeybindHintComponent } from "./KeybindHint";
