@@ -42,6 +42,12 @@ export default function ({ input }: { input: Input }) {
 				>
 					<EditIcon className="w-7 fill-white" />
 					{currentInput === input ? "Editing" : "Edit"}
+					{currentInput === input && (
+						<>
+							<KeybindHintComponent>↑</KeybindHintComponent>
+							<KeybindHintComponent>↓</KeybindHintComponent>
+						</>
+					)}
 				</div>
 				<div
 					onClick={() => deleteInput(input)}
