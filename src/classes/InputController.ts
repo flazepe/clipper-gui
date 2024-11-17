@@ -105,6 +105,10 @@ export default class {
 		}
 	}
 
+	fullscreen() {
+		document.fullscreenElement ? document.exitFullscreen() : this.video?.requestFullscreen();
+	}
+
 	setTrack(trackType: "video" | "audio" | "subtitle", trackIndex: number) {
 		switch (trackType) {
 			case "video":

@@ -11,6 +11,7 @@ export default function ({ input }: { input: Input }) {
 			if (event.key === " ") c.playorPause();
 			if (event.key === "ArrowLeft") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
 			if (event.key === "ArrowRight") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
+			if (event.key === "F11") c.fullscreen();
 			if (event.key === "Enter") c.addCurrentSegment();
 			if (event.key === "Backspace") c.deleteSegment([c.segmentStart, c.segmentEnd]);
 			if (event.key.toUpperCase() === "S") c.setSegmentStart(c.currentTime);
