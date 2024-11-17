@@ -5,4 +5,4 @@ export { default as EditIcon } from "./Edit";
 export { default as MenuCloseIcon } from "./MenuClose";
 export { default as MenuOpenIcon } from "./MenuOpen";
 export { default as PlayIcon } from "./Play";
-export { default as VideoVintageIcon } from "./VideoVintage";
+export { default as VideoIcon } from "./Video";
