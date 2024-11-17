@@ -12,7 +12,7 @@ export default function ({ input }: { input: Input }) {
 			if (event.key === "ArrowLeft") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
 			if (event.key === "ArrowRight") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
 			if (event.key === "Enter") c.addCurrentSegment();
-			if (event.key === "Backspace") c.deleteSegment(c.input.segments[c.input.segments.length - 1]);
+			if (event.key === "Backspace") c.deleteSegment([c.segmentStart, c.segmentEnd]);
 			if (event.key.toUpperCase() === "S") c.setSegmentStart(c.currentTime);
 			if (event.key.toUpperCase() === "E") c.setSegmentEnd(c.currentTime);
 			if (event.key.toUpperCase() === "P") c.playSegment([c.segmentStart, c.segmentEnd]);

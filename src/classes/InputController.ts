@@ -79,7 +79,7 @@ export default class {
 	}
 
 	deleteSegment(segment: [number, number]) {
-		const index = this.input.segments.indexOf(segment);
+		const index = this.input.segments.findIndex(([start, end]) => start === segment[0] && end === segment[1]);
 		if (index === -1) return;
 
 		this.input.segments.splice(index, 1);
