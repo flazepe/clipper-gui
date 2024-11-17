@@ -9,7 +9,7 @@ import { useContext, useEffect } from "react";
 export default function ({ input }: { input: Input }) {
 	const {
 			clipper: {
-				inputs: [, setInputs]
+				inputs: [inputs, setInputs]
 			},
 			currentInput: [currentInput, setCurrentInput]
 		} = useContext(StatesContext),
@@ -17,7 +17,21 @@ export default function ({ input }: { input: Input }) {
 		{ setNodeRef: setDroppableNodeRef } = useDroppable({ id: input._dndID });
 
 	useEffect(() => {
-		const onKeyDown = (event: KeyboardEvent) => event.ctrlKey && event.key.toLowerCase() === "w" && currentInput && deleteInput(currentInput);
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (!currentInput) return;
+
+			if (event.key === "ArrowUp") {
+				const previousInput = inputs.inputs[inputs.inputs.indexOf(currentInput) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
+				if (previousInput) setCurrentInput?.(previousInput);
+			}
+
+			if (event.key === "ArrowDown") {
+				const nextInput = inputs.inputs[inputs.inputs.indexOf(currentInput) + 1] ?? inputs.inputs[0];
+				if (nextInput) setCurrentInput?.(nextInput);
+			}
+
+			if (event.ctrlKey && event.key.toUpperCase() === "W") deleteInput(currentInput);
+		};
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
 	});

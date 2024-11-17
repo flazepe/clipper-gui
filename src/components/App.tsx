@@ -79,16 +79,6 @@ function App() {
 					for (const render of renders) await render.child.kill().catch(() => null);
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
-
-				if (event.key === "ArrowUp" && currentInput) {
-					const previousInput = inputs.inputs[inputs.inputs.indexOf(currentInput) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
-					if (previousInput) setCurrentInput(previousInput);
-				}
-
-				if (event.key === "ArrowDown" && currentInput) {
-					const nextInput = inputs.inputs[inputs.inputs.indexOf(currentInput) + 1] ?? inputs.inputs[0];
-					if (nextInput) setCurrentInput(nextInput);
-				}
 			};
 
 		document.addEventListener("contextmenu", onContextMenu);
