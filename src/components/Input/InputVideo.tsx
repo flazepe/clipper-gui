@@ -57,7 +57,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 						}}
 					/>
 					<div className="flex items-center justify-center gap-2">
-						<ButtonComponent onClick={() => c.setSegmentStart(c.currentTime)} className="w-1/2">
+						<ButtonComponent onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
 							Set current time as start <KeybindHintComponent>S</KeybindHintComponent>
 						</ButtonComponent>
 						<input
@@ -93,7 +93,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 							}}
 							className="w-28"
 						/>
-						<ButtonComponent onClick={() => c.setSegmentEnd(c.currentTime)} className="w-1/2">
+						<ButtonComponent onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
 							Set current time as end <KeybindHintComponent>E</KeybindHintComponent>
 						</ButtonComponent>
 					</div>
