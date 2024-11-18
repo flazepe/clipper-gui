@@ -54,7 +54,7 @@ function App() {
 						inputs: [
 							...inputs.inputs,
 							...paths.map(path => ({
-								_dndID: Math.random().toString(8),
+								_dndID: Math.random(),
 								file: path,
 								segments: [],
 								videoTrack: 0,
