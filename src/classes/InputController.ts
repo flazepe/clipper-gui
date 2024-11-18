@@ -78,6 +78,9 @@ export default class {
 
 		this.currentInput.segments.push([this.segmentStart, this.segmentEnd]);
 		this.setInputs?.({ ...this.inputs });
+
+		this.setSegmentStart(0);
+		this.setSegmentEnd(this.duration);
 	}
 
 	deleteSegment(segment: [number, number]) {
