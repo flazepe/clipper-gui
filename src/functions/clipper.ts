@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { message } from "@tauri-apps/plugin-dialog";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 
 export const SUPPORTED_EXTENSIONS = ["avi", "flv", "mkv", "mov", "mp4"];
@@ -47,15 +48,19 @@ export function getFfmpegArgs({ inputs, encoder, output }: { inputs: Inputs; enc
 
 export async function isValidVideo(path: string) {
 	return new Promise<boolean>(async resolve => {
-		const command = Command.create("ffprobe", ["-v", "error", path]),
-			child = await command.spawn();
+		try {
+			const command = Command.create("ffprobe", ["-v", "error", path]),
+				child = await command.spawn();
 
-		command.stderr.on("data", async () => {
-			resolve(false);
-			await child.kill();
-		});
+			command.stderr.on("data", async () => {
+				resolve(false);
+				await child.kill();
+			});
 
-		command.on("close", () => resolve(true));
+			command.on("close", () => resolve(true));
+		} catch {
+			message("ffprobe not found. Please make sure to install ffmpeg (which includes ffprobe) and add the bin folder to PATH.");
+		}
 	});
 }
 
