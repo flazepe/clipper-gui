@@ -18,7 +18,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 					c.setSegmentEnd(Math.trunc(event.currentTarget.duration));
 
 					if (!c.inputs.resize || c.inputs.inputs.length === 1)
-						c.inputs.resize = `${event.currentTarget.videoWidth}:${event.currentTarget.videoHeight}`;
+						c.inputs.resize = [event.currentTarget.videoWidth, event.currentTarget.videoHeight];
 				}}
 				onTimeUpdate={event => {
 					// Psuse the player if the current time is outside segment range

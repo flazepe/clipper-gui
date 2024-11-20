@@ -13,7 +13,7 @@ export interface Clipper {
 export interface Inputs {
 	inputs: Array<Input>;
 	fade: number;
-	resize: string | null;
+	resize: [number, number] | null;
 	noVideo: boolean;
 	noAudio: boolean;
 }
