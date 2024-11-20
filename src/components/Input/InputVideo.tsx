@@ -42,9 +42,6 @@ export default function ({ controller: c }: { controller: InputController }) {
 						maxCaption={secondsToDuration(c.segmentEnd)}
 						step={1}
 						ruler={false}
-						barInnerColor="#1d4ed8"
-						barLeftColor="gray"
-						barRightColor="gray"
 						onInput={event => {
 							if (event.minValue !== c.segmentStart) c.currentTime = event.minValue;
 							if (event.maxValue !== c.segmentEnd) c.currentTime = event.maxValue;

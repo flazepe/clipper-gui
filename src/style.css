@@ -21,22 +21,42 @@ input[type="checkbox"] {
 
 /* Video range slider */
 .multi-range-slider {
+	/* Add y margin and remove border/padding */
 	@apply my-3 border-none p-0;
-}
 
-/* Thicken bar */
-.multi-range-slider .bar {
-	@apply h-6;
-}
+	/* Increase bar's thickness */
+	.bar {
+		@apply h-6;
 
-/* Remove additional styles from the bars */
-.multi-range-slider .bar-left,
-.multi-range-slider .bar-right,
-.multi-range-slider .bar-inner {
-	@apply rounded-none shadow-none;
-}
+		/* Remove bars' additional styles */
+		.bar-left,
+		.bar-right,
+		.bar-inner {
+			@apply rounded-none shadow-none;
+		}
 
-/* Fix thumb alignment */
-.multi-range-slider .thumb::before {
-	@apply ml-[-10px] mt-5;
+		/* Set bar's outer left and right color */
+		.bar-left,
+		.bar-right {
+			@apply bg-gray-800;
+		}
+
+		/* Set bar's inner left and right color */
+		.bar-inner {
+			@apply bg-gray-500;
+		}
+	}
+
+	.thumb {
+		/* Remove thumbs' additional styles and fix their alignment  */
+		&::before {
+			@apply ml-[-10px] mt-5 border-none shadow-none;
+		}
+
+		/* Set captions' background color */
+		.min-caption,
+		.max-caption {
+			@apply bg-gray-700;
+		}
+	}
 }
