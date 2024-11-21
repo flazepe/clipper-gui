@@ -39,7 +39,11 @@ export default function () {
 				defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
 				filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
 			});
+
 			if (!output.file) return;
+
+			if (inputs.inputs.some(input => input.file === output.file))
+				return message("Please pick a different output that does not conflict with one of the inputs.", { kind: "error" });
 
 			try {
 				const args = await getFfmpegArgs({ inputs, encoder, output }),
