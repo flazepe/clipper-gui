@@ -20,12 +20,16 @@ export default function ({ input }: { input: Input }) {
 		const onKeyDown = (event: KeyboardEvent) => {
 			if (!currentInput) return;
 
-			if (event.key === "ArrowUp") {
+			if (
+				event.key === "ArrowUp" ||
+				// Ctrl should not be pressed to avoid conflict with Ctrl + W
+				(!event.ctrlKey && event.key.toUpperCase() === "W")
+			) {
 				const previousInput = inputs.inputs[inputs.inputs.indexOf(currentInput) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
 				if (previousInput) setCurrentInput?.(previousInput);
 			}
 
-			if (event.key === "ArrowDown") {
+			if (event.key === "ArrowDown" || event.key.toUpperCase() === "S") {
 				const nextInput = inputs.inputs[inputs.inputs.indexOf(currentInput) + 1] ?? inputs.inputs[0];
 				if (nextInput) setCurrentInput?.(nextInput);
 			}

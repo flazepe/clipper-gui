@@ -60,7 +60,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 						<ButtonComponent onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
 							<RayStartIcon className="w-10 fill-white" />
 							Set current time as start
-							<KeybindHintComponent>S</KeybindHintComponent>
+							<KeybindHintComponent>Q</KeybindHintComponent>
 						</ButtonComponent>
 						<input
 							ref={c.segmentStartInput}

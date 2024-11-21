@@ -9,12 +9,12 @@ export default function ({ currentInput }: { currentInput: Input }) {
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
 			if (event.key === " ") c.playorPause();
-			if (event.key === "ArrowLeft") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
-			if (event.key === "ArrowRight") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
+			if (event.key === "ArrowLeft" || event.key.toUpperCase() === "A") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
+			if (event.key === "ArrowRight" || event.key.toUpperCase() === "D") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
 			if (event.key === "F11") c.fullscreen();
 			if (event.key === "Enter") c.addCurrentSegment();
 			if (event.key === "Backspace") c.deleteSegment([c.segmentStart, c.segmentEnd]);
-			if (event.key.toUpperCase() === "S") c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime);
+			if (event.key.toUpperCase() === "Q") c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime);
 			if (event.key.toUpperCase() === "E") c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime);
 			if (event.key.toUpperCase() === "P") c.playSegment([c.segmentStart, c.segmentEnd]);
 		};
