@@ -75,8 +75,10 @@ function App() {
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
-				if (event.key === "F5" || (event.ctrlKey && event.key.toUpperCase() === "R"))
-					for (const render of renders) await render.child.kill().catch(() => null);
+				if ((event.key === "F5" || (event.ctrlKey && event.key.toUpperCase() === "R")) && renders[0]) {
+					event.preventDefault();
+					return message("You have ongoing renders. Please cancel them before refreshing.", { kind: "warning" });
+				}
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);
 			};
