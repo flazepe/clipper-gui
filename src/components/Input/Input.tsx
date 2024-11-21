@@ -14,8 +14,8 @@ export default function ({ currentInput }: { currentInput: Input }) {
 			if (event.key === "F11") c.fullscreen();
 			if (event.key === "Enter") c.addCurrentSegment();
 			if (event.key === "Backspace") c.deleteSegment([c.segmentStart, c.segmentEnd]);
-			if (event.key.toUpperCase() === "S") c.setSegmentStart(c.currentTime);
-			if (event.key.toUpperCase() === "E") c.setSegmentEnd(c.currentTime);
+			if (event.key.toUpperCase() === "S") c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime);
+			if (event.key.toUpperCase() === "E") c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime);
 			if (event.key.toUpperCase() === "P") c.playSegment([c.segmentStart, c.segmentEnd]);
 		};
 		document.addEventListener("keydown", onKeyDown);
