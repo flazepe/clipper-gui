@@ -10,7 +10,7 @@ export default function ({ render }: { render: Render }) {
 			</div>
 			<div
 				onClick={() => render.child.kill().catch(() => null)}
-				className="gap-b flex cursor-pointer items-center justify-center rounded-b bg-red-600 p-2 uppercase"
+				className="flex cursor-pointer items-center justify-center gap-2 rounded-b bg-red-600 p-2 uppercase"
 			>
 				<CancelIcon className="w-7 fill-white" />
 				Cancel
