@@ -1,7 +1,7 @@
 import InputController from "@/classes/InputController";
 import { ButtonComponent, KeybindHintComponent } from "@/components";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
-import { AddIcon, PlayIcon } from "@/icons";
+import { AddIcon, PlayIcon, RayEndIcon, RayStartIcon } from "@/icons";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
 
@@ -58,7 +58,9 @@ export default function ({ controller: c }: { controller: InputController }) {
 					/>
 					<div className="flex items-center justify-center gap-2">
 						<ButtonComponent onClick={() => c.currentTime < c.segmentEnd && c.setSegmentStart(c.currentTime)} className="w-1/2">
-							Set current time as start <KeybindHintComponent>S</KeybindHintComponent>
+							<RayStartIcon className="w-10 fill-white" />
+							Set current time as start
+							<KeybindHintComponent>S</KeybindHintComponent>
 						</ButtonComponent>
 						<input
 							ref={c.segmentStartInput}
@@ -94,7 +96,9 @@ export default function ({ controller: c }: { controller: InputController }) {
 							className="w-28"
 						/>
 						<ButtonComponent onClick={() => c.currentTime > c.segmentStart && c.setSegmentEnd(c.currentTime)} className="w-1/2">
-							Set current time as end <KeybindHintComponent>E</KeybindHintComponent>
+							<RayEndIcon className="w-10 fill-white" />
+							Set current time as end
+							<KeybindHintComponent>E</KeybindHintComponent>
 						</ButtonComponent>
 					</div>
 					<div className="flex gap-2">

@@ -6,10 +6,12 @@ body {
 	@apply bg-black text-white;
 }
 
+/* Inputs */
 input {
 	@apply rounded bg-gray-700 p-2 text-center outline-none;
 }
 
+/* Checkboxes */
 input[type="checkbox"] {
 	@apply w-4 accent-blue-700;
 }
@@ -17,6 +19,11 @@ input[type="checkbox"] {
 /* Scrollbar */
 .simplebar-scrollbar::before {
 	@apply bg-gray-50;
+}
+
+/* Hide selection outside inputs */
+::selection:not(input) {
+	@apply bg-transparent;
 }
 
 /* Video range slider */

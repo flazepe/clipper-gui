@@ -113,7 +113,8 @@ function App() {
 				<div className="w-1/6">
 					<ButtonComponent onClick={() => setSideInputsToggled(!sideInputsToggled)}>
 						<div className="w-8 fill-white">{sideInputsToggled ? <MenuOpenIcon /> : <MenuCloseIcon />}</div>
-						{sideInputsToggled ? "Hide" : "Show"} Inputs <KeybindHintComponent>Esc</KeybindHintComponent>
+						{sideInputsToggled ? "Hide" : "Show"} Inputs
+						<KeybindHintComponent>Esc</KeybindHintComponent>
 					</ButtonComponent>
 				</div>
 				<div className="w-4/6">
