@@ -43,8 +43,8 @@ export interface Output {
 	dryRun: boolean;
 }
 
-export function getFfmpegArgs({ inputs, encoder, output }: { inputs: Inputs; encoder: Encoder; output: Output }) {
-	return invoke<Array<string>>("run_clipper", { clipper: { inputs, encoder, output } });
+export function getFfmpegArgs(clipper: Clipper) {
+	return invoke<Array<string>>("run_clipper", { clipper });
 }
 
 export async function isValidVideo(path: string) {
