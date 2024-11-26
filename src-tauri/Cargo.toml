@@ -17,6 +17,7 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 clipper = { path = "../../clipper" }
+fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri = { version = "2", features = ["protocol-asset"] }
