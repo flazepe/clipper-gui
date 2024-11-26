@@ -20,6 +20,7 @@ export interface Inputs {
 
 export interface Input {
 	_dndID: number;
+	_objectURL: string;
 	file: string;
 	segments: Array<[number, number]>;
 	videoTrack: number;

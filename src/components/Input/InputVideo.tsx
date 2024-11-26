@@ -2,7 +2,6 @@ import InputController from "@/classes/InputController";
 import { ButtonComponent, KeybindHintComponent } from "@/components";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { AddIcon, PlayIcon, RayEndIcon, RayStartIcon } from "@/icons";
-import { convertFileSrc } from "@tauri-apps/api/core";
 import MultiRangeSlider from "multi-range-slider-react";
 
 export default function ({ controller: c }: { controller: InputController }) {
@@ -10,7 +9,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 		<>
 			<div className="text-center text-2xl font-bold">{c.filename}</div>
 			<video
-				src={convertFileSrc(c.currentInput.file)}
+				src={c.currentInput._objectURL}
 				controls
 				onLoadedMetadata={event => {
 					c.setVideo(event.currentTarget);

@@ -10,6 +10,7 @@ import {
 import { isValidVideo, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
 import StatesContext from "@/StatesContext";
+import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { useContext, useEffect, useState } from "react";
@@ -35,13 +36,22 @@ function App() {
 				),
 				listen(TauriEvent.DRAG_LEAVE, () => setDragMessage(null)),
 				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
-					const paths = [];
+					const inputsToAdd = [];
 
 					for (const path of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
 						setDragMessage(`Processing input "${path}"`);
 
 						if (await isValidVideo(path)) {
-							paths.push(path);
+							inputsToAdd.push({
+								_dndID: Math.random(),
+								_objectURL: URL.createObjectURL(await (await fetch(convertFileSrc(path))).blob()),
+								file: path,
+								segments: [],
+								videoTrack: 0,
+								audioTrack: 0,
+								subtitleTrack: null,
+								speed: 1
+							});
 						} else {
 							message(`Input "${path}" is not a valid video.`, { kind: "error" });
 						}
@@ -51,18 +61,7 @@ function App() {
 
 					const newInputs = {
 						...inputs,
-						inputs: [
-							...inputs.inputs,
-							...paths.map(path => ({
-								_dndID: Math.random(),
-								file: path,
-								segments: [],
-								videoTrack: 0,
-								audioTrack: 0,
-								subtitleTrack: null,
-								speed: 1
-							}))
-						]
+						inputs: [...inputs.inputs, ...inputsToAdd]
 					};
 
 					setInputs?.(newInputs);

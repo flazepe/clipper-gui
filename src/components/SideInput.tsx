@@ -42,8 +42,11 @@ export default function ({ input }: { input: Input }) {
 
 	const deleteInput = (input: Input) =>
 		setInputs?.(inputs => {
-			const index = inputs.inputs.indexOf(input);
-			inputs.inputs.splice(index, 1);
+			const index = inputs.inputs.indexOf(input),
+				[deletedInput] = inputs.inputs.splice(index, 1);
+
+			URL.revokeObjectURL(deletedInput._objectURL);
+
 			if (currentInput === input) setCurrentInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
 			return { ...inputs };
 		});
