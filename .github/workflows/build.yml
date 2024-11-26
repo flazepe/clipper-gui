@@ -20,6 +20,7 @@ jobs:
             - uses: actions/checkout@master
               with:
                   repository: flazepe/clipper
+                  path: ..
             - uses: actions/checkout@master
             - name: Compile and release
               uses: rust-build/rust-build.action@v1.4.5
