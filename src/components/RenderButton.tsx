@@ -3,9 +3,10 @@ import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/fun
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { VideoIcon } from "@/icons";
 import StatesContext from "@/StatesContext";
+import { appLogDir } from "@tauri-apps/api/path";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { message, save } from "@tauri-apps/plugin-dialog";
-import { writeTextFile } from "@tauri-apps/plugin-fs";
+import { BaseDirectory, mkdir, writeTextFile } from "@tauri-apps/plugin-fs";
 import { Command } from "@tauri-apps/plugin-shell";
 import { useContext, useEffect } from "react";
 
@@ -54,7 +55,12 @@ export default function () {
 					return message("Wrote the ffmpeg command to clipboard.");
 				}
 
-				await writeTextFile("ffmpeg.log", `${renders[0] ? "\n\n" : ""}${commandString}\n\n`, { append: !!renders[0] });
+				await mkdir(await appLogDir(), { recursive: true });
+
+				await writeTextFile("ffmpeg.log", `${renders[0] ? "\n\n" : ""}${commandString}\n\n`, {
+					baseDir: BaseDirectory.AppLog,
+					append: !!renders[0]
+				});
 
 				const command = Command.create("ffmpeg", args),
 					child = await command.spawn(),
@@ -67,13 +73,21 @@ export default function () {
 					data = `[${render.filename}] ${data}`;
 
 					console.log(data);
-					writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
+
+					writeTextFile("ffmpeg.log", data, {
+						baseDir: BaseDirectory.AppLog,
+						append: true
+					}).catch(() => null);
 				});
 				command.stderr.on("data", data => {
 					data = `[${render.filename}] ${data}`;
 
 					console.log(data);
-					writeTextFile("ffmpeg.log", data, { append: true }).catch(() => null);
+
+					writeTextFile("ffmpeg.log", data, {
+						baseDir: BaseDirectory.AppLog,
+						append: true
+					}).catch(() => null);
 
 					const time = data.split("time=").pop()!.split(" ")[0];
 
@@ -82,13 +96,14 @@ export default function () {
 						setRenders?.(renders => [...renders]);
 					}
 				});
-				command.on("close", close => {
+				command.on("close", async close => {
 					setRenders?.(renders => renders.filter(entry => entry !== render));
 
 					if (![0, 1].includes(close.code ?? 0))
-						message(`[${render.filename}] ffmpeg exited with code ${close.code}. Please check the ffmpeg.log file.`, {
-							kind: "error"
-						});
+						message(
+							`[${render.filename}] ffmpeg exited with code ${close.code}. Please check the ffmpeg.log file in ${await appLogDir()}.`,
+							{ kind: "error" }
+						);
 				});
 				command.on("error", error => message(error, { kind: "error" }));
 			} catch (error) {

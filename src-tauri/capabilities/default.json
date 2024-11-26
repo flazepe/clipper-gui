@@ -8,8 +8,12 @@
 		"clipboard-manager:allow-write-text",
 		"dialog:default",
 		{
+			"identifier": "fs:allow-mkdir",
+			"allow": [{ "path": "$APPLOG" }, { "path": "$APPLOG/**" }]
+		},
+		{
 			"identifier": "fs:allow-write-text-file",
-			"allow": [{ "path": "ffmpeg.log" }]
+			"allow": [{ "path": "$APPLOG" }, { "path": "$APPLOG/**" }]
 		},
 		"shell:allow-kill",
 		{
