@@ -28,6 +28,7 @@ jobs:
               uses: rust-build/rust-build.action@v1.4.5
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  TOOLCHAIN_VERSION: stable
                   SRC_DIR: clipper-gui/src-tauri
               with:
                   RUSTTARGET: ${{ matrix.target }}
