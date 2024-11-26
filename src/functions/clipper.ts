@@ -60,8 +60,8 @@ export async function isValidVideo(path: string) {
 			});
 
 			command.on("close", () => resolve(true));
-		} catch {
-			message("ffprobe not found. Please make sure to install ffmpeg (which includes ffprobe) and add the bin folder to PATH.", {
+		} catch (error) {
+			message(`${error}\n\nIs ffprobe installed? Please make sure to install ffmpeg (which includes ffprobe) and add the bin folder to PATH.`, {
 				kind: "error"
 			});
 		}
