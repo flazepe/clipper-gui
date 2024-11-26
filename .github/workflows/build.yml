@@ -20,13 +20,15 @@ jobs:
             - uses: actions/checkout@master
               with:
                   repository: flazepe/clipper
-                  path: ..
+                  path: clipper
             - uses: actions/checkout@master
+              with:
+                  path: clipper-gui
             - name: Compile and release
               uses: rust-build/rust-build.action@v1.4.5
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  SRC_DIR: src-tauri
+                  SRC_DIR: clipper-gui/src-tauri
               with:
                   RUSTTARGET: ${{ matrix.target }}
                   ARCHIVE_TYPES: ${{ matrix.archive }}
