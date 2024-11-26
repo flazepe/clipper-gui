@@ -106,7 +106,7 @@ function App() {
 			}}
 		>
 			{dragMessage && (
-				<div className="fixed z-10 flex h-full w-full items-center justify-center bg-gray-700 p-10 text-5xl font-bold text-white">
+				<div className="fixed z-10 flex h-full w-full items-center justify-center break-all bg-gray-700 p-10 text-5xl font-bold text-white">
 					{dragMessage}
 				</div>
 			)}

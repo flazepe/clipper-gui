@@ -7,7 +7,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 export default function ({ controller: c }: { controller: InputController }) {
 	return (
 		<>
-			<div className="text-center text-2xl font-bold">{c.filename}</div>
+			<div className="truncate text-center text-2xl font-bold">{c.filename}</div>
 			<video
 				src={c.currentInput._objectURL}
 				controls
@@ -31,7 +31,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 					if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) event.currentTarget.pause();
 				}}
 				onFocus={event => event.currentTarget.blur() /* Do not let player focus to ignore default keybinds */}
-				className="h-3/5 w-screen"
+				className="h-3/5"
 			/>
 			{c.ready && (
 				<div className="flex flex-col gap-5 text-2xl">

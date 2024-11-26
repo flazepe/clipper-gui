@@ -57,7 +57,7 @@ export default function ({ input }: { input: Input }) {
 			style={{ transform: CSS.Translate.toString(transform), opacity: transform ? 0.7 : 1 }}
 			className="flex flex-col text-lg"
 		>
-			<div ref={setNodeRef} {...listeners} {...attributes} className="cursor-move break-words rounded-t bg-gray-800 p-2 text-center">
+			<div ref={setNodeRef} {...listeners} {...attributes} className="cursor-move break-all rounded-t bg-gray-800 p-2 text-center">
 				{input.file.split(/[/\\]/).pop()}
 			</div>
 			<div className="flex">
