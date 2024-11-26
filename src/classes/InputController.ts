@@ -93,13 +93,7 @@ export default class {
 
 	playorPause() {
 		if (!this.video) return;
-
-		if (this.video.currentTime >= this.segmentStart && this.video.currentTime < this.segmentEnd) {
-			this.video.paused ? this.video.play() : this.video.pause();
-		} else if (this.video.paused) {
-			this.video.currentTime = this.segmentStart;
-			this.video.play();
-		}
+		this.video.paused ? this.video.play() : this.video.pause();
 	}
 
 	fullscreen() {

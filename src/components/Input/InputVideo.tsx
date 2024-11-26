@@ -16,15 +16,19 @@ export default function ({ controller: c }: { controller: InputController }) {
 					c.setSegmentStart(0);
 					c.setSegmentEnd(Math.trunc(event.currentTarget.duration));
 				}}
+				onPlay={event => {
+					const currentTime = Math.trunc(event.currentTarget.currentTime);
+
+					if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) {
+						event.currentTarget.pause();
+						c.currentTime = c.segmentStart;
+						event.currentTarget.play();
+					}
+				}}
 				onTimeUpdate={event => {
 					// Psuse the player if the current time is outside segment range
 					const currentTime = Math.trunc(event.currentTarget.currentTime);
 					if (currentTime < c.segmentStart || currentTime >= c.segmentEnd) event.currentTarget.pause();
-				}}
-				onClick={event => {
-					// Handle play/pause our own way
-					event.preventDefault();
-					c.playorPause();
 				}}
 				onFocus={event => event.currentTarget.blur() /* Do not let player focus to ignore default keybinds */}
 				className="h-3/5 w-screen"
