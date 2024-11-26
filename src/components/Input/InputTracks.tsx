@@ -21,7 +21,10 @@ export default function ({ controller: c }: { controller: InputController }) {
 					onChange={event => c.setTrack("audio", Number(event.currentTarget.value))}
 					className="w-20"
 				/>
-				<div onClick={() => c.setTrack("subtitle", c.currentInput.subtitleTrack !== null ? -1 : 0)} className="flex cursor-pointer gap-2">
+				<div
+					onClick={() => c.setTrack("subtitle", c.currentInput.subtitleTrack !== null ? -1 : 0)}
+					className="flex cursor-pointer items-center gap-2"
+				>
 					<input type="checkbox" checked={c.currentInput.subtitleTrack !== null} readOnly />
 					Subtitle:
 				</div>
