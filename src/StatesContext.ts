@@ -14,7 +14,7 @@ export interface States {
 
 export default createContext<States>({
 	clipper: {
-		inputs: [{ inputs: [], fade: 0, resize: null, noVideo: false, noAudio: false }, null],
+		inputs: [{ entries: [], fade: 0, resize: null, noVideo: false, noAudio: false }, null],
 		encoder: [{ nvenc: false, hevc: false, preset: null, crf: null, cq: null }, null],
 		output: [{ file: null, forceOverwrite: true, forceNotOverwrite: false, dryRun: false }, null]
 	},

@@ -11,7 +11,7 @@ export interface Clipper {
 }
 
 export interface Inputs {
-	inputs: Array<Input>;
+	entries: Array<Input>;
 	fade: number;
 	resize: [number, number] | null;
 	noVideo: boolean;

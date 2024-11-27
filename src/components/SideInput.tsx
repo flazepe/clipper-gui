@@ -25,12 +25,12 @@ export default function ({ input }: { input: Input }) {
 				// Ctrl should not be pressed to avoid conflict with Ctrl + W
 				(!event.ctrlKey && event.key.toUpperCase() === "W")
 			) {
-				const previousInput = inputs.inputs[inputs.inputs.indexOf(currentInput) - 1] ?? inputs.inputs[inputs.inputs.length - 1];
+				const previousInput = inputs.entries[inputs.entries.indexOf(currentInput) - 1] ?? inputs.entries[inputs.entries.length - 1];
 				if (previousInput) setCurrentInput?.(previousInput);
 			}
 
 			if (event.key === "ArrowDown" || event.key.toUpperCase() === "S") {
-				const nextInput = inputs.inputs[inputs.inputs.indexOf(currentInput) + 1] ?? inputs.inputs[0];
+				const nextInput = inputs.entries[inputs.entries.indexOf(currentInput) + 1] ?? inputs.entries[0];
 				if (nextInput) setCurrentInput?.(nextInput);
 			}
 
@@ -42,12 +42,12 @@ export default function ({ input }: { input: Input }) {
 
 	const deleteInput = (input: Input) =>
 		setInputs?.(inputs => {
-			const index = inputs.inputs.indexOf(input),
-				[deletedInput] = inputs.inputs.splice(index, 1);
+			const index = inputs.entries.indexOf(input),
+				[deletedInput] = inputs.entries.splice(index, 1);
 
 			URL.revokeObjectURL(deletedInput._objectURL);
 
-			if (currentInput === input) setCurrentInput?.(inputs.inputs[Math.max(0, index - 1)] ?? null);
+			if (currentInput === input) setCurrentInput?.(inputs.entries[Math.max(0, index - 1)] ?? null);
 			return { ...inputs };
 		});
 

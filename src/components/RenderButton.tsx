@@ -20,12 +20,12 @@ export default function () {
 			sideInputsToggled: [, setSideInputsToggled],
 			renders: [renders, setRenders]
 		} = useContext(StatesContext),
-		totalDuration = inputs.inputs.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0),
+		totalDuration = inputs.entries.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0),
 		render = async () => {
 			// No inputs
-			if (!inputs.inputs[0]) return message("No inputs given.", { kind: "error" });
+			if (!inputs.entries[0]) return message("No inputs given.", { kind: "error" });
 
-			for (const input of inputs.inputs) {
+			for (const input of inputs.entries) {
 				// Inputs without segments
 				if (!input.segments[0]) return message(`Input "${input.file}" is missing segments.`, { kind: "error" });
 
@@ -33,7 +33,7 @@ export default function () {
 				if (!(await isValidVideo(input.file))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
 			}
 
-			const split = inputs.inputs[0].file.split("."),
+			const split = inputs.entries[0].file.split("."),
 				[defaultExtension, defaultPath] = [split.pop(), split.join(".")];
 
 			output.file = await save({
@@ -43,7 +43,7 @@ export default function () {
 
 			if (!output.file) return;
 
-			if (inputs.inputs.some(input => input.file === output.file))
+			if (inputs.entries.some(entry => entry.file === output.file))
 				return message("Please pick a different output that does not conflict with one of the inputs.", { kind: "error" });
 
 			try {

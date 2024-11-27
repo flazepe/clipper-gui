@@ -36,13 +36,13 @@ function App() {
 				),
 				listen(TauriEvent.DRAG_LEAVE, () => setDragMessage(null)),
 				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
-					const inputsToAdd = [];
+					const entries = [];
 
 					for (const path of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
 						setDragMessage(`Processing input "${path}"`);
 
 						if (await isValidVideo(path)) {
-							inputsToAdd.push({
+							entries.push({
 								_dndID: Math.random(),
 								_objectURL: URL.createObjectURL(await (await fetch(convertFileSrc(path))).blob()),
 								file: path,
@@ -61,13 +61,13 @@ function App() {
 
 					const newInputs = {
 						...inputs,
-						inputs: [...inputs.inputs, ...inputsToAdd]
+						entries: inputs.entries.concat(entries)
 					};
 
 					setInputs?.(newInputs);
 
-					if (newInputs.inputs[0]) {
-						setCurrentInput(newInputs.inputs[newInputs.inputs.length - 1]);
+					if (newInputs.entries[0]) {
+						setCurrentInput(newInputs.entries[newInputs.entries.length - 1]);
 						setSideInputsToggled(true);
 					}
 				})
