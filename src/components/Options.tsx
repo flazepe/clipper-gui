@@ -25,9 +25,9 @@ export default function () {
 	output.dryRun = dryRun;
 
 	return (
-		<div className="flex cursor-pointer items-center justify-center gap-5 text-xl">
+		<div className="flex items-center justify-center gap-5 text-xl">
 			<div className="flex items-center gap-2">
-				<div onClick={() => setFade(fade ? 0 : 0.5)} className="flex items-center gap-2">
+				<div onClick={() => setFade(fade ? 0 : 0.5)} className="flex cursor-pointer items-center gap-2">
 					<CheckboxComponent checked={!!fade} />
 					Fade:
 				</div>
@@ -41,23 +41,23 @@ export default function () {
 					className="w-16"
 				/>
 			</div>
-			<div onClick={() => setNoVideo(!noVideo)} className="flex items-center gap-2">
+			<div onClick={() => setNoVideo(!noVideo)} className="flex cursor-pointer items-center gap-2">
 				<CheckboxComponent checked={noVideo} />
 				No Video
 			</div>
-			<div onClick={() => setNoAudio(!noAudio)} className="flex items-center gap-2">
+			<div onClick={() => setNoAudio(!noAudio)} className="flex cursor-pointer items-center gap-2">
 				<CheckboxComponent checked={noAudio} />
 				No Audio
 			</div>
-			<div onClick={() => setNvenc(!nvenc)} className="flex items-center gap-2">
+			<div onClick={() => setNvenc(!nvenc)} className="flex cursor-pointer items-center gap-2">
 				<CheckboxComponent checked={nvenc} />
 				NVENC
 			</div>
-			<div onClick={() => setHevc(!hevc)} className="flex items-center gap-2">
+			<div onClick={() => setHevc(!hevc)} className="flex cursor-pointer items-center gap-2">
 				<CheckboxComponent checked={hevc} />
 				HEVC
 			</div>
-			<div onClick={() => setDryRun(!dryRun)} className="flex items-center gap-2">
+			<div onClick={() => setDryRun(!dryRun)} className="flex cursor-pointer items-center gap-2">
 				<CheckboxComponent checked={dryRun} />
 				Dry Run
 			</div>
