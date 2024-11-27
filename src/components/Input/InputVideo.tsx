@@ -9,7 +9,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 		<>
 			<div className="truncate text-center text-2xl font-bold">{c.filename}</div>
 			<video
-				src={c.currentInput._objectURL}
+				src={c.currentInput._src}
 				controls
 				onLoadedMetadata={event => {
 					c.setVideo(event.currentTarget);

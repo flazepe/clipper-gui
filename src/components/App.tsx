@@ -13,6 +13,7 @@ import StatesContext from "@/StatesContext";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
+import { platform } from "@tauri-apps/plugin-os";
 import { useContext, useEffect, useState } from "react";
 import SimpleBar from "simplebar-react";
 
@@ -44,7 +45,10 @@ function App() {
 						if (await isValidVideo(path)) {
 							entries.push({
 								_dndID: Math.random(),
-								_objectURL: URL.createObjectURL(await (await fetch(convertFileSrc(path))).blob()),
+								_src:
+									platform() === "windows"
+										? convertFileSrc(path)
+										: URL.createObjectURL(await (await fetch(convertFileSrc(path))).blob()),
 								file: path,
 								segments: [],
 								videoTrack: 0,
