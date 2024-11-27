@@ -14,7 +14,7 @@ export default function ({ controller: c, segment }: { controller: InputControll
 		<div
 			ref={setDroppableNodeRef}
 			style={{ transform: CSS.Translate.toString(transform), opacity: transform ? 0.7 : 1 }}
-			className="flex min-w-72 flex-col rounded bg-gray-700 text-xl font-bold"
+			className="flex min-w-96 flex-col rounded bg-gray-700 text-xl font-bold"
 		>
 			<div ref={setNodeRef} {...listeners} {...attributes} className="cursor-move rounded-t bg-gray-800 p-2 text-center">
 				{segment.map(entry => secondsToDuration(entry, true)).join("-")}

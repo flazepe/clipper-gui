@@ -48,8 +48,17 @@ export default function ({ controller: c }: { controller: InputController }) {
 					type="number"
 					min={0.5}
 					max={100}
-					value={c.currentInput.speed}
-					onChange={event => c.setSpeed(Number(event.currentTarget.value))}
+					defaultValue={c.currentInput.speed}
+					onBlur={event => {
+						const speed = Number(event.currentTarget.value);
+
+						if (speed >= 0.5 && speed <= 100) {
+							c.setSpeed(speed);
+							event.currentTarget.value = speed.toString();
+						} else {
+							event.currentTarget.value = c.currentInput.speed.toString();
+						}
+					}}
 					className="w-20"
 				/>
 			</div>
