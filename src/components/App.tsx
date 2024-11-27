@@ -39,17 +39,18 @@ function App() {
 				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
 					const entries = [];
 
-					for (const path of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
-						setDragMessage(`Processing input "${path}"`);
+					for (const file of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
+						setDragMessage(`Processing input "${file}"`);
 
-						if (await isValidVideo(path)) {
+						if (await isValidVideo(file)) {
 							entries.push({
 								_dndID: Math.random(),
 								_src:
 									platform() === "windows"
-										? convertFileSrc(path)
-										: URL.createObjectURL(await (await fetch(convertFileSrc(path))).blob()),
-								file: path,
+										? convertFileSrc(file)
+										: (inputs.entries.find(entry => entry.file === file)?._src ??
+											URL.createObjectURL(await (await fetch(convertFileSrc(file))).blob())),
+								file,
 								segments: [],
 								videoTrack: 0,
 								audioTrack: 0,
@@ -57,7 +58,7 @@ function App() {
 								speed: 1
 							});
 						} else {
-							message(`Input "${path}" is not a valid video.`, { kind: "error" });
+							message(`Input "${file}" is not a valid video.`, { kind: "error" });
 						}
 					}
 
