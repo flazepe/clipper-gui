@@ -3,7 +3,7 @@ import { CheckboxComponent } from "@/components";
 
 export default function ({ controller: c }: { controller: InputController }) {
 	return (
-		<>
+		<div className="flex flex-col gap-10 p-5 text-xl">
 			<div className="flex flex-col gap-2">
 				<div className="text-2xl font-bold uppercase">Tracks</div>
 				Video:
@@ -62,6 +62,6 @@ export default function ({ controller: c }: { controller: InputController }) {
 					className="w-20"
 				/>
 			</div>
-		</>
+		</div>
 	);
 }

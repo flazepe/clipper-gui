@@ -6,7 +6,7 @@ import MultiRangeSlider from "multi-range-slider-react";
 
 export default function ({ controller: c }: { controller: InputController }) {
 	return (
-		<>
+		<div className="flex w-full flex-col gap-5 bg-black p-5">
 			<div className="truncate text-center text-2xl font-bold">{c.filename}</div>
 			<video
 				src={c.currentInput._src}
@@ -113,6 +113,6 @@ export default function ({ controller: c }: { controller: InputController }) {
 					</div>
 				</div>
 			)}
-		</>
+		</div>
 	);
 }

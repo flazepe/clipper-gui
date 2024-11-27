@@ -21,6 +21,11 @@ input {
 	@apply bg-transparent;
 }
 
+/* Hide focus outline */
+:focus {
+	outline: none;
+}
+
 /* Video range slider */
 .multi-range-slider {
 	/* Add y margin and remove border/padding */

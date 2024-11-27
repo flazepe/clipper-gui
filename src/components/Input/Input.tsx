@@ -25,10 +25,10 @@ export default function ({ currentInput }: { currentInput: Input }) {
 	return (
 		<>
 			<div className="flex h-5/6 w-full bg-gray-950">
-				<div className="flex w-1/6 flex-col items-center justify-center gap-10 p-5 text-xl">
+				<div className="flex w-1/6 items-center justify-center">
 					<InputTracksComponent controller={c} />
 				</div>
-				<div className="flex w-4/6 flex-col justify-center gap-5 overflow-y-auto overflow-x-hidden bg-black p-5">
+				<div className="flex w-4/6">
 					<InputVideoComponent controller={c} />
 				</div>
 				<div className="w-1/6" />
