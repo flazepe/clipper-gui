@@ -1,4 +1,5 @@
 import InputController from "@/classes/InputController";
+import { CheckboxComponent } from "@/components";
 
 export default function ({ controller: c }: { controller: InputController }) {
 	return (
@@ -25,7 +26,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 					onClick={() => c.setTrack("subtitle", c.currentInput.subtitleTrack !== null ? -1 : 0)}
 					className="flex cursor-pointer items-center gap-2"
 				>
-					<input type="checkbox" checked={c.currentInput.subtitleTrack !== null} readOnly />
+					<CheckboxComponent checked={c.currentInput.subtitleTrack !== null} />
 					Subtitle:
 				</div>
 				{c.currentInput.subtitleTrack === null ? (

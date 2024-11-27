@@ -13,7 +13,7 @@ export default function () {
 	return (
 		<>
 			<div className="my-2 text-2xl font-bold uppercase">Inputs</div>
-			{!inputs.entries[0] && <div className="flex justify-center text-xl font-bold uppercase text-gray-400">Empty</div>}
+			{!inputs.entries[0] && <div className="text-center text-xl font-bold uppercase text-gray-400">Empty</div>}
 			<div className="flex flex-col gap-4 font-bold">
 				<DndContext
 					onDragEnd={event => {

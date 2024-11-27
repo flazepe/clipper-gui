@@ -1,5 +1,7 @@
 export { default as AddIcon } from "./Add";
 export { default as CancelIcon } from "./Cancel";
+export { default as CheckboxBlankIcon } from "./CheckboxBlank";
+export { default as CheckboxMarkedIcon } from "./CheckboxMarked";
 export { default as DeleteIcon } from "./Delete";
 export { default as EditIcon } from "./Edit";
 export { default as MenuCloseIcon } from "./MenuClose";

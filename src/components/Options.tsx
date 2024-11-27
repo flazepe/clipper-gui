@@ -1,3 +1,4 @@
+import { CheckboxComponent } from "@/components";
 import StatesContext from "@/StatesContext";
 import { useContext, useState } from "react";
 
@@ -27,7 +28,7 @@ export default function () {
 		<div className="flex cursor-pointer items-center justify-center gap-5 text-xl">
 			<div className="flex items-center gap-2">
 				<div onClick={() => setFade(fade ? 0 : 0.5)} className="flex items-center gap-2">
-					<input type="checkbox" checked={!!fade} readOnly />
+					<CheckboxComponent checked={!!fade} />
 					Fade:
 				</div>
 				<input
@@ -41,23 +42,23 @@ export default function () {
 				/>
 			</div>
 			<div onClick={() => setNoVideo(!noVideo)} className="flex items-center gap-2">
-				<input type="checkbox" checked={noVideo} readOnly />
+				<CheckboxComponent checked={noVideo} />
 				No Video
 			</div>
 			<div onClick={() => setNoAudio(!noAudio)} className="flex items-center gap-2">
-				<input type="checkbox" checked={noAudio} readOnly />
+				<CheckboxComponent checked={noAudio} />
 				No Audio
 			</div>
 			<div onClick={() => setNvenc(!nvenc)} className="flex items-center gap-2">
-				<input type="checkbox" checked={nvenc} readOnly />
+				<CheckboxComponent checked={nvenc} />
 				NVENC
 			</div>
 			<div onClick={() => setHevc(!hevc)} className="flex items-center gap-2">
-				<input type="checkbox" checked={hevc} readOnly />
+				<CheckboxComponent checked={hevc} />
 				HEVC
 			</div>
 			<div onClick={() => setDryRun(!dryRun)} className="flex items-center gap-2">
-				<input type="checkbox" checked={dryRun} readOnly />
+				<CheckboxComponent checked={dryRun} />
 				Dry Run
 			</div>
 		</div>

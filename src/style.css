@@ -11,11 +11,6 @@ input {
 	@apply rounded bg-gray-700 p-2 text-center outline-none;
 }
 
-/* Checkboxes */
-input[type="checkbox"] {
-	@apply w-4 accent-blue-700;
-}
-
 /* Scrollbar */
 .simplebar-scrollbar::before {
 	@apply bg-gray-50;

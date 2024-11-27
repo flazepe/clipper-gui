@@ -106,7 +106,7 @@ function App() {
 			}}
 		>
 			{dragMessage && (
-				<div className="fixed z-10 flex h-full w-full items-center justify-center break-all bg-gray-700 p-10 text-5xl font-bold text-white">
+				<div className="fixed z-20 flex h-full w-full items-center justify-center break-all bg-gray-700 p-10 text-5xl font-bold text-white">
 					{dragMessage}
 				</div>
 			)}
@@ -126,15 +126,15 @@ function App() {
 				</div>
 			</div>
 			<div className="flex h-[93vh]">
-				<div className={`w-1/4 flex-col gap-5 ${sideInputsToggled ? "flex" : "hidden"} bg-gray-900`}>
-					<SimpleBar className="h-2/3 p-4">
+				<div className={`fixed z-10 h-[93vh] w-1/3 flex-col gap-5 bg-gray-900 ${sideInputsToggled ? "flex" : "hidden"}`}>
+					<SimpleBar className="m-2 h-2/3 p-4">
 						<SideInputsComponent />
 					</SimpleBar>
-					<SimpleBar className="h-1/3 p-4">
+					<SimpleBar className="m-2 h-1/3 p-4">
 						<SideRendersComponent />
 					</SimpleBar>
 				</div>
-				<div className={`flex flex-col items-center justify-center ${sideInputsToggled ? "w-3/4" : "w-full"}`}>
+				<div className="flex w-full flex-col items-center justify-center">
 					{currentInput ? (
 						<InputComponent currentInput={currentInput} />
 					) : (

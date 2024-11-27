@@ -1,5 +1,6 @@
 export { default as AppComponent } from "./App";
 export { default as ButtonComponent } from "./Button";
+export { default as CheckboxComponent } from "./Checkbox";
 export { default as InputComponent } from "./Input/Input";
 export { default as InputSegmentComponent } from "./Input/InputSegment";
 export { default as InputSegmentsComponent } from "./Input/InputSegments";
