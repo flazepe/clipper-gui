@@ -38,7 +38,7 @@ export default function () {
 
 			output.file = await save({
 				defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
-				filters: [{ name: "videos", extensions: SUPPORTED_EXTENSIONS }]
+				filters: [{ name: "Media files", extensions: SUPPORTED_EXTENSIONS }]
 			});
 
 			if (!output.file) return;
