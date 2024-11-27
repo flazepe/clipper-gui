@@ -65,11 +65,7 @@ function App() {
 					};
 
 					setInputs?.(newInputs);
-
-					if (newInputs.entries[0]) {
-						setCurrentInput(newInputs.entries[newInputs.entries.length - 1]);
-						setSideInputsToggled(true);
-					}
+					setCurrentInput(newInputs.entries[newInputs.entries.length - 1]);
 				})
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
