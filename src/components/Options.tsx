@@ -41,11 +41,23 @@ export default function () {
 					className="w-16"
 				/>
 			</div>
-			<div onClick={() => setNoVideo(!noVideo)} className="flex cursor-pointer items-center gap-2">
+			<div
+				onClick={() => {
+					setNoVideo(!noVideo);
+					if (!noVideo && noAudio) setNoAudio(false);
+				}}
+				className="flex cursor-pointer items-center gap-2"
+			>
 				<CheckboxComponent checked={noVideo} />
 				No Video
 			</div>
-			<div onClick={() => setNoAudio(!noAudio)} className="flex cursor-pointer items-center gap-2">
+			<div
+				onClick={() => {
+					setNoAudio(!noAudio);
+					if (!noAudio && noVideo) setNoVideo(false);
+				}}
+				className="flex cursor-pointer items-center gap-2"
+			>
 				<CheckboxComponent checked={noAudio} />
 				No Audio
 			</div>
