@@ -66,7 +66,7 @@ function App() {
 
 					const newInputs = {
 						...inputs,
-						entries: inputs.entries.concat(entries)
+						entries: [...inputs.entries, ...entries]
 					};
 
 					setInputs?.(newInputs);
@@ -77,7 +77,7 @@ function App() {
 			onKeyDown = async (event: KeyboardEvent) => {
 				if ((event.key === "F5" || (event.ctrlKey && event.key.toUpperCase() === "R")) && renders[0]) {
 					event.preventDefault();
-					return message("You have ongoing renders. Please cancel them before refreshing.", { kind: "warning" });
+					return message("You have ongoing renders. Please cancel them before refreshing.", { kind: "error" });
 				}
 
 				if (event.key === "Escape") setSideInputsToggled(!sideInputsToggled);

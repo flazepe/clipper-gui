@@ -1,5 +1,5 @@
 import { ButtonComponent, KeybindHintComponent } from "@/components";
-import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_AUDIO_EXTENSIONS, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { VideoIcon } from "@/icons";
 import StatesContext from "@/StatesContext";
@@ -22,14 +22,10 @@ export default function () {
 		} = useContext(StatesContext),
 		totalDuration = inputs.entries.reduce((acc, cur) => acc + cur.segments.reduce((acc, cur) => acc + (cur[1] - cur[0]), 0) / cur.speed, 0),
 		render = async () => {
-			// No inputs
 			if (!inputs.entries[0]) return message("No inputs given.", { kind: "error" });
 
 			for (const input of inputs.entries) {
-				// Inputs without segments
 				if (!input.segments[0]) return message(`Input "${input.file}" is missing segments.`, { kind: "error" });
-
-				// Deleted inputs
 				if (!(await isValidVideo(input.file))) return message(`Input "${input.file}" is deleted.`, { kind: "error" });
 			}
 
@@ -45,6 +41,9 @@ export default function () {
 
 			if (inputs.entries.some(entry => entry.file === output.file))
 				return message("Please pick a different output that does not conflict with one of the inputs.", { kind: "error" });
+
+			if (SUPPORTED_AUDIO_EXTENSIONS.some(ext => output.file?.toLowerCase().endsWith(ext)) && !inputs.noVideo)
+				return message(`You are rendering into an audio file. Please turn on the "No Video" option to avoid errors.`, { kind: "error" });
 
 			try {
 				const args = await getFfmpegArgs({ inputs, encoder, output }),

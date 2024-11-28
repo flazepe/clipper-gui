@@ -2,27 +2,9 @@ import { invoke } from "@tauri-apps/api/core";
 import { message } from "@tauri-apps/plugin-dialog";
 import { Child, Command } from "@tauri-apps/plugin-shell";
 
-export const SUPPORTED_EXTENSIONS = [
-	"3g2",
-	"3gp",
-	"aac",
-	"alac",
-	"avi",
-	"flac",
-	"flv",
-	"m4a",
-	"m4v",
-	"mka",
-	"mkv",
-	"mov",
-	"mp3",
-	"mp4",
-	"ogg",
-	"opus",
-	"wav",
-	"webm",
-	"wma"
-];
+export const SUPPORTED_VIDEO_EXTENSIONS = ["3g2", "3gp", "avi", "flv", "m4v", "mkv", "mov", "mp4", "webm"],
+	SUPPORTED_AUDIO_EXTENSIONS = ["aac", "alac", "flac", "m4a", "mka", "mp3", "ogg", "opus", "wav", "wma"],
+	SUPPORTED_EXTENSIONS = [...SUPPORTED_VIDEO_EXTENSIONS, ...SUPPORTED_AUDIO_EXTENSIONS];
 
 export interface Clipper {
 	inputs: Inputs;
