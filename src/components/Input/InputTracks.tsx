@@ -43,7 +43,7 @@ export default function ({ controller: c }: { controller: InputController }) {
 			</div>
 			<div className="flex flex-col gap-2">
 				<div className="text-2xl font-bold uppercase">Speed</div>
-				Multiplier
+				Multiplier:
 				<input
 					type="number"
 					min={0.5}

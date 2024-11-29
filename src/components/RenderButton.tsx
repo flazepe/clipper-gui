@@ -1,5 +1,5 @@
 import { ButtonComponent, KeybindHintComponent } from "@/components";
-import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_AUDIO_EXTENSIONS, SUPPORTED_EXTENSIONS } from "@/functions/clipper";
+import { getFfmpegArgs, isValidVideo, Render, SUPPORTED_AUDIO_EXTENSIONS, SUPPORTED_VIDEO_EXTENSIONS } from "@/functions/clipper";
 import { durationToSeconds, secondsToDuration } from "@/functions/seconds";
 import { VideoIcon } from "@/icons";
 import StatesContext from "@/StatesContext";
@@ -34,7 +34,10 @@ export default function () {
 
 			output.file = await save({
 				defaultPath: `${defaultPath} (clipped).${defaultExtension}`,
-				filters: [{ name: "Media files", extensions: SUPPORTED_EXTENSIONS }]
+				filters: [
+					{ name: "Video files", extensions: SUPPORTED_VIDEO_EXTENSIONS },
+					{ name: "Audio files", extensions: SUPPORTED_AUDIO_EXTENSIONS }
+				]
 			});
 
 			if (!output.file) return;

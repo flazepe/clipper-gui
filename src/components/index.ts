@@ -8,6 +8,7 @@ export { default as InputTracksComponent } from "./Input/InputTracks";
 export { default as InputVideoComponent } from "./Input/InputVideo";
 export { default as KeybindHintComponent } from "./KeybindHint";
 export { default as OptionsComponent } from "./Options";
+export { default as OptionsMoreComponent } from "./OptionsMore";
 export { default as RenderButtonComponent } from "./RenderButton";
 export { default as SideInputComponent } from "./SideInput";
 export { default as SideInputsComponent } from "./SideInputs";

@@ -7,7 +7,8 @@ body {
 }
 
 /* Inputs */
-input {
+input,
+select {
 	@apply rounded bg-gray-700 p-2 text-center outline-none;
 }
 
