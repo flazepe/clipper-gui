@@ -18,7 +18,7 @@ export default function ({ input }: { input: Input }) {
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
-			if (!currentInput) return;
+			if (document.activeElement?.tagName === "INPUT" || !currentInput) return;
 
 			if (
 				event.key === "ArrowUp" ||

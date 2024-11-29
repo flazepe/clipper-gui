@@ -8,6 +8,8 @@ export default function ({ currentInput }: { currentInput: Input }) {
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) => {
+			if (document.activeElement?.tagName === "INPUT") return;
+
 			if (event.key === " ") c.playorPause();
 			if (event.key === "ArrowLeft" || event.key.toUpperCase() === "A") c.currentTime -= event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;
 			if (event.key === "ArrowRight" || event.key.toUpperCase() === "D") c.currentTime += event.shiftKey ? 1 : event.ctrlKey ? 5 : 3;

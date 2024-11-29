@@ -112,8 +112,11 @@ export default function () {
 
 	useEffect(() => {
 		const onKeyDown = (event: KeyboardEvent) =>
+			document.activeElement?.tagName !== "INPUT" &&
 			// Ctrl should not be pressed to avoid conflict with Ctrl + R
-			!event.ctrlKey && event.key.toUpperCase() === "R" && render();
+			!event.ctrlKey &&
+			event.key.toUpperCase() === "R" &&
+			render();
 		document.addEventListener("keydown", onKeyDown);
 		return () => document.removeEventListener("keydown", onKeyDown);
 	});
