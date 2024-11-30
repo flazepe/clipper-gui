@@ -44,7 +44,7 @@ export default function () {
 
 			setNvenc(value.nvenc);
 			setHevc(value.hevc);
-			setPreset(value.preset);
+			setPreset(value.preset === "default" ? null : value.preset);
 			setCrf(value.crf);
 			setCq(value.cq);
 		} catch {
