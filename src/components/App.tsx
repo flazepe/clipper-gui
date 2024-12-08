@@ -16,6 +16,7 @@ import { message } from "@tauri-apps/plugin-dialog";
 import { platform } from "@tauri-apps/plugin-os";
 import { useContext, useEffect, useState } from "react";
 import SimpleBar from "simplebar-react";
+import AppIcon from "@/../app-icon.png";
 
 function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
@@ -140,6 +141,7 @@ function App() {
 						<InputComponent currentInput={currentInput} />
 					) : (
 						<>
+							<img src={AppIcon} />
 							<div className="m-5 text-5xl font-bold">clipper-gui</div>
 							<div className="text-2xl">Drag input(s) to this window to get started.</div>
 						</>
