@@ -1,6 +1,6 @@
 [package]
 name = "clipper-gui"
-version = "0.1.0"
+version = "0.1.1"
 description = "A GUI for clipper."
 authors = ["flazepe"]
 edition = "2021"
