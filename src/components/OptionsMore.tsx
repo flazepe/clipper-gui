@@ -1,9 +1,10 @@
 import { CheckboxComponent } from "@/components";
 import { FFMPEG_NVENC_PRESETS, FFMPEG_PRESETS, encoderSchema, outputSchema } from "@/functions/clipper";
 import StatesContext from "@/StatesContext";
+import { motion } from "framer-motion";
 import { FocusEvent, useContext, useEffect, useState } from "react";
 
-export default function () {
+export default function ({ toggled }: { toggled: boolean }) {
 	const {
 			clipper: {
 				encoder: [encoder],
@@ -71,7 +72,11 @@ export default function () {
 	}, [nvenc, hevc, preset, crf, cq, dryRun]);
 
 	return (
-		<div className="fixed inset-0 z-40 m-auto flex h-2/3 w-1/2 flex-col items-center justify-center gap-10 rounded border border-black bg-gray-900">
+		<motion.div
+			initial={{ display: "none", opacity: 0 }}
+			animate={{ display: toggled ? "flex" : "none", opacity: toggled ? 1 : 0 }}
+			className="fixed inset-0 z-40 m-auto h-2/3 w-1/2 flex-col items-center justify-center gap-10 rounded border border-black bg-gray-900"
+		>
 			<div className="flex w-1/3 flex-col gap-4">
 				<div className="text-3xl font-bold">Encoder</div>
 				<div
@@ -121,6 +126,6 @@ export default function () {
 					Dry Run
 				</div>
 			</div>
-		</div>
+		</motion.div>
 	);
 }

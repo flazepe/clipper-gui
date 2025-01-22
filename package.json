@@ -17,6 +17,7 @@
 		"@tauri-apps/plugin-fs": "^2.0.2",
 		"@tauri-apps/plugin-os": "^2.0.0",
 		"@tauri-apps/plugin-shell": "^2",
+		"framer-motion": "^12.0.1",
 		"joi": "^17.13.3",
 		"multi-range-slider-react": "^2.0.7",
 		"react": "^18.2.0",

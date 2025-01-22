@@ -1,3 +1,4 @@
+import AppIcon from "@/../app-icon.png";
 import {
 	ButtonComponent,
 	InputComponent,
@@ -14,9 +15,9 @@ import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
 import { message } from "@tauri-apps/plugin-dialog";
 import { platform } from "@tauri-apps/plugin-os";
+import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
 import SimpleBar from "simplebar-react";
-import AppIcon from "@/../app-icon.png";
 
 function App() {
 	const [dragMessage, setDragMessage] = useState<string | null>(null),
@@ -128,14 +129,18 @@ function App() {
 				</div>
 			</div>
 			<div className="flex h-[93vh]">
-				<div className={`fixed z-10 h-[93vh] w-1/3 flex-col gap-5 bg-gray-900 ${sideInputsToggled ? "flex" : "hidden"}`}>
+				<motion.div
+					initial={{ left: "-100%" }}
+					animate={{ left: sideInputsToggled ? "0" : "-100%" }}
+					className="fixed z-10 h-[93vh] w-1/3 flex-col gap-5 bg-gray-900"
+				>
 					<SimpleBar className="m-2 h-2/3 p-4">
 						<SideInputsComponent />
 					</SimpleBar>
 					<SimpleBar className="m-2 h-1/3 p-4">
 						<SideRendersComponent />
 					</SimpleBar>
-				</div>
+				</motion.div>
 				<div className="flex w-full flex-col items-center justify-center">
 					{currentInput ? (
 						<InputComponent currentInput={currentInput} />

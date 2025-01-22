@@ -58,7 +58,7 @@ export default function () {
 				<CheckboxComponent checked={moreOptionsToggled} />
 				More Options
 			</div>
-			{moreOptionsToggled && <OptionsMoreComponent />}
+			<OptionsMoreComponent toggled={moreOptionsToggled} />
 		</div>
 	);
 }
