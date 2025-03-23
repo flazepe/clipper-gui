@@ -3,7 +3,7 @@ name = "clipper-gui"
 version = "0.1.1"
 description = "A GUI for clipper."
 authors = ["flazepe"]
-edition = "2021"
+edition = "2024"
 
 [lib]
 # The `_lib` suffix may seem redundant but it is necessary
