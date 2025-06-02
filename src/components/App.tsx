@@ -13,7 +13,7 @@ import { MenuCloseIcon, MenuOpenIcon } from "@/icons";
 import StatesContext from "@/StatesContext";
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { listen, TauriEvent } from "@tauri-apps/api/event";
-import { message } from "@tauri-apps/plugin-dialog";
+import { message, open } from "@tauri-apps/plugin-dialog";
 import { platform } from "@tauri-apps/plugin-os";
 import { motion } from "framer-motion";
 import { useContext, useEffect, useState } from "react";
@@ -27,7 +27,43 @@ function App() {
 		[output, setOutput] = useState(states.clipper.output[0]),
 		[sideInputsToggled, setSideInputsToggled] = useState(false),
 		[currentInput, setCurrentInput] = useState(states.currentInput[0]),
-		[renders, setRenders] = useState(states.renders[0]);
+		[renders, setRenders] = useState(states.renders[0]),
+		handlePaths = async (paths: Array<string>) => {
+			const entries = [];
+
+			for (const file of paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
+				setDragMessage(`Processing input "${file}"`);
+
+				if (await isValidVideo(file)) {
+					entries.push({
+						_dndID: Math.random(),
+						_src:
+							platform() === "windows"
+								? convertFileSrc(file)
+								: (inputs.entries.find(entry => entry.file === file)?._src ??
+									URL.createObjectURL(await (await fetch(convertFileSrc(file))).blob())),
+						file,
+						segments: [],
+						videoTrack: 0,
+						audioTrack: 0,
+						subtitleTrack: null,
+						speed: 1
+					});
+				} else {
+					message(`Input "${file}" is not a valid video.`, { kind: "error" });
+				}
+			}
+
+			setDragMessage(null);
+
+			const newInputs = {
+				...inputs,
+				entries: [...inputs.entries, ...entries]
+			};
+
+			setInputs?.(newInputs);
+			setCurrentInput(newInputs.entries[newInputs.entries.length - 1]);
+		};
 
 	useEffect(() => {
 		const unlistens = [
@@ -38,42 +74,7 @@ function App() {
 						setDragMessage("Drop the input(s) NOW!")
 				),
 				listen(TauriEvent.DRAG_LEAVE, () => setDragMessage(null)),
-				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => {
-					const entries = [];
-
-					for (const file of event.payload.paths.filter(path => SUPPORTED_EXTENSIONS.some(ext => path.toLowerCase().endsWith(ext)))) {
-						setDragMessage(`Processing input "${file}"`);
-
-						if (await isValidVideo(file)) {
-							entries.push({
-								_dndID: Math.random(),
-								_src:
-									platform() === "windows"
-										? convertFileSrc(file)
-										: (inputs.entries.find(entry => entry.file === file)?._src ??
-											URL.createObjectURL(await (await fetch(convertFileSrc(file))).blob())),
-								file,
-								segments: [],
-								videoTrack: 0,
-								audioTrack: 0,
-								subtitleTrack: null,
-								speed: 1
-							});
-						} else {
-							message(`Input "${file}" is not a valid video.`, { kind: "error" });
-						}
-					}
-
-					setDragMessage(null);
-
-					const newInputs = {
-						...inputs,
-						entries: [...inputs.entries, ...entries]
-					};
-
-					setInputs?.(newInputs);
-					setCurrentInput(newInputs.entries[newInputs.entries.length - 1]);
-				})
+				listen<{ paths: Array<string> }>(TauriEvent.DRAG_DROP, async event => handlePaths(event.payload.paths))
 			],
 			onContextMenu = (event: MouseEvent) => event.preventDefault(),
 			onKeyDown = async (event: KeyboardEvent) => {
@@ -146,9 +147,13 @@ function App() {
 						<InputComponent currentInput={currentInput} />
 					) : (
 						<>
-							<img src={AppIcon} />
+							<img
+								src={AppIcon}
+								onClick={() => open({ multiple: true }).then(paths => paths && handlePaths(paths))}
+								className="cursor-pointer"
+							/>
 							<div className="m-5 text-5xl font-bold">clipper-gui</div>
-							<div className="text-2xl">Drag input(s) to this window to get started.</div>
+							<div className="text-2xl">Drag input(s) to this window or press the logo to get started.</div>
 						</>
 					)}
 				</div>
