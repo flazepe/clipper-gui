@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 body {
 	@apply bg-black text-white;
@@ -58,7 +56,7 @@ select {
 	.thumb {
 		/* Remove thumbs' additional styles and fix their alignment  */
 		&::before {
-			@apply ml-[-10px] mt-5 border-none shadow-none;
+			@apply mt-5 ml-[-10px] border-none shadow-none;
 		}
 
 		/* Set captions' background color */

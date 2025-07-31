@@ -10,31 +10,30 @@
 		"tauri": "tauri"
 	},
 	"dependencies": {
-		"@dnd-kit/core": "^6.1.0",
-		"@tauri-apps/api": "^2",
-		"@tauri-apps/plugin-clipboard-manager": "^2.0.0",
-		"@tauri-apps/plugin-dialog": "^2.0.1",
-		"@tauri-apps/plugin-fs": "^2.0.2",
-		"@tauri-apps/plugin-os": "^2.0.0",
-		"@tauri-apps/plugin-shell": "^2",
-		"framer-motion": "^12.0.1",
+		"@dnd-kit/core": "^6.3.1",
+		"@tailwindcss/postcss": "^4.1.11",
+		"@tauri-apps/api": "^2.7.0",
+		"@tauri-apps/plugin-clipboard-manager": "^2.3.0",
+		"@tauri-apps/plugin-dialog": "^2.3.2",
+		"@tauri-apps/plugin-fs": "^2.4.1",
+		"@tauri-apps/plugin-os": "^2.3.0",
+		"@tauri-apps/plugin-shell": "^2.3.0",
+		"framer-motion": "^12.23.12",
 		"joi": "^17.13.3",
 		"multi-range-slider-react": "^2.0.7",
-		"react": "^18.2.0",
-		"react-dom": "^18.2.0",
-		"simplebar-react": "^3.2.6"
+		"postcss": "^8.5.6",
+		"react": "^19.1.1",
+		"react-dom": "^19.1.1",
+		"simplebar-react": "^3.3.2",
+		"tailwindcss": "^4.1.11"
 	},
 	"devDependencies": {
-		"@tauri-apps/cli": "^2",
-		"@types/react": "^18.2.15",
-		"@types/react-dom": "^18.2.7",
-		"@vitejs/plugin-react": "^4.2.1",
-		"autoprefixer": "^10.4.20",
-		"postcss": "^8.4.47",
-		"prettier": "^3.3.3",
-		"prettier-plugin-tailwindcss": "^0.6.8",
-		"tailwindcss": "^3.4.14",
-		"typescript": "^5.2.2",
-		"vite": "^5.3.1"
+		"@tauri-apps/cli": "^2.7.1",
+		"@types/react": "^19.1.9",
+		"@types/react-dom": "^19.1.7",
+		"@vitejs/plugin-react": "^4.7.0",
+		"prettier-plugin-tailwindcss": "^0.6.14",
+		"typescript": "^5.8.3",
+		"vite": "^7.0.6"
 	}
 }
