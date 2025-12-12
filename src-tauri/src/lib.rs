@@ -1,5 +1,5 @@
 use clipper::Clipper;
-use tauri::{command, generate_context, generate_handler, Builder, Error};
+use tauri::{Builder, Error, command, generate_context, generate_handler};
 
 #[command]
 fn run_clipper(clipper: Clipper) -> Result<Vec<String>, Error> {
